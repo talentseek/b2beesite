@@ -103,7 +103,7 @@ export default function BeesPage() {
           <div className="bees-grid">
             {filteredBees.map((bee) => (
               <div key={bee.id} className="bee-card">
-                <div className="bee-image">
+                <div className="bee-image-container">
                   {bee.image_url ? (
                     <Image
                       src={bee.image_url}
@@ -115,14 +115,14 @@ export default function BeesPage() {
                   ) : (
                     <div className="bee-placeholder">🐝</div>
                   )}
+                  {bee.price && (
+                    <div className="price-sticker">${bee.price}/month</div>
+                  )}
                 </div>
                 <div className="bee-info">
                   <h3>{bee.name}</h3>
                   <div className="bee-role">{bee.role}</div>
                   <p className="bee-description">{bee.description}</p>
-                  {bee.price && (
-                    <div className="bee-price">${bee.price}/month</div>
-                  )}
                   <div className="bee-actions">
                     <button 
                       className="hire-button"
@@ -144,6 +144,15 @@ export default function BeesPage() {
 
       <div className="cta-section">
         <div className="cta-content">
+          <div className="buzz-photo">
+            <Image
+              src="/just-buzz.png"
+              alt="Buzz - Your AI Assistant"
+              width={120}
+              height={120}
+              className="buzz-avatar"
+            />
+          </div>
           <h2>Can't find the perfect bee?</h2>
           <p>Let Buzz help you find the right AI assistant for your specific needs.</p>
           <Link href="/chat" className="chat-with-buzz-btn">
@@ -251,7 +260,7 @@ export default function BeesPage() {
           box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
         }
 
-        .bee-image {
+        .bee-image-container {
           height: 250px;
           display: flex;
           align-items: center;
@@ -259,13 +268,28 @@ export default function BeesPage() {
           background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
           position: relative;
           overflow: hidden;
+          border-radius: 16px 16px 0 0;
         }
 
         .bee-avatar {
-          object-fit: contain;
+          object-fit: cover;
           width: 100%;
           height: 100%;
-          background: #f3f4f6;
+          border-radius: 16px 16px 0 0;
+        }
+
+        .price-sticker {
+          position: absolute;
+          bottom: 12px;
+          right: 12px;
+          background: linear-gradient(135deg, #fe8a00 0%, #e67a00 100%);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-weight: 700;
+          font-size: 0.9rem;
+          box-shadow: 0 4px 12px rgba(254, 138, 0, 0.3);
+          backdrop-filter: blur(10px);
         }
 
         .bee-placeholder {
@@ -278,34 +302,27 @@ export default function BeesPage() {
         }
 
         .bee-info h3 {
-          color: #205b41;
+          color: #2d3748;
           font-size: 1.5rem;
           margin: 0 0 0.5rem 0;
           font-weight: 700;
         }
 
         .bee-role {
-          color: #fe8a00;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          font-size: 0.875rem;
           font-weight: 600;
-          font-size: 1.1rem;
+          display: inline-block;
           margin-bottom: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
+          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .bee-description {
-          color: #666;
+          color: #4a5568;
           line-height: 1.6;
-          margin-bottom: 1.5rem;
-        }
-
-        .bee-price {
-          background: #205b41;
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-weight: 600;
-          display: inline-block;
           margin-bottom: 1.5rem;
         }
 
@@ -346,6 +363,16 @@ export default function BeesPage() {
           color: white;
         }
 
+        .buzz-photo {
+          margin-bottom: 2rem;
+        }
+
+        .buzz-avatar {
+          border-radius: 50%;
+          border: 4px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
         .cta-content h2 {
           font-size: 2.5rem;
           margin-bottom: 1rem;
@@ -360,21 +387,21 @@ export default function BeesPage() {
 
         .chat-with-buzz-btn {
           display: inline-block;
-          background: #205b41;
+          background: linear-gradient(135deg, #fe8a00 0%, #e67a00 100%);
           color: white;
           text-decoration: none;
-          padding: 1rem 2rem;
+          padding: 1.25rem 2.5rem;
           border-radius: 50px;
-          font-weight: 600;
-          font-size: 1.1rem;
+          font-weight: 700;
+          font-size: 1.2rem;
           transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(32, 91, 65, 0.3);
+          box-shadow: 0 8px 24px rgba(254, 138, 0, 0.3);
         }
 
         .chat-with-buzz-btn:hover {
-          background: #1a4a35;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(32, 91, 65, 0.4);
+          background: linear-gradient(135deg, #e67a00 0%, #d46a00 100%);
+          transform: translateY(-3px);
+          box-shadow: 0 12px 32px rgba(254, 138, 0, 0.4);
         }
 
         .loading {
