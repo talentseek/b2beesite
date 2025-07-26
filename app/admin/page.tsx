@@ -50,16 +50,12 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="admin-container">
-        <div className="loading">Loading dashboard...</div>
-      </div>
+      <div className="loading">Loading dashboard...</div>
     )
   }
 
   return (
-    <div className="admin-container">
-      <h1>B2Bee Admin Dashboard</h1>
-      
+    <div className="admin-dashboard">
       {analytics && (
         <div className="analytics-section">
           <h2>Analytics Overview</h2>
@@ -102,17 +98,9 @@ export default function AdminDashboard() {
       </div>
 
       <style jsx>{`
-        .admin-container {
+        .admin-dashboard {
           max-width: 1200px;
           margin: 0 auto;
-          padding: 2rem;
-          font-family: 'Inter', sans-serif;
-        }
-
-        h1 {
-          color: #205b41;
-          margin-bottom: 2rem;
-          font-size: 2.5rem;
         }
 
         h2 {
@@ -201,10 +189,6 @@ export default function AdminDashboard() {
         }
 
         @media (max-width: 768px) {
-          .admin-container {
-            padding: 1rem;
-          }
-
           .stats-grid {
             grid-template-columns: repeat(2, 1fr);
           }
