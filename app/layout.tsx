@@ -7,6 +7,30 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'B2BEE - AI Support Coming Soon',
   description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
+  openGraph: {
+    title: 'B2BEE - AI Support Coming Soon',
+    description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
+    images: [
+      {
+        url: '/logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'B2BEE Logo',
+      },
+    ],
+    type: 'website',
+    siteName: 'B2BEE',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'B2BEE - AI Support Coming Soon',
+    description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
+    images: ['/logo.png'],
+  },
 }
 
 export default function RootLayout({
