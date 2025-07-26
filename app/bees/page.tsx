@@ -124,11 +124,8 @@ export default function BeesPage() {
                     <div className="bee-price">${bee.price}/month</div>
                   )}
                   <div className="bee-actions">
-                    <button className="hire-button">
+                    <Link href={`/bees/${bee.id}`} className="hire-button">
                       Hire {bee.name}
-                    </button>
-                    <Link href={`/bees/${bee.id}`} className="learn-more-button">
-                      Learn More
                     </Link>
                   </div>
                 </div>
@@ -324,6 +321,9 @@ export default function BeesPage() {
           cursor: pointer;
           transition: all 0.3s ease;
           flex: 1;
+          text-decoration: none;
+          display: inline-block;
+          text-align: center;
         }
 
         .hire-button:hover {
@@ -331,27 +331,7 @@ export default function BeesPage() {
           transform: translateY(-2px);
         }
 
-        .learn-more-button {
-          background: #ff0000 !important;
-          color: white !important;
-          border: 3px solid #ff0000 !important;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          flex: 1;
-          text-decoration: none;
-          display: inline-block;
-          text-align: center;
-          font-size: 16px !important;
-        }
 
-        .learn-more-button:hover {
-          background: #cc0000 !important;
-          border-color: #cc0000 !important;
-          transform: translateY(-2px);
-        }
 
         .no-results {
           text-align: center;
