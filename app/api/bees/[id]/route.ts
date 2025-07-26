@@ -1,24 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
-import pool from '@/lib/db'
+import { sql } from '@vercel/postgres'
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const result = await pool.query(
-      'SELECT * FROM bees WHERE id = $1 AND is_active = true',
-      [params.id]
-    )
-    
+    console.log('Fetching bee with ID:', params.id)
+
+    const result = await sql`
+      SELECT id, name, role, description, price, image_url, created_at
+      FROM bees 
+      WHERE id = ${params.id}
+    `
+
     if (result.rows.length === 0) {
       return NextResponse.json(
         { error: 'Bee not found' },
         { status: 404 }
       )
     }
-    
-    return NextResponse.json({ bee: result.rows[0] })
+
+    const bee = result.rows[0]
+    console.log('Bee found:', bee.name)
+
+    return NextResponse.json({ bee })
+
   } catch (error) {
     console.error('Error fetching bee:', error)
     return NextResponse.json(
@@ -43,10 +50,12 @@ export async function PUT(
       )
     }
     
-    const result = await pool.query(
-      'UPDATE bees SET name = $1, role = $2, description = $3, price = $4, image_url = $5, is_active = $6 WHERE id = $7 RETURNING *',
-      [name, role, description, price || null, image_url || null, is_active !== false, params.id]
-    )
+    const result = await sql`
+      UPDATE bees 
+      SET name = ${name}, role = ${role}, description = ${description}, price = ${price || null}, image_url = ${image_url || null}, is_active = ${is_active !== false}
+      WHERE id = ${params.id}
+      RETURNING *
+    `
     
     if (result.rows.length === 0) {
       return NextResponse.json(
@@ -70,10 +79,12 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const result = await pool.query(
-      'UPDATE bees SET is_active = false WHERE id = $1 RETURNING *',
-      [params.id]
-    )
+    const result = await sql`
+      UPDATE bees 
+      SET is_active = false
+      WHERE id = ${params.id}
+      RETURNING *
+    `
     
     if (result.rows.length === 0) {
       return NextResponse.json(

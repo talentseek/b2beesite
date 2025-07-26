@@ -121,9 +121,9 @@ export default function BeesPage() {
                     <button className="hire-button">
                       Hire {bee.name}
                     </button>
-                    <button className="learn-more-button">
+                    <Link href={`/bees/${bee.id}`} className="learn-more-button">
                       Learn More
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -335,6 +335,9 @@ export default function BeesPage() {
           cursor: pointer;
           transition: all 0.3s ease;
           flex: 1;
+          text-decoration: none;
+          display: inline-block;
+          text-align: center;
         }
 
         .learn-more-button:hover {
