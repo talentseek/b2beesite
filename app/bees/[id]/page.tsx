@@ -30,11 +30,18 @@ export default function BeeProfilePage() {
 
   const fetchBee = async (id: string) => {
     try {
+      console.log('Fetching bee with ID:', id)
       const response = await fetch(`/api/bees/${id}`)
+      console.log('Response status:', response.status)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('Bee data received:', data)
         setBee(data.bee)
       } else {
+        console.log('Response not ok, status:', response.status)
+        const errorData = await response.json()
+        console.log('Error data:', errorData)
         setError('Bee not found')
       }
     } catch (error) {
