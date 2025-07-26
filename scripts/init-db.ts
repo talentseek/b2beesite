@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 import path from 'path'
-import pool, { testConnection } from '../lib/db'
+import pool from '../lib/db'
 import fs from 'fs'
 
 // Load environment variables from .env.local
@@ -12,11 +12,9 @@ async function initializeDatabase() {
     console.log('Database URL:', process.env.DATABASE_URL ? 'Set' : 'Not set')
     
     // Test connection first
-    const connected = await testConnection()
-    if (!connected) {
-      console.error('❌ Cannot proceed without database connection')
-      process.exit(1)
-    }
+    const client = await pool.connect()
+    console.log('✅ Database connection successful!')
+    client.release()
     
     // Read the schema file
     const schemaPath = path.join(process.cwd(), 'lib', 'schema.sql')
