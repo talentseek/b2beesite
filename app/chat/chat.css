@@ -94,6 +94,8 @@
   min-width: fit-content;
   position: relative;
   color: #205b41; /* Dark text color for Buzz messages */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .buzz-message .message-content {
@@ -240,6 +242,8 @@
   .message-content {
     max-width: 85%;
     padding: 0.75rem 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .message-content p {
@@ -279,6 +283,8 @@
   .message-content {
     max-width: 90%;
     padding: 0.75rem 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .message-content p {
@@ -315,6 +321,30 @@
   .chat-subscribe-button {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+  }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 360px) {
+  .message-content {
+    max-width: 95%;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .message-content p {
+    font-size: 0.8rem;
+  }
+  
+  .chat-messages {
+    padding: 0.5rem;
+  }
+  
+  .chat-header {
+    padding: 0.5rem;
+  }
+  
+  .chat-input-form {
+    padding: 0.5rem;
   }
 }
 
