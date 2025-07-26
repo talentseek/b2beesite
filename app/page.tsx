@@ -36,7 +36,7 @@ export default function Home() {
         <div className="image-section">
           <Image
             src="/comingsoon.png"
-            alt="B2Bee Coming Soon"
+            alt="B2BEE Coming Soon"
             width={600}
             height={600}
             priority
@@ -45,10 +45,29 @@ export default function Home() {
         </div>
         
         <div className="info-section">
-          <p className="description">
-            We're working hard to bring you something incredible. 
-            Stay tuned for updates and be the first to know when we launch!
-          </p>
+          <h1 className="main-title">Buzzing Into Business – AI Support Coming Soon!</h1>
+          
+          <h2 className="subheadline">At B2BEE, we help small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.</h2>
+          
+          <div className="divider"></div>
+          
+          <div className="what-we-do-section">
+            <h3 className="section-title">What We Do</h3>
+            <p className="section-intro">Why build a whole hive of staff when AI can do the work?</p>
+            <p className="section-subtitle">Let B2BEE be your busy bee, taking care of:</p>
+            
+            <ul className="services-list">
+              <li>Inbound replies (email, Instagram, Facebook, phone)</li>
+              <li>Outbound campaigns that keep your brand buzzing</li>
+              <li>Reports and insights that help you stay ahead of the swarm</li>
+              <li>Account management, sales follow-ups and client care</li>
+              <li>Lead generation and reviving old leads</li>
+            </ul>
+            
+            <p className="section-description">
+              We create AI helpers that help your business bee more and do more – perfect for estate agents, trades, plumbers, salons, hospitality and other buzzing small businesses.
+            </p>
+          </div>
           
           <div className="cta-section">
             <EmailSubscription />
@@ -87,7 +106,7 @@ export default function Home() {
       </div>
       
       <footer className="footer">
-        <p>&copy; 2024 B2Bee. All rights reserved.</p>
+        <p>&copy; 2024 B2BEE. All rights reserved.</p>
       </footer>
     </main>
   )

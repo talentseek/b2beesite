@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'B2Bee - Coming Soon',
-  description: 'B2Bee is coming soon. Stay tuned for something amazing!',
+  title: 'B2BEE - AI Support Coming Soon',
+  description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
 }
 
 export default function RootLayout({
