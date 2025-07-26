@@ -42,4 +42,14 @@ a {
     --text-dark: #f8fafc;
     --background: #0f172a;
   }
+}
+
+/* Footer styles for bees page */
+.footer {
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  opacity: 0.9;
+  font-size: 0.875rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 } 
