@@ -5,8 +5,16 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import './chat.css'
 
+interface Message {
+  id: number
+  text: string
+  sender: 'buzz' | 'user'
+  timestamp: Date
+  isTyping?: boolean
+}
+
 export default function ChatPage() {
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isClient, setIsClient] = useState(false)
   const [isTyping, setIsTyping] = useState(true)
@@ -46,7 +54,7 @@ export default function ChatPage() {
     e.preventDefault()
     if (!newMessage.trim() || isTyping) return
 
-    const userMessage = {
+    const userMessage: Message = {
       id: messages.length + 1,
       text: newMessage,
       sender: 'user',
@@ -58,7 +66,7 @@ export default function ChatPage() {
 
     // Simulate Buzz response
     setTimeout(() => {
-      const buzzResponse = {
+      const buzzResponse: Message = {
         id: messages.length + 2,
         text: "Thanks for your message! I'm still learning and will be fully operational soon. In the meantime, why not subscribe to our newsletter to be the first to know when I'm ready to help your business? 🐝✨",
         sender: 'buzz',
