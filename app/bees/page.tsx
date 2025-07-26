@@ -192,42 +192,27 @@ export default function BeesPage() {
                 </div>
 
         {/* Footer */}
-        <footer className="bg-black/10 backdrop-blur-sm border-t border-white/10 mt-16">
-          <div className="max-w-6xl mx-auto px-8 py-12 text-center text-white">
-            <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-6">Follow us for updates</h3>
-              <div className="flex justify-center gap-8 flex-wrap">
-                <a 
-                  href="https://twitter.com/b2bee" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 hover:shadow-lg"
-                >
-                  <span className="text-xl font-bold">𝕏</span>
+        <footer className="footer">
+          <div className="footer-content">
+            <div className="footer-section">
+              <h3>Follow us for updates</h3>
+              <div className="social-links">
+                <a href="https://twitter.com/b2bee" target="_blank" rel="noopener noreferrer" className="social-link">
+                  <span className="social-icon">𝕏</span>
                   <span>Twitter</span>
                 </a>
-                <a 
-                  href="https://linkedin.com/company/b2bee" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 hover:shadow-lg"
-                >
-                  <span className="text-xl font-bold">💼</span>
+                <a href="https://linkedin.com/company/b2bee" target="_blank" rel="noopener noreferrer" className="social-link">
+                  <span className="social-icon">💼</span>
                   <span>LinkedIn</span>
                 </a>
-                <a 
-                  href="https://instagram.com/b2bee" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 hover:-translate-y-1 transition-all duration-300 hover:shadow-lg"
-                >
-                  <span className="text-xl font-bold">📸</span>
+                <a href="https://instagram.com/b2bee" target="_blank" rel="noopener noreferrer" className="social-link">
+                  <span className="social-icon">📸</span>
                   <span>Instagram</span>
                 </a>
               </div>
             </div>
-            <div className="border-t border-white/10 pt-8">
-              <p className="text-white/80 text-sm">© 2024 B2BEE. All rights reserved.</p>
+            <div className="footer-bottom">
+              <p>© 2024 B2BEE. All rights reserved.</p>
             </div>
           </div>
         </footer>
@@ -661,6 +646,87 @@ export default function BeesPage() {
 
           .feature {
             justify-content: center;
+          }
+
+          .footer {
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
+          }
+
+          .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem 2rem;
+            text-align: center;
+            color: white;
+          }
+
+          .footer-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+          }
+
+          .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+          }
+
+          .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          }
+
+          .social-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+          }
+
+          .social-icon {
+            font-size: 1.2rem;
+            font-weight: bold;
+          }
+
+          .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+          }
+
+          .footer-bottom p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            margin: 0;
+          }
+
+          @media (max-width: 768px) {
+            .footer-content {
+              padding: 2rem 1rem 1.5rem;
+            }
+
+            .social-links {
+              gap: 1rem;
+            }
+
+            .social-link {
+              padding: 0.5rem 1rem;
+              font-size: 0.9rem;
+            }
           }
         }
       `}</style>
