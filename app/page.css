@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #fcefdb;
+  background: linear-gradient(135deg, #ea3e93 0%, #d63384 100%);
   position: relative;
 }
 
@@ -45,21 +45,27 @@
 
 .coming-soon-image {
   border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(32, 91, 65, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   object-fit: cover;
   max-width: 100%;
   height: auto;
+  background: transparent;
 }
 
 .coming-soon-image:hover {
   transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(32, 91, 65, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
 }
 
 .info-section {
   max-width: 800px;
   margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
 }
 
 /* New B2BEE Content Styles */
@@ -311,16 +317,21 @@
 .footer {
   padding: 2rem;
   text-align: center;
-  color: #000000;
-  opacity: 0.6;
+  color: white;
+  opacity: 0.9;
   font-size: 0.875rem;
-  border-top: 1px solid rgba(32, 91, 65, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .content-wrapper {
     padding: 1rem;
+  }
+  
+  .info-section {
+    padding: 2rem;
+    margin: 0 1rem;
   }
   
   .main-title {
@@ -406,5 +417,9 @@
   .services-list li {
     font-size: 0.875rem;
     padding-left: 1.25rem;
+  }
+  
+  .info-section {
+    padding: 1.5rem;
   }
 } 
