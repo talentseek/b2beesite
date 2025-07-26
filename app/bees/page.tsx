@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface Bee {
   id: number
@@ -58,7 +57,18 @@ export default function BeesPage() {
   })
 
   if (loading) {
-    return <LoadingSpinner />
+    return (
+      <div className="bees-page">
+        <div className="loading-section">
+          <div className="bee-spinner">
+            <div className="bee">🐝</div>
+            <div className="bee">🐝</div>
+            <div className="bee">🐝</div>
+          </div>
+          <p className="loading-text">Loading our busy bees...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -560,6 +570,56 @@ export default function BeesPage() {
 
         .chat-with-buzz-btn:hover .btn-arrow {
           transform: translateX(4px);
+        }
+
+        .loading-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          min-height: 100vh;
+          text-align: center;
+          color: white;
+        }
+
+        .bee-spinner {
+          display: flex;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .bee {
+          font-size: 2rem;
+          animation: bounce 1.4s ease-in-out infinite both;
+        }
+
+        .bee:nth-child(1) {
+          animation-delay: -0.32s;
+        }
+
+        .bee:nth-child(2) {
+          animation-delay: -0.16s;
+        }
+
+        .bee:nth-child(3) {
+          animation-delay: 0s;
+        }
+
+        @keyframes bounce {
+          0%, 80%, 100% {
+            transform: scale(0);
+          }
+          40% {
+            transform: scale(1);
+          }
+        }
+
+        .loading-text {
+          font-size: 1.2rem;
+          font-weight: 500;
+          opacity: 0.9;
+          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         @media (max-width: 768px) {
