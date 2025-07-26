@@ -44,9 +44,8 @@
 }
 
 .coming-soon-image {
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* Updated shadow color */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* Removed border-radius and box-shadow for seamless integration */
+  transition: transform 0.3s ease;
   object-fit: cover;
   max-width: 100%;
   height: auto;
@@ -55,7 +54,7 @@
 
 .coming-soon-image:hover {
   transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3); /* Updated shadow color */
+  /* Removed box-shadow on hover as well */
 }
 
 .info-section {
