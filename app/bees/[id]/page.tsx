@@ -406,10 +406,16 @@ export default function BeeProfilePage() {
         }
 
         .savings-section {
-          background: #f8f9fa;
+          background: linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%);
           padding: 3rem;
           border-radius: 20px;
           margin: 3rem 0;
+          color: white;
+        }
+
+        .savings-section h2 {
+          color: white;
+          text-align: center;
         }
 
         .savings-grid {
@@ -423,27 +429,40 @@ export default function BeeProfilePage() {
           padding: 2rem;
           border-radius: 15px;
           text-align: center;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(10px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
         .savings-card.traditional {
-          background: #fff;
           border: 2px solid #e5e7eb;
         }
 
         .savings-card.ai {
           background: #205b41;
           color: white;
+          border: 2px solid #205b41;
         }
 
         .savings-card h3 {
           font-size: 1.5rem;
           margin-bottom: 1rem;
+          color: #205b41;
+        }
+
+        .savings-card.ai h3 {
+          color: white;
         }
 
         .cost {
           font-size: 2rem;
           font-weight: bold;
           margin-bottom: 1rem;
+          color: #205b41;
+        }
+
+        .savings-card.ai .cost {
+          color: white;
         }
 
         .cost-breakdown, .benefits {
@@ -454,6 +473,12 @@ export default function BeeProfilePage() {
         .cost-breakdown p, .benefits p {
           margin-bottom: 0.5rem;
           font-size: 0.95rem;
+          color: #666;
+        }
+
+        .savings-card.ai .cost-breakdown p,
+        .savings-card.ai .benefits p {
+          color: rgba(255, 255, 255, 0.9);
         }
 
         .limitations {
@@ -467,15 +492,22 @@ export default function BeeProfilePage() {
         }
 
         .savings-highlight {
-          background: rgba(255, 255, 255, 0.2);
-          padding: 1rem;
-          border-radius: 10px;
+          background: #fe8a00;
+          color: white;
+          padding: 1.5rem;
+          border-radius: 15px;
           margin-top: 1rem;
+          text-align: center;
         }
 
         .savings-highlight p {
           margin-bottom: 0.5rem;
-          font-size: 1.1rem;
+          font-size: 1.2rem;
+          font-weight: 600;
+        }
+
+        .savings-highlight strong {
+          font-size: 1.4rem;
         }
 
         .cta-buttons {

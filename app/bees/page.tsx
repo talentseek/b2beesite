@@ -326,8 +326,8 @@ export default function BeesPage() {
         }
 
         .learn-more-button {
-          background: transparent;
-          color: #205b41;
+          background: #205b41;
+          color: white;
           border: 2px solid #205b41;
           padding: 0.75rem 1.5rem;
           border-radius: 8px;
@@ -341,8 +341,9 @@ export default function BeesPage() {
         }
 
         .learn-more-button:hover {
-          background: #205b41;
-          color: white;
+          background: #1a4a35;
+          border-color: #1a4a35;
+          transform: translateY(-2px);
         }
 
         .no-results {
