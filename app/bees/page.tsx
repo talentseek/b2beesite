@@ -146,7 +146,7 @@ export default function BeesPage() {
         <div className="cta-content">
           <div className="buzz-photo">
             <Image
-              src="/just-buzz.png"
+              src="/buzz.png"
               alt="Buzz - Your AI Assistant"
               width={120}
               height={120}
