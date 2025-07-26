@@ -18,6 +18,9 @@ export default function ChatPage() {
   const [newMessage, setNewMessage] = useState('')
   const [isClient, setIsClient] = useState(false)
   const [isTyping, setIsTyping] = useState(true)
+  const [email, setEmail] = useState('')
+  const [subStatus, setSubStatus] = useState<'idle' | 'loading' | 'success' | 'error'>("idle")
+  const [subMessage, setSubMessage] = useState('')
 
   useEffect(() => {
     setIsClient(true)
@@ -76,6 +79,32 @@ export default function ChatPage() {
     }, 1000)
   }
 
+  // Subscription handler
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email.trim()) return
+    setSubStatus('loading')
+    setSubMessage('')
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        setSubStatus('success')
+        setSubMessage('You are now subscribed!')
+      } else {
+        setSubStatus('error')
+        setSubMessage(data.error || 'Subscription failed.')
+      }
+    } catch (err) {
+      setSubStatus('error')
+      setSubMessage('Subscription failed. Please try again.')
+    }
+  }
+
   return (
     <main className="chat-container">
       <div className="chat-header">
@@ -95,7 +124,7 @@ export default function ChatPage() {
       </div>
 
       <div className="chat-messages">
-        {messages.map((message) => (
+        {messages.map((message, idx) => (
           <div
             key={message.id}
             className={`message ${message.sender === 'buzz' ? 'buzz-message' : 'user-message'}`}
@@ -117,6 +146,34 @@ export default function ChatPage() {
               <span className="message-time">
                 {formatTime(message.timestamp)}
               </span>
+              {/* Show subscription input after Buzz's final message */}
+              {idx === messages.length - 1 && message.sender === 'buzz' && !message.isTyping && messages.length > 1 && subStatus !== 'success' && (
+                <form onSubmit={handleSubscribe} className="chat-subscribe-form">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="Enter your email to subscribe"
+                    className="chat-subscribe-input"
+                    required
+                    disabled={subStatus === 'loading'}
+                  />
+                  <button
+                    type="submit"
+                    className="chat-subscribe-button"
+                    disabled={subStatus === 'loading' || !email.trim()}
+                  >
+                    {subStatus === 'loading' ? 'Subscribing...' : 'Subscribe'}
+                  </button>
+                </form>
+              )}
+              {/* Show success or error message */}
+              {idx === messages.length - 1 && message.sender === 'buzz' && subStatus === 'success' && (
+                <div className="chat-subscribe-success">{subMessage}</div>
+              )}
+              {idx === messages.length - 1 && message.sender === 'buzz' && subStatus === 'error' && (
+                <div className="chat-subscribe-error">{subMessage}</div>
+              )}
             </div>
           </div>
         ))}

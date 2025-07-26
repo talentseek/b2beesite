@@ -267,4 +267,72 @@
   .message-content p {
     font-size: 0.875rem;
   }
+}
+
+.chat-subscribe-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.chat-subscribe-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(32, 91, 65, 0.2);
+  border-radius: 50px;
+  font-size: 1rem;
+  background: white;
+  color: #000000;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.chat-subscribe-input:focus {
+  border-color: #fe8a00;
+  box-shadow: 0 0 0 3px rgba(254, 138, 0, 0.1);
+}
+
+.chat-subscribe-button {
+  background: #fe8a00;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.chat-subscribe-button:hover:not(:disabled) {
+  background: #e67a00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(254, 138, 0, 0.3);
+}
+
+.chat-subscribe-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.chat-subscribe-success {
+  color: #205b41;
+  background: rgba(254, 138, 0, 0.1);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.chat-subscribe-error {
+  color: #ea3e93;
+  background: rgba(255, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 0.5rem 1rem;
+  margin-top: 1rem;
+  font-weight: 600;
+  text-align: center;
 } 
