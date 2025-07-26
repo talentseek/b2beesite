@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface Bee {
   id: number
@@ -57,11 +58,7 @@ export default function BeesPage() {
   })
 
   if (loading) {
-    return (
-      <div className="bees-page">
-        <div className="loading">Loading our busy bees...</div>
-      </div>
-    )
+    return <LoadingSpinner />
   }
 
   return (
@@ -563,13 +560,6 @@ export default function BeesPage() {
 
         .chat-with-buzz-btn:hover .btn-arrow {
           transform: translateX(4px);
-        }
-
-        .loading {
-          text-align: center;
-          padding: 4rem 2rem;
-          color: white;
-          font-size: 1.2rem;
         }
 
         @media (max-width: 768px) {

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface Bee {
   id: number
@@ -55,11 +56,7 @@ export default function BeeProfilePage() {
   }
 
   if (loading) {
-    return (
-      <div className="bee-profile-page">
-        <div className="loading">Loading bee profile...</div>
-      </div>
-    )
+    return <LoadingSpinner message="Loading bee profile..." />
   }
 
   if (error || !bee) {
