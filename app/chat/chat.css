@@ -91,6 +91,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
   max-width: 70%;
+  min-width: fit-content;
   position: relative;
   color: #205b41; /* Dark text color for Buzz messages */
 }
@@ -103,6 +104,7 @@
   background: rgba(254, 138, 0, 0.95);
   color: white;
   border-bottom-right-radius: 8px;
+  min-width: 120px; /* Ensure minimum width for user messages */
 }
 
 .message-content p {
