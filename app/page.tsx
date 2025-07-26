@@ -35,7 +35,7 @@ export default function Home() {
       <div className="content-wrapper">
         <div className="image-section">
           <Image
-            src="/buzzlogo"
+            src="/buzzlogo.png"
             alt="B2BEE Logo"
             width={400}
             height={400}
