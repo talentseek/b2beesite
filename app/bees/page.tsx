@@ -124,9 +124,12 @@ export default function BeesPage() {
                     <div className="bee-price">${bee.price}/month</div>
                   )}
                   <div className="bee-actions">
-                    <Link href={`/bees/${bee.id}`} className="hire-button">
+                    <button 
+                      className="hire-button"
+                      onClick={() => window.location.href = `/bees/${bee.id}`}
+                    >
                       Hire {bee.name}
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -321,9 +324,6 @@ export default function BeesPage() {
           cursor: pointer;
           transition: all 0.3s ease;
           flex: 1;
-          text-decoration: none;
-          display: inline-block;
-          text-align: center;
         }
 
         .hire-button:hover {
