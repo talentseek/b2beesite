@@ -444,3 +444,41 @@
     padding-left: 1.25rem;
   }
 } 
+
+/* Mobile Talk to Buzz button */
+.mobile-talk-button {
+  display: none;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.talk-to-buzz-btn {
+  display: inline-block;
+  background: #fe8a00;
+  color: white;
+  text-decoration: none;
+  padding: 1rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(254, 138, 0, 0.3);
+}
+
+.talk-to-buzz-btn:hover {
+  background: #e67a00;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(254, 138, 0, 0.4);
+}
+
+/* Show mobile button only on mobile devices */
+@media (max-width: 768px) {
+  .mobile-talk-button {
+    display: block;
+  }
+  
+  /* Hide speech bubble on mobile since we have the button */
+  .speech-bubble {
+    display: none !important;
+  }
+} 

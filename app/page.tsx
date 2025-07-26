@@ -56,6 +56,13 @@ export default function Home() {
           )}
         </div>
         
+        {/* Mobile Talk to Buzz button */}
+        <div className="mobile-talk-button">
+          <a href="/chat" className="talk-to-buzz-btn">
+            🐝 Talk to Buzz
+          </a>
+        </div>
+        
         <div className="info-section">
           <h1 className="main-title">Buzzing Into Business – AI Support Coming Soon!</h1>
           

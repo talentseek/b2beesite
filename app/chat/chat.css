@@ -239,6 +239,11 @@
 
   .message-content {
     max-width: 85%;
+    padding: 0.75rem 1rem;
+  }
+
+  .message-content p {
+    font-size: 0.9rem;
   }
 
   .input-group {
@@ -254,6 +259,16 @@
   .chat-input-form {
     padding: 1rem;
   }
+
+  .chat-subscribe-form {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .chat-subscribe-input,
+  .chat-subscribe-button {
+    width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
@@ -268,6 +283,38 @@
 
   .message-content p {
     font-size: 0.875rem;
+  }
+
+  .chat-messages {
+    padding: 0.75rem;
+  }
+
+  .chat-header {
+    padding: 0.75rem;
+  }
+
+  .chat-input-form {
+    padding: 0.75rem;
+  }
+
+  .buzz-avatar {
+    width: 40px !important;
+    height: 40px !important;
+  }
+
+  .message-avatar {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .chat-subscribe-input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .chat-subscribe-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }
 
