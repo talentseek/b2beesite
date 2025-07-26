@@ -98,4 +98,8 @@ jspm_packages/
 .dynamodb/
 
 # TernJS port file
-.tern-port 
+.tern-port
+
+# Uploaded files (keep directory but ignore contents)
+public/uploads/*
+!public/uploads/.gitkeep 

@@ -56,6 +56,14 @@ export default function AdminDashboard() {
 
   return (
     <div className="admin-dashboard">
+      <div className="admin-nav">
+        <h1>Admin Dashboard</h1>
+        <nav>
+          <a href="/admin" className="nav-link active">Dashboard</a>
+          <a href="/admin/bees" className="nav-link">Busy Bees</a>
+        </nav>
+      </div>
+
       {analytics && (
         <div className="analytics-section">
           <h2>Analytics Overview</h2>
@@ -101,6 +109,43 @@ export default function AdminDashboard() {
         .admin-dashboard {
           max-width: 1200px;
           margin: 0 auto;
+        }
+
+        .admin-nav {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 2rem;
+          padding-bottom: 1rem;
+          border-bottom: 2px solid #f0f0f0;
+        }
+
+        .admin-nav h1 {
+          color: #205b41;
+          margin: 0;
+        }
+
+        .admin-nav nav {
+          display: flex;
+          gap: 1rem;
+        }
+
+        .nav-link {
+          padding: 0.5rem 1rem;
+          text-decoration: none;
+          color: #666;
+          border-radius: 6px;
+          transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+          background: #f3f4f6;
+          color: #205b41;
+        }
+
+        .nav-link.active {
+          background: #fe8a00;
+          color: white;
         }
 
         h2 {

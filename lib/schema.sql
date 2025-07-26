@@ -34,7 +34,33 @@ END;
 $$ language 'plpgsql';
 
 -- Create trigger to automatically update updated_at
+DROP TRIGGER IF EXISTS update_subscribers_updated_at ON subscribers;
 CREATE TRIGGER update_subscribers_updated_at 
   BEFORE UPDATE ON subscribers 
+  FOR EACH ROW 
+  EXECUTE FUNCTION update_updated_at_column();
+
+-- Create bees table for bee profiles
+CREATE TABLE IF NOT EXISTS bees (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  role VARCHAR(255) NOT NULL,
+  description TEXT NOT NULL,
+  price DECIMAL(10,2),
+  image_url VARCHAR(500),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create indexes for bees table
+CREATE INDEX IF NOT EXISTS idx_bees_is_active ON bees(is_active);
+CREATE INDEX IF NOT EXISTS idx_bees_role ON bees(role);
+CREATE INDEX IF NOT EXISTS idx_bees_created_at ON bees(created_at);
+
+-- Create trigger to automatically update bees updated_at
+DROP TRIGGER IF EXISTS update_bees_updated_at ON bees;
+CREATE TRIGGER update_bees_updated_at 
+  BEFORE UPDATE ON bees 
   FOR EACH ROW 
   EXECUTE FUNCTION update_updated_at_column(); 
