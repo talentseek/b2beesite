@@ -25,15 +25,21 @@ export default function BeesPage() {
   }, [])
 
   const fetchBees = async () => {
+    console.log('Fetching bees...')
     try {
       const response = await fetch('/api/bees')
+      console.log('Response status:', response.status)
       if (response.ok) {
         const data = await response.json()
+        console.log('Bees data:', data)
         setBees(data.bees || [])
+      } else {
+        console.error('Response not ok:', response.status)
       }
     } catch (error) {
       console.error('Error fetching bees:', error)
     } finally {
+      console.log('Setting loading to false')
       setLoading(false)
     }
   }
@@ -326,9 +332,9 @@ export default function BeesPage() {
         }
 
         .learn-more-button {
-          background: #fe8a00 !important;
+          background: #ff0000 !important;
           color: white !important;
-          border: 2px solid #fe8a00 !important;
+          border: 3px solid #ff0000 !important;
           padding: 0.75rem 1.5rem;
           border-radius: 8px;
           font-weight: 600;
@@ -338,11 +344,12 @@ export default function BeesPage() {
           text-decoration: none;
           display: inline-block;
           text-align: center;
+          font-size: 16px !important;
         }
 
         .learn-more-button:hover {
-          background: #e67a00 !important;
-          border-color: #e67a00 !important;
+          background: #cc0000 !important;
+          border-color: #cc0000 !important;
           transform: translateY(-2px);
         }
 
