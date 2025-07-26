@@ -142,24 +142,54 @@ export default function BeesPage() {
         )}
       </div>
 
-      <div className="cta-section">
-        <div className="cta-content">
-          <div className="buzz-photo">
-            <Image
-              src="/buzz.png"
-              alt="Buzz - Your AI Assistant"
-              width={120}
-              height={120}
-              className="buzz-avatar"
-            />
+              <div className="cta-section">
+          <div className="cta-background">
+            <div className="cta-content">
+              <div className="cta-left">
+                <div className="buzz-photo">
+                  <Image
+                    src="/buzz.png"
+                    alt="Buzz - Your AI Assistant"
+                    width={140}
+                    height={140}
+                    className="buzz-avatar"
+                  />
+                  <div className="buzz-status">
+                    <div className="status-dot"></div>
+                    <span>Online & Ready to Help</span>
+                  </div>
+                </div>
+              </div>
+              <div className="cta-right">
+                <div className="cta-badge">🤖 AI Assistant</div>
+                <h2>Can't find the perfect bee?</h2>
+                <p className="cta-description">
+                  Let Buzz, your AI recruitment specialist, help you find the right AI assistant for your specific needs. 
+                  Get personalized recommendations in seconds!
+                </p>
+                <div className="cta-features">
+                  <div className="feature">
+                    <span className="feature-icon">⚡</span>
+                    <span>Instant Recommendations</span>
+                  </div>
+                  <div className="feature">
+                    <span className="feature-icon">🎯</span>
+                    <span>Personalized Matching</span>
+                  </div>
+                  <div className="feature">
+                    <span className="feature-icon">💬</span>
+                    <span>24/7 Availability</span>
+                  </div>
+                </div>
+                <Link href="/chat" className="chat-with-buzz-btn">
+                  <span className="btn-icon">💬</span>
+                  <span>Chat with Buzz Now</span>
+                  <span className="btn-arrow">→</span>
+                </Link>
+              </div>
+            </div>
           </div>
-          <h2>Can't find the perfect bee?</h2>
-          <p>Let Buzz help you find the right AI assistant for your specific needs.</p>
-          <Link href="/chat" className="chat-with-buzz-btn">
-            Chat with Buzz
-          </Link>
         </div>
-      </div>
 
       <style jsx>{`
         .bees-page {
@@ -358,50 +388,176 @@ export default function BeesPage() {
         }
 
         .cta-section {
-          padding: 4rem 2rem;
+          margin: 4rem 2rem;
+        }
+
+        .cta-background {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 24px;
+          padding: 3rem;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .cta-background::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+          pointer-events: none;
+        }
+
+        .cta-content {
+          display: grid;
+          grid-template-columns: auto 1fr;
+          gap: 3rem;
+          align-items: center;
+          position: relative;
+          z-index: 1;
+        }
+
+        .cta-left {
           text-align: center;
-          color: white;
         }
 
         .buzz-photo {
-          margin-bottom: 2rem;
+          position: relative;
+          margin-bottom: 1rem;
         }
 
         .buzz-avatar {
           border-radius: 50%;
-          border: 4px solid rgba(255, 255, 255, 0.3);
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+          border: 6px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+          background: white;
         }
 
-        .cta-content h2 {
-          font-size: 2.5rem;
+        .buzz-status {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-top: 1rem;
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        .status-dot {
+          width: 8px;
+          height: 8px;
+          background: #4ade80;
+          border-radius: 50%;
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+
+        .cta-right {
+          color: white;
+        }
+
+        .cta-badge {
+          display: inline-block;
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-size: 0.9rem;
+          font-weight: 600;
           margin-bottom: 1rem;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          backdrop-filter: blur(10px);
         }
 
-        .cta-content p {
-          font-size: 1.25rem;
+        .cta-right h2 {
+          font-size: 2.5rem;
+          font-weight: 800;
+          margin: 0 0 1rem 0;
+          line-height: 1.2;
+        }
+
+        .cta-description {
+          font-size: 1.1rem;
+          line-height: 1.6;
           margin-bottom: 2rem;
-          opacity: 0.9;
+          opacity: 0.95;
+        }
+
+        .cta-features {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          margin-bottom: 2rem;
+        }
+
+        .feature {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          font-size: 1rem;
+        }
+
+        .feature-icon {
+          font-size: 1.2rem;
+          width: 24px;
+          text-align: center;
         }
 
         .chat-with-buzz-btn {
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
           background: linear-gradient(135deg, #fe8a00 0%, #e67a00 100%);
           color: white;
           text-decoration: none;
-          padding: 1.25rem 2.5rem;
+          padding: 1.25rem 2rem;
           border-radius: 50px;
           font-weight: 700;
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           transition: all 0.3s ease;
-          box-shadow: 0 8px 24px rgba(254, 138, 0, 0.3);
+          box-shadow: 0 8px 24px rgba(254, 138, 0, 0.4);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .chat-with-buzz-btn::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+          transition: left 0.5s;
+        }
+
+        .chat-with-buzz-btn:hover::before {
+          left: 100%;
         }
 
         .chat-with-buzz-btn:hover {
           background: linear-gradient(135deg, #e67a00 0%, #d46a00 100%);
-          transform: translateY(-3px);
-          box-shadow: 0 12px 32px rgba(254, 138, 0, 0.4);
+          transform: translateY(-2px);
+          box-shadow: 0 12px 32px rgba(254, 138, 0, 0.5);
+        }
+
+        .btn-icon {
+          font-size: 1.2rem;
+        }
+
+        .btn-arrow {
+          font-size: 1.3rem;
+          transition: transform 0.3s ease;
+        }
+
+        .chat-with-buzz-btn:hover .btn-arrow {
+          transform: translateX(4px);
         }
 
         .loading {
@@ -448,8 +604,22 @@ export default function BeesPage() {
             flex-direction: column;
           }
 
-          .cta-content h2 {
+          .cta-content {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            text-align: center;
+          }
+
+          .cta-right h2 {
             font-size: 2rem;
+          }
+
+          .cta-features {
+            align-items: center;
+          }
+
+          .feature {
+            justify-content: center;
           }
         }
       `}</style>
