@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import EmailSubscription from '@/components/EmailSubscription'
 import './page.css'
 
@@ -30,10 +30,17 @@ export default function Home() {
     })
   }
 
+  const [showBubble, setShowBubble] = useState(false)
+
   return (
     <main className="coming-soon-container">
       <div className="content-wrapper">
-        <div className="image-section">
+        <div
+          className="image-section"
+          onMouseEnter={() => setShowBubble(true)}
+          onMouseLeave={() => setShowBubble(false)}
+          style={{ position: 'relative', display: 'inline-block' }}
+        >
           <Image
             src="/newbuzz.png"
             alt="B2BEE Logo"
@@ -42,6 +49,11 @@ export default function Home() {
             priority
             className="coming-soon-image"
           />
+          {showBubble && (
+            <a href="/chat" className="speech-bubble">
+              Talk to Buzz
+            </a>
+          )}
         </div>
         
         <div className="info-section">
