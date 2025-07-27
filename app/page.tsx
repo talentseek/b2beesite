@@ -60,10 +60,10 @@ export default function Home() {
         }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <Image
-              src="/logofooter.png"
+              src="/logo.png"
               alt="B2BEE Logo"
-              width={80}
-              height={80}
+              width={40}
+              height={40}
               style={{
                 transition: 'transform 0.3s ease'
               }}
