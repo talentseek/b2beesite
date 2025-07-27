@@ -62,8 +62,8 @@ export default function Home() {
             <Image
               src="/logo.png"
               alt="B2BEE Logo"
-              width={40}
-              height={40}
+              width={80}
+              height={80}
               style={{
                 transition: 'transform 0.3s ease'
               }}
