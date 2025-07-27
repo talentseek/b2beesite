@@ -14,6 +14,19 @@ export default function ChatPage() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [newsletterMessage, setNewsletterMessage] = useState('');
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  // Set screen width on client side only
+  useEffect(() => {
+    setScreenWidth(window.innerWidth);
+    
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Simulate Buzz typing and sending the first message
   useEffect(() => {
@@ -157,7 +170,7 @@ export default function ChatPage() {
             backgroundColor: '#22c55e',
             animation: 'pulse 2s infinite'
           }}></div>
-          <span style={{ display: window.innerWidth < 360 ? 'none' : 'inline' }}>
+          <span style={{ display: screenWidth < 360 ? 'none' : 'inline' }}>
             Online
           </span>
         </div>
