@@ -69,7 +69,11 @@ export default function EmailSubscription() {
   }
 
   return (
-    <div style={{ width: '100%', maxWidth: '28rem' }}>
+    <div style={{ 
+      width: '100%', 
+      maxWidth: '28rem',
+      margin: '0 auto'
+    }}>
       {status === 'success' ? (
         <div style={{
           backgroundColor: '#dcfce7',

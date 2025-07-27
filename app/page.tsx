@@ -358,33 +358,59 @@ export default function Home() {
         <div style={{
           maxWidth: '600px',
           width: '100%',
-          marginBottom: '4rem'
+          marginBottom: '4rem',
+          textAlign: 'center'
         }}>
+          <h3 style={{
+            fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+            fontWeight: '700',
+            marginBottom: '1rem',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+          }}>
+            Stay Informed
+          </h3>
+          <p style={{
+            fontSize: '1rem',
+            marginBottom: '2rem',
+            opacity: '0.9',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+            lineHeight: '1.5'
+          }}>
+            Be the first to know when we launch our AI solutions! Follow us for updates and exclusive early access.
+          </p>
+          
           <EmailSubscription />
+          
+          <p style={{
+            fontSize: '0.875rem',
+            opacity: '0.8',
+            marginTop: '1.5rem',
+            marginBottom: '2rem',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+          }}>
+            Follow us for updates
+          </p>
           
           <div style={{
             display: 'flex',
             justifyContent: 'center',
             gap: '2rem',
-            marginTop: '2rem'
+            marginTop: '1rem'
           }}>
             <a 
               href="#" 
               style={{
                 color: 'white',
-                padding: '12px',
-                borderRadius: '50%',
+                padding: '8px',
                 transition: 'all 0.3s ease',
-                textDecoration: 'none',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '2px solid rgba(255, 255, 255, 0.2)'
+                textDecoration: 'none'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.color = '#fed7aa'
                 e.currentTarget.style.transform = 'scale(1.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.color = 'white'
                 e.currentTarget.style.transform = 'scale(1)'
               }}
               onClick={() => handleSocialClick('x')}
@@ -397,19 +423,16 @@ export default function Home() {
               href="#" 
               style={{
                 color: 'white',
-                padding: '12px',
-                borderRadius: '50%',
+                padding: '8px',
                 transition: 'all 0.3s ease',
-                textDecoration: 'none',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '2px solid rgba(255, 255, 255, 0.2)'
+                textDecoration: 'none'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.color = '#fed7aa'
                 e.currentTarget.style.transform = 'scale(1.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.color = 'white'
                 e.currentTarget.style.transform = 'scale(1)'
               }}
               onClick={() => handleSocialClick('linkedin')}
@@ -422,19 +445,16 @@ export default function Home() {
               href="#" 
               style={{
                 color: 'white',
-                padding: '12px',
-                borderRadius: '50%',
+                padding: '8px',
                 transition: 'all 0.3s ease',
-                textDecoration: 'none',
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '2px solid rgba(255, 255, 255, 0.2)'
+                textDecoration: 'none'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.color = '#fed7aa'
                 e.currentTarget.style.transform = 'scale(1.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.color = 'white'
                 e.currentTarget.style.transform = 'scale(1)'
               }}
               onClick={() => handleSocialClick('instagram')}
@@ -449,7 +469,7 @@ export default function Home() {
 
       {/* Professional Footer */}
       <footer style={{
-        background: 'rgba(0, 0, 0, 0.8)',
+        background: 'black',
         color: 'white',
         padding: '3rem 2rem 2rem 2rem',
         marginTop: 'auto'
