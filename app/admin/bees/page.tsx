@@ -3,6 +3,10 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import ImageUpload from '@/components/ImageUpload'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 interface Bee {
   id: number
@@ -54,13 +58,9 @@ export default function BeesManagement() {
       price: formData.price ? parseFloat(formData.price) : null
     }
 
-    console.log('Submitting bee data:', beeData)
-
     try {
       const url = editingBee ? `/api/bees/${editingBee.id}` : '/api/bees'
       const method = editingBee ? 'PUT' : 'POST'
-      
-      console.log('Sending request to:', url, 'with method:', method)
       
       const response = await fetch(url, {
         method,
@@ -131,414 +131,616 @@ export default function BeesManagement() {
   }
 
   if (loading) {
-    return <div className="loading">Loading bees...</div>
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '400px',
+        color: 'white'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '8px'
+          }}>
+            <div style={{
+              fontSize: '24px',
+              animation: 'bounce 1.4s ease-in-out infinite both'
+            }}>🐝</div>
+            <div style={{
+              fontSize: '24px',
+              animation: 'bounce 1.4s ease-in-out infinite both 0.2s'
+            }}>🐝</div>
+            <div style={{
+              fontSize: '24px',
+              animation: 'bounce 1.4s ease-in-out infinite both 0.4s'
+            }}>🐝</div>
+          </div>
+          <p style={{
+            fontSize: 'clamp(16px, 3vw, 18px)',
+            fontWeight: '500',
+            opacity: '0.9'
+          }}>
+            Loading bees...
+          </p>
+        </div>
+        
+        <style jsx>{`
+          @keyframes bounce {
+            0%, 80%, 100% {
+              transform: scale(0);
+            }
+            40% {
+              transform: scale(1);
+            }
+          }
+        `}</style>
+      </div>
+    )
   }
 
   return (
-    <div className="bees-management">
-      <div className="header">
-        <h1>Busy Bees Management</h1>
-        <button 
-          className="add-button"
-          onClick={() => setShowAddForm(true)}
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 'clamp(32px, 6vw, 48px)'
+    }}>
+      {/* Header */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        gap: 'clamp(16px, 3vw, 24px)'
+      }}>
+        <h1 style={{
+          fontSize: 'clamp(24px, 5vw, 32px)',
+          fontWeight: 'bold',
+          color: 'white',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+          margin: '0'
+        }}>
+          Busy Bees Management
+        </h1>
+        
+        <Button 
+          onClick={() => {
+            console.log('Add New Bee button clicked')
+            setShowAddForm(true)
+          }}
+          style={{
+            background: '#fe8a00',
+            color: 'white',
+            border: 'none',
+            padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
+            borderRadius: '12px',
+            fontSize: 'clamp(14px, 3vw, 16px)',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = '#e67a00'
+            e.currentTarget.style.transform = 'translateY(-2px)'
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = '#fe8a00'
+            e.currentTarget.style.transform = 'translateY(0)'
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
+          }}
         >
           Add New Bee
-        </button>
+        </Button>
       </div>
 
+      {/* Custom Modal */}
       {showAddForm && (
-        <div className="form-overlay">
-          <div className="form-container">
-            <h2>{editingBee ? 'Edit Bee' : 'Add New Bee'}</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label htmlFor="name">Name *</label>
-                <input
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: '20px'
+        }}>
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+            border: 'none',
+            padding: 'clamp(24px, 4vw, 32px)',
+            maxWidth: '500px',
+            width: '90vw',
+            maxHeight: '90vh',
+            overflowY: 'auto'
+          }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 'clamp(16px, 3vw, 24px)'
+            }}>
+              <h2 style={{
+                fontSize: 'clamp(20px, 4vw, 24px)',
+                fontWeight: 'bold',
+                color: '#2d3748',
+                margin: 0
+              }}>
+                {editingBee ? 'Edit Bee' : 'Add New Bee'}
+              </h2>
+              <Button 
+                onClick={() => setShowAddForm(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  color: '#666',
+                  padding: '4px',
+                  borderRadius: '4px'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#f0f0f0'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'none'
+                }}
+              >
+                ×
+              </Button>
+            </div>
+            <form onSubmit={handleSubmit} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'clamp(16px, 3vw, 24px)'
+            }}>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <label htmlFor="name" style={{
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  fontWeight: '600',
+                  color: '#2d3748'
+                }}>
+                  Name *
+                </label>
+                <Input
                   type="text"
                   id="name"
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
                   required
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e2e8f0'
+                    e.target.style.boxShadow = 'none'
+                  }}
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="role">Role *</label>
-                <input
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <label htmlFor="role" style={{
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  fontWeight: '600',
+                  color: '#2d3748'
+                }}>
+                  Role *
+                </label>
+                <Input
                   type="text"
                   id="role"
                   value={formData.role}
                   onChange={(e) => setFormData({...formData, role: e.target.value})}
                   required
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e2e8f0'
+                    e.target.style.boxShadow = 'none'
+                  }}
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="description">Description *</label>
-                <textarea
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <label htmlFor="description" style={{
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  fontWeight: '600',
+                  color: '#2d3748'
+                }}>
+                  Description *
+                </label>
+                <Textarea
                   id="description"
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
                   required
                   rows={4}
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0',
+                    transition: 'all 0.3s ease',
+                    resize: 'vertical'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e2e8f0'
+                    e.target.style.boxShadow = 'none'
+                  }}
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="price">Price (optional)</label>
-                <input
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <label htmlFor="price" style={{
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  fontWeight: '600',
+                  color: '#2d3748'
+                }}>
+                  Price (optional)
+                </label>
+                <Input
                   type="number"
                   id="price"
                   value={formData.price}
                   onChange={(e) => setFormData({...formData, price: e.target.value})}
                   step="0.01"
                   min="0"
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e2e8f0'
+                    e.target.style.boxShadow = 'none'
+                  }}
                 />
               </div>
 
-              <div className="form-group">
-                <label>Bee Profile Image (optional)</label>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <label style={{
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  fontWeight: '600',
+                  color: '#2d3748'
+                }}>
+                  Bee Profile Image (optional)
+                </label>
                 <ImageUpload
                   currentImageUrl={formData.image_url}
                   onImageUpload={(url) => setFormData({...formData, image_url: url})}
                   onImageRemove={() => setFormData({...formData, image_url: ''})}
                 />
-                <p className="form-hint">Upload an image above, or provide a URL below</p>
-                <input
+                <p style={{
+                  fontSize: 'clamp(12px, 2.5vw, 14px)',
+                  color: '#666',
+                  margin: '0'
+                }}>
+                  Upload an image above, or provide a URL below
+                </p>
+                <Input
                   type="text"
                   id="image_url"
                   value={formData.image_url}
                   onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                  placeholder="Or enter image URL directly (e.g., https://example.com/image.jpg)..."
+                  placeholder="Or enter image URL directly..."
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: '2px solid #e2e8f0',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e2e8f0'
+                    e.target.style.boxShadow = 'none'
+                  }}
                 />
               </div>
 
-              <div className="form-actions">
-                <button type="submit" className="save-button">
-                  {editingBee ? 'Update Bee' : 'Add Bee'}
-                </button>
-                <button type="button" className="cancel-button" onClick={cancelForm}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 'clamp(12px, 2vw, 16px)',
+                marginTop: 'clamp(16px, 3vw, 24px)'
+              }}>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={cancelForm}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    color: '#2d3748',
+                    border: '2px solid #e2e8f0',
+                    padding: 'clamp(10px, 2vw, 14px) clamp(20px, 3vw, 28px)',
+                    borderRadius: '12px',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
+                    e.currentTarget.style.borderColor = '#fe8a00'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                    e.currentTarget.style.borderColor = '#e2e8f0'
+                  }}
+                >
                   Cancel
-                </button>
+                </Button>
+                <Button 
+                  type="submit"
+                  style={{
+                    background: '#fe8a00',
+                    color: 'white',
+                    border: 'none',
+                    padding: 'clamp(10px, 2vw, 14px) clamp(20px, 3vw, 28px)',
+                    borderRadius: '12px',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#e67a00'
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#fe8a00'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
+                  }}
+                >
+                  {editingBee ? 'Update Bee' : 'Add Bee'}
+                </Button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      <div className="bees-grid">
+      {/* Bees Grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+        gap: 'clamp(20px, 4vw, 32px)'
+      }}>
         {bees.map((bee) => (
-          <div key={bee.id} className="bee-card">
-            <div className="bee-image">
+          <div key={bee.id} style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            backdropFilter: 'blur(10px)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+            overflow: 'hidden',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-4px)'
+            e.currentTarget.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.25)'
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)'
+            e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.15)'
+          }}>
+            <div style={{
+              position: 'relative',
+              width: '100%',
+              height: '200px',
+              overflow: 'hidden'
+            }}>
               {bee.image_url ? (
                 <Image
                   src={bee.image_url}
                   alt={bee.name}
-                  width={200}
-                  height={200}
-                  className="bee-avatar"
+                  fill
+                  style={{
+                    objectFit: 'cover'
+                  }}
                 />
               ) : (
-                <div className="bee-placeholder">🐝</div>
+                <div style={{
+                  width: '100%',
+                  height: '100%',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '60px'
+                }}>
+                  🐝
+                </div>
               )}
             </div>
-            <div className="bee-info">
-              <h3>{bee.name}</h3>
-              <p className="bee-role">{bee.role}</p>
-              <p className="bee-description">{bee.description}</p>
+            
+            <div style={{
+              padding: 'clamp(20px, 4vw, 24px)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'clamp(8px, 2vw, 12px)'
+            }}>
+              <h3 style={{
+                fontSize: 'clamp(18px, 4vw, 24px)',
+                fontWeight: 'bold',
+                color: '#2d3748',
+                margin: '0'
+              }}>
+                {bee.name}
+              </h3>
+              <p style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                color: '#fe8a00',
+                margin: '0'
+              }}>
+                {bee.role}
+              </p>
+              <p style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                color: '#666',
+                lineHeight: '1.5',
+                margin: '0'
+              }}>
+                {bee.description}
+              </p>
               {bee.price && (
-                <p className="bee-price">${bee.price}/month</p>
+                <p style={{
+                  fontSize: 'clamp(18px, 4vw, 20px)',
+                  fontWeight: 'bold',
+                  color: '#fe8a00',
+                  margin: '0'
+                }}>
+                  ${bee.price}/month
+                </p>
               )}
-            </div>
-            <div className="bee-actions">
-              <button 
-                className="edit-button"
-                onClick={() => handleEdit(bee)}
-              >
-                Edit
-              </button>
-              <button 
-                className="delete-button"
-                onClick={() => handleDelete(bee.id)}
-              >
-                Delete
-              </button>
+              
+              <div style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: 'clamp(8px, 2vw, 12px)',
+                marginTop: 'clamp(12px, 2vw, 16px)'
+              }}>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleEdit(bee)}
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    color: '#2d3748',
+                    border: '2px solid #e2e8f0',
+                    padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
+                    borderRadius: '12px',
+                    fontSize: 'clamp(12px, 2.5vw, 14px)',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
+                    e.currentTarget.style.borderColor = '#fe8a00'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                    e.currentTarget.style.borderColor = '#e2e8f0'
+                  }}
+                >
+                  Edit
+                </Button>
+                <Button 
+                  variant="destructive" 
+                  size="sm" 
+                  onClick={() => handleDelete(bee.id)}
+                  style={{
+                    background: '#e53e3e',
+                    color: 'white',
+                    border: 'none',
+                    padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
+                    borderRadius: '12px',
+                    fontSize: 'clamp(12px, 2.5vw, 14px)',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#c53030'
+                    e.currentTarget.style.transform = 'translateY(-1px)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#e53e3e'
+                    e.currentTarget.style.transform = 'translateY(0)'
+                  }}
+                >
+                  Delete
+                </Button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
       {bees.length === 0 && (
-        <div className="empty-state">
-          <p>No bees added yet. Click "Add New Bee" to get started!</p>
+        <div style={{
+          textAlign: 'center',
+          padding: 'clamp(40px, 8vw, 80px)',
+          color: 'white'
+        }}>
+          <p style={{
+            fontSize: 'clamp(18px, 4vw, 24px)',
+            margin: '0',
+            opacity: '0.9'
+          }}>
+            No bees added yet. Click "Add New Bee" to get started!
+          </p>
         </div>
       )}
-
-      <style jsx>{`
-        .bees-management {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 2rem;
-        }
-
-        .header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 2rem;
-        }
-
-        .header h1 {
-          color: #205b41;
-          margin: 0;
-        }
-
-        .add-button {
-          background: #fe8a00;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .add-button:hover {
-          background: #e67a00;
-          transform: translateY(-2px);
-        }
-
-        .form-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-        }
-
-        .form-container {
-          background: white;
-          padding: 2rem;
-          border-radius: 12px;
-          width: 90%;
-          max-width: 500px;
-          max-height: 90vh;
-          overflow-y: auto;
-        }
-
-        .form-container h2 {
-          color: #205b41;
-          margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-          margin-bottom: 1rem;
-        }
-
-        .form-group label {
-          display: block;
-          margin-bottom: 0.5rem;
-          color: #333;
-          font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-          width: 100%;
-          padding: 0.75rem;
-          border: 2px solid #e5e7eb;
-          border-radius: 8px;
-          font-size: 1rem;
-          transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-          outline: none;
-          border-color: #fe8a00;
-        }
-
-        .form-hint {
-          font-size: 0.875rem;
-          color: #6b7280;
-          margin: 0.5rem 0;
-        }
-
-        .form-actions {
-          display: flex;
-          gap: 1rem;
-          margin-top: 1.5rem;
-        }
-
-        .save-button {
-          background: #205b41;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .save-button:hover {
-          background: #1a4a35;
-        }
-
-        .cancel-button {
-          background: #6b7280;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .cancel-button:hover {
-          background: #4b5563;
-        }
-
-        .bees-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 1.5rem;
-        }
-
-        .bee-card {
-          background: white;
-          border-radius: 12px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-          transition: transform 0.3s ease;
-        }
-
-        .bee-card:hover {
-          transform: translateY(-4px);
-        }
-
-        .bee-image {
-          height: 200px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #f3f4f6;
-        }
-
-        .bee-avatar {
-          object-fit: contain;
-          width: 100%;
-          height: 100%;
-          background: #f3f4f6;
-        }
-
-        .bee-placeholder {
-          font-size: 4rem;
-        }
-
-        .bee-info {
-          padding: 1.5rem;
-        }
-
-        .bee-info h3 {
-          color: #205b41;
-          margin: 0 0 0.5rem 0;
-          font-size: 1.25rem;
-        }
-
-        .bee-role {
-          color: #fe8a00;
-          font-weight: 600;
-          margin: 0 0 0.75rem 0;
-        }
-
-        .bee-description {
-          color: #666;
-          margin: 0 0 0.75rem 0;
-          line-height: 1.5;
-        }
-
-        .bee-price {
-          color: #205b41;
-          font-weight: 600;
-          margin: 0;
-        }
-
-        .bee-actions {
-          padding: 0 1.5rem 1.5rem;
-          display: flex;
-          gap: 0.75rem;
-        }
-
-        .edit-button {
-          background: #3b82f6;
-          color: white;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 6px;
-          font-size: 0.875rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .edit-button:hover {
-          background: #2563eb;
-        }
-
-        .delete-button {
-          background: #ef4444;
-          color: white;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 6px;
-          font-size: 0.875rem;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .delete-button:hover {
-          background: #dc2626;
-        }
-
-        .empty-state {
-          text-align: center;
-          padding: 3rem;
-          color: #666;
-        }
-
-        .loading {
-          text-align: center;
-          padding: 2rem;
-          color: #666;
-        }
-
-        @media (max-width: 768px) {
-          .bees-management {
-            padding: 1rem;
-          }
-
-          .header {
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
-          }
-
-          .bees-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .form-actions {
-            flex-direction: column;
-          }
-        }
-      `}</style>
     </div>
   )
-} 
+}

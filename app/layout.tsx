@@ -1,18 +1,20 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
+import Link from 'next/link'
+import Image from 'next/image'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'B2BEE - AI Support Coming Soon',
+  title: 'B2BEE - AI Support',
   description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
   icons: {
     icon: '/logo.png',
     apple: '/logo.png',
   },
   openGraph: {
-    title: 'B2BEE - AI Support Coming Soon',
+    title: 'B2BEE - AI Support',
     description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
     images: [
       {
@@ -27,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'B2BEE - AI Support Coming Soon',
+    title: 'B2BEE - AI Support',
     description: 'B2BEE helps small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.',
     images: ['/logo.png'],
   },
@@ -40,7 +42,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+      </body>
     </html>
   )
-} 
+}

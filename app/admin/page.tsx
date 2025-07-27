@@ -1,6 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 interface Analytics {
   page_views: number
@@ -50,200 +53,275 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="loading">Loading dashboard...</div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '400px',
+        color: 'white'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '16px'
+        }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '8px'
+          }}>
+            <div style={{
+              fontSize: '24px',
+              animation: 'bounce 1.4s ease-in-out infinite both'
+            }}>🐝</div>
+            <div style={{
+              fontSize: '24px',
+              animation: 'bounce 1.4s ease-in-out infinite both 0.2s'
+            }}>🐝</div>
+            <div style={{
+              fontSize: '24px',
+              animation: 'bounce 1.4s ease-in-out infinite both 0.4s'
+            }}>🐝</div>
+          </div>
+          <p style={{
+            fontSize: 'clamp(16px, 3vw, 18px)',
+            fontWeight: '500',
+            opacity: '0.9'
+          }}>
+            Loading dashboard...
+          </p>
+        </div>
+        
+        <style jsx>{`
+          @keyframes bounce {
+            0%, 80%, 100% {
+              transform: scale(0);
+            }
+            40% {
+              transform: scale(1);
+            }
+          }
+        `}</style>
+      </div>
     )
   }
 
   return (
-    <div className="admin-dashboard">
-      <div className="admin-nav">
-        <h1>Admin Dashboard</h1>
-        <nav>
-          <a href="/admin" className="nav-link active">Dashboard</a>
-          <a href="/admin/bees" className="nav-link">Busy Bees</a>
-        </nav>
-      </div>
-
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 'clamp(32px, 6vw, 48px)'
+    }}>
+      {/* Analytics Overview */}
       {analytics && (
-        <div className="analytics-section">
-          <h2>Analytics Overview</h2>
-          <div className="stats-grid">
-            <div className="stat-card">
-              <h3>Page Views</h3>
-              <p className="stat-number">{analytics.page_views}</p>
+        <div style={{
+          background: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '20px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+          padding: 'clamp(24px, 4vw, 32px)'
+        }}>
+          <h2 style={{
+            fontSize: 'clamp(24px, 5vw, 32px)',
+            fontWeight: 'bold',
+            color: '#2d3748',
+            marginBottom: 'clamp(24px, 4vw, 32px)',
+            textAlign: 'center'
+          }}>
+            Analytics Overview
+          </h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: 'clamp(16px, 3vw, 24px)'
+          }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              padding: 'clamp(20px, 4vw, 24px)',
+              borderRadius: '15px',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+            }}>
+              <h3 style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                marginBottom: '8px',
+                opacity: '0.9'
+              }}>
+                Page Views
+              </h3>
+              <p style={{
+                fontSize: 'clamp(28px, 5vw, 36px)',
+                fontWeight: 'bold',
+                margin: '0'
+              }}>
+                {analytics.page_views.toLocaleString()}
+              </p>
             </div>
-            <div className="stat-card">
-              <h3>Button Clicks</h3>
-              <p className="stat-number">{analytics.button_clicks}</p>
+            
+            <div style={{
+              background: 'linear-gradient(135deg, #fe8a00 0%, #ea3e93 100%)',
+              color: 'white',
+              padding: 'clamp(20px, 4vw, 24px)',
+              borderRadius: '15px',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+            }}>
+              <h3 style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                marginBottom: '8px',
+                opacity: '0.9'
+              }}>
+                Button Clicks
+              </h3>
+              <p style={{
+                fontSize: 'clamp(28px, 5vw, 36px)',
+                fontWeight: 'bold',
+                margin: '0'
+              }}>
+                {analytics.button_clicks.toLocaleString()}
+              </p>
             </div>
-            <div className="stat-card">
-              <h3>Social Clicks</h3>
-              <p className="stat-number">{analytics.social_clicks}</p>
+            
+            <div style={{
+              background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+              color: 'white',
+              padding: 'clamp(20px, 4vw, 24px)',
+              borderRadius: '15px',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+            }}>
+              <h3 style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                marginBottom: '8px',
+                opacity: '0.9'
+              }}>
+                Social Clicks
+              </h3>
+              <p style={{
+                fontSize: 'clamp(28px, 5vw, 36px)',
+                fontWeight: 'bold',
+                margin: '0'
+              }}>
+                {analytics.social_clicks.toLocaleString()}
+              </p>
             </div>
-            <div className="stat-card">
-              <h3>Total Subscribers</h3>
-              <p className="stat-number">{analytics.total_subscribers}</p>
+            
+            <div style={{
+              background: 'linear-gradient(135deg, #ed8936 0%, #dd6b20 100%)',
+              color: 'white',
+              padding: 'clamp(20px, 4vw, 24px)',
+              borderRadius: '15px',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+            }}>
+              <h3 style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                marginBottom: '8px',
+                opacity: '0.9'
+              }}>
+                Total Subscribers
+              </h3>
+              <p style={{
+                fontSize: 'clamp(28px, 5vw, 36px)',
+                fontWeight: 'bold',
+                margin: '0'
+              }}>
+                {analytics.total_subscribers.toLocaleString()}
+              </p>
             </div>
           </div>
         </div>
       )}
 
-      <div className="subscribers-section">
-        <h2>Email Subscribers ({subscribers.length})</h2>
-        <div className="subscribers-list">
+      {/* Email Subscribers */}
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        borderRadius: '20px',
+        backdropFilter: 'blur(10px)',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+        padding: 'clamp(24px, 4vw, 32px)'
+      }}>
+        <h2 style={{
+          fontSize: 'clamp(24px, 5vw, 32px)',
+          fontWeight: 'bold',
+          color: '#2d3748',
+          marginBottom: 'clamp(24px, 4vw, 32px)',
+          textAlign: 'center'
+        }}>
+          Email Subscribers ({subscribers.length})
+        </h2>
+        
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          maxHeight: '400px',
+          overflowY: 'auto'
+        }}>
           {subscribers.map((subscriber) => (
-            <div key={subscriber.id} className="subscriber-item">
-              <div className="subscriber-email">{subscriber.email}</div>
-              <div className="subscriber-date">
+            <div key={subscriber.id} style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: 'clamp(12px, 2vw, 16px)',
+              borderBottom: '1px solid #e2e8f0',
+              transition: 'background-color 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f7fafc'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+            }}>
+              <p style={{
+                fontWeight: '600',
+                color: '#2d3748',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                margin: '0'
+              }}>
+                {subscriber.email}
+              </p>
+              <p style={{
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                color: '#666',
+                margin: '0'
+              }}>
                 {new Date(subscriber.created_at).toLocaleDateString()}
-              </div>
-              <div className="subscriber-status">
+              </p>
+              <p style={{
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                color: subscriber.is_active ? '#48bb78' : '#e53e3e',
+                fontWeight: '600',
+                margin: '0'
+              }}>
                 {subscriber.is_active ? 'Active' : 'Inactive'}
-              </div>
+              </p>
             </div>
           ))}
+          
+          {subscribers.length === 0 && (
+            <div style={{
+              textAlign: 'center',
+              padding: 'clamp(32px, 6vw, 48px)',
+              color: '#666'
+            }}>
+              <p style={{
+                fontSize: 'clamp(16px, 3vw, 18px)',
+                margin: '0'
+              }}>
+                No subscribers yet. Start promoting your newsletter!
+              </p>
+            </div>
+          )}
         </div>
       </div>
-
-      <style jsx>{`
-        .admin-dashboard {
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .admin-nav {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 2rem;
-          padding-bottom: 1rem;
-          border-bottom: 2px solid #f0f0f0;
-        }
-
-        .admin-nav h1 {
-          color: #205b41;
-          margin: 0;
-        }
-
-        .admin-nav nav {
-          display: flex;
-          gap: 1rem;
-        }
-
-        .nav-link {
-          padding: 0.5rem 1rem;
-          text-decoration: none;
-          color: #666;
-          border-radius: 6px;
-          transition: all 0.3s ease;
-        }
-
-        .nav-link:hover {
-          background: #f3f4f6;
-          color: #205b41;
-        }
-
-        .nav-link.active {
-          background: #fe8a00;
-          color: white;
-        }
-
-        h2 {
-          color: #205b41;
-          margin-bottom: 1rem;
-          font-size: 1.5rem;
-        }
-
-        .analytics-section {
-          margin-bottom: 3rem;
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
-        }
-
-        .stat-card {
-          background: white;
-          padding: 1.5rem;
-          border-radius: 12px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          text-align: center;
-        }
-
-        .stat-card h3 {
-          color: #666;
-          font-size: 0.875rem;
-          margin-bottom: 0.5rem;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-
-        .stat-number {
-          color: #fe8a00;
-          font-size: 2rem;
-          font-weight: 700;
-          margin: 0;
-        }
-
-        .subscribers-list {
-          background: white;
-          border-radius: 12px;
-          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-          overflow: hidden;
-        }
-
-        .subscriber-item {
-          display: grid;
-          grid-template-columns: 1fr auto auto;
-          gap: 1rem;
-          padding: 1rem 1.5rem;
-          border-bottom: 1px solid #f0f0f0;
-          align-items: center;
-        }
-
-        .subscriber-item:last-child {
-          border-bottom: none;
-        }
-
-        .subscriber-email {
-          font-weight: 500;
-          color: #333;
-        }
-
-        .subscriber-date {
-          color: #666;
-          font-size: 0.875rem;
-        }
-
-        .subscriber-status {
-          padding: 0.25rem 0.75rem;
-          border-radius: 20px;
-          font-size: 0.75rem;
-          font-weight: 500;
-          text-transform: uppercase;
-          background: #dcfce7;
-          color: #166534;
-        }
-
-        .loading {
-          text-align: center;
-          padding: 2rem;
-          color: #666;
-        }
-
-        @media (max-width: 768px) {
-          .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-
-          .subscriber-item {
-            grid-template-columns: 1fr;
-            gap: 0.5rem;
-          }
-        }
-      `}</style>
     </div>
   )
-} 
+}

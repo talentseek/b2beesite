@@ -25,21 +25,17 @@ export default function BeesPage() {
   }, [])
 
   const fetchBees = async () => {
-    console.log('Fetching bees...')
     try {
       const response = await fetch('/api/bees')
-      console.log('Response status:', response.status)
       if (response.ok) {
         const data = await response.json()
-        console.log('Bees data:', data)
         setBees(data.bees || [])
       } else {
-        console.error('Response not ok:', response.status)
+        console.error('Failed to fetch bees:', response.status)
       }
     } catch (error) {
       console.error('Error fetching bees:', error)
     } finally {
-      console.log('Setting loading to false')
       setLoading(false)
     }
   }
@@ -58,43 +54,201 @@ export default function BeesPage() {
 
   if (loading) {
     return (
-      <div className="bees-page">
-        <div className="loading-section">
-          <div className="bee-spinner">
-            <div className="bee">🐝</div>
-            <div className="bee">🐝</div>
-            <div className="bee">🐝</div>
-          </div>
-          <p className="loading-text">Loading our busy bees...</p>
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '8px',
+          marginBottom: '32px'
+        }}>
+          <div style={{
+            fontSize: '32px',
+            animation: 'bounce 1.4s ease-in-out infinite both'
+          }}>🐝</div>
+          <div style={{
+            fontSize: '32px',
+            animation: 'bounce 1.4s ease-in-out infinite both 0.2s'
+          }}>🐝</div>
+          <div style={{
+            fontSize: '32px',
+            animation: 'bounce 1.4s ease-in-out infinite both 0.4s'
+          }}>🐝</div>
         </div>
+        <p style={{
+          fontSize: '20px',
+          fontWeight: '500',
+          opacity: '0.9',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+        }}>
+          Loading our busy bees...
+        </p>
+        
+        <style jsx>{`
+          @keyframes bounce {
+            0%, 80%, 100% {
+              transform: scale(0);
+            }
+            40% {
+              transform: scale(1);
+            }
+          }
+        `}</style>
       </div>
     )
   }
 
   return (
-    <div className="bees-page">
-      <div className="hero-section">
-        <div className="hero-content">
-          <h1>Meet Our Busy Bees</h1>
-          <p>Choose the perfect AI assistant for your business needs. Each bee is specialized in different areas to help your business thrive.</p>
-        </div>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%)'
+    }}>
+      {/* Header */}
+      <div style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        padding: '16px 24px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+      }}>
+        <Link href="/" style={{
+          display: 'flex',
+          alignItems: 'center',
+          textDecoration: 'none',
+          color: 'white'
+        }}>
+          <Image
+            src="/logo.png"
+            alt="B2BEE Logo"
+            width={40}
+            height={40}
+            style={{
+              cursor: 'pointer',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.1)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
+          />
+        </Link>
+        <Link href="/chat" style={{
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          color: 'white',
+          textDecoration: 'none',
+          padding: '8px 16px',
+          borderRadius: '20px',
+          fontSize: '14px',
+          fontWeight: '600',
+          transition: 'all 0.2s ease'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+        }}>
+          Chat with Buzz
+        </Link>
       </div>
 
-      <div className="filters-section">
-        <div className="search-filter">
+      {/* Hero Section */}
+      <div style={{
+        padding: 'clamp(40px, 8vw, 80px) clamp(20px, 4vw, 40px)',
+        textAlign: 'center',
+        color: 'white'
+      }}>
+        <h1 style={{
+          fontSize: 'clamp(32px, 6vw, 48px)',
+          marginBottom: '16px',
+          textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)',
+          fontWeight: 'bold'
+        }}>
+          Meet Our Busy Bees
+        </h1>
+        <p style={{
+          fontSize: 'clamp(16px, 3vw, 20px)',
+          maxWidth: '600px',
+          margin: '0 auto',
+          opacity: '0.9',
+          lineHeight: '1.5'
+        }}>
+          Choose the perfect AI assistant for your business needs. Each bee is specialized in different areas to help your business thrive.
+        </p>
+      </div>
+
+      {/* Filters Section */}
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.95)',
+        padding: 'clamp(20px, 4vw, 32px)',
+        margin: '0 clamp(20px, 4vw, 40px)',
+        borderRadius: '12px',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+        backdropFilter: 'blur(10px)',
+        display: 'flex',
+        gap: '16px',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap'
+      }}>
+        <div style={{
+          flex: '1',
+          minWidth: '300px'
+        }}>
           <input
             type="text"
             placeholder="Search bees by name, role, or description..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            style={{
+              width: '100%',
+              padding: '12px 16px',
+              border: '2px solid #e5e7eb',
+              borderRadius: '8px',
+              fontSize: '16px',
+              transition: 'border-color 0.3s ease',
+              outline: 'none'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#fe8a00'
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#e5e7eb'
+            }}
           />
         </div>
-        <div className="role-filter">
+        <div>
           <select
             value={selectedRole}
             onChange={(e) => setSelectedRole(e.target.value)}
-            className="role-select"
+            style={{
+              padding: '12px 16px',
+              border: '2px solid #e5e7eb',
+              borderRadius: '8px',
+              fontSize: '16px',
+              background: 'white',
+              cursor: 'pointer',
+              transition: 'border-color 0.3s ease',
+              outline: 'none'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#fe8a00'
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = '#e5e7eb'
+            }}
           >
             {roles.map(role => (
               <option key={role} value={role}>
@@ -105,34 +259,137 @@ export default function BeesPage() {
         </div>
       </div>
 
-      <div className="bees-container">
+      {/* Bees Container */}
+      <div style={{
+        padding: 'clamp(40px, 6vw, 60px) clamp(20px, 4vw, 40px)'
+      }}>
         {filteredBees.length > 0 ? (
-          <div className="bees-grid">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+            gap: 'clamp(20px, 4vw, 32px)',
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
             {filteredBees.map((bee) => (
-              <div key={bee.id} className="bee-card">
-                <div className="bee-image-container">
+              <div key={bee.id} style={{
+                background: 'rgba(255, 255, 255, 0.95)',
+                borderRadius: '16px',
+                overflow: 'hidden',
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                backdropFilter: 'blur(10px)',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-8px)'
+                e.currentTarget.style.boxShadow = '0 16px 32px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15)'
+              }}>
+                <div style={{
+                  height: '250px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  borderRadius: '16px 16px 0 0'
+                }}>
                   {bee.image_url ? (
                     <Image
                       src={bee.image_url}
                       alt={bee.name}
                       width={300}
                       height={300}
-                      className="bee-avatar"
+                      style={{
+                        objectFit: 'cover',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '16px 16px 0 0'
+                      }}
                     />
                   ) : (
-                    <div className="bee-placeholder">🐝</div>
+                    <div style={{
+                      fontSize: '80px',
+                      opacity: '0.7'
+                    }}>🐝</div>
                   )}
                   {bee.price && (
-                    <div className="price-sticker">${bee.price}/month</div>
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '12px',
+                      right: '12px',
+                      background: 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)',
+                      color: 'white',
+                      padding: '8px 16px',
+                      borderRadius: '20px',
+                      fontWeight: '700',
+                      fontSize: '14px',
+                      boxShadow: '0 4px 12px rgba(254, 138, 0, 0.3)',
+                      backdropFilter: 'blur(10px)'
+                    }}>
+                      ${bee.price}/month
+                    </div>
                   )}
                 </div>
-                <div className="bee-info">
-                  <h3>{bee.name}</h3>
-                  <div className="bee-role">{bee.role}</div>
-                  <p className="bee-description">{bee.description}</p>
-                  <div className="bee-actions">
+                <div style={{
+                  padding: 'clamp(20px, 4vw, 32px)'
+                }}>
+                  <h3 style={{
+                    color: '#2d3748',
+                    fontSize: 'clamp(20px, 4vw, 24px)',
+                    margin: '0 0 8px 0',
+                    fontWeight: '700'
+                  }}>
+                    {bee.name}
+                  </h3>
+                  <div style={{
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    padding: '4px 12px',
+                    borderRadius: '20px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    display: 'inline-block',
+                    marginBottom: '16px',
+                    boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+                  }}>
+                    {bee.role}
+                  </div>
+                  <p style={{
+                    color: '#4a5568',
+                    lineHeight: '1.6',
+                    marginBottom: '24px'
+                  }}>
+                    {bee.description}
+                  </p>
+                  <div style={{
+                    display: 'flex',
+                    gap: '16px'
+                  }}>
                     <button 
-                      className="hire-button"
+                      style={{
+                        background: '#fe8a00',
+                        color: 'white',
+                        border: 'none',
+                        padding: '12px 24px',
+                        borderRadius: '8px',
+                        fontWeight: '600',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        flex: '1'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = '#e67a00'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = '#fe8a00'
+                        e.currentTarget.style.transform = 'translateY(0)'
+                      }}
                       onClick={() => window.location.href = `/bees/${bee.id}`}
                     >
                       Hire {bee.name}
@@ -143,547 +400,224 @@ export default function BeesPage() {
             ))}
           </div>
         ) : (
-          <div className="no-results">
+          <div style={{
+            textAlign: 'center',
+            padding: 'clamp(40px, 8vw, 80px)',
+            color: 'white',
+            fontSize: 'clamp(16px, 3vw, 20px)'
+          }}>
             <p>No bees found matching your criteria. Try adjusting your search or filters.</p>
           </div>
         )}
       </div>
 
-              <div className="cta-section">
-          <div className="cta-background">
-            <div className="cta-content">
-              <div className="cta-left">
-                <div className="buzz-photo">
-                  <Image
-                    src="/buzz.png"
-                    alt="Buzz - Your AI Assistant"
-                    width={140}
-                    height={140}
-                    className="buzz-avatar"
-                  />
-                  <div className="buzz-status">
-                    <div className="status-dot"></div>
-                    <span>Online & Ready to Help</span>
-                  </div>
+      {/* CTA Section */}
+      <div style={{
+        margin: 'clamp(40px, 8vw, 80px) clamp(20px, 4vw, 40px)'
+      }}>
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderRadius: '24px',
+          padding: 'clamp(32px, 6vw, 48px)',
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '0 20px 40px rgba(102, 126, 234, 0.3)'
+        }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'auto 1fr',
+            gap: 'clamp(24px, 4vw, 48px)',
+            alignItems: 'center',
+            position: 'relative',
+            zIndex: '1'
+          }}>
+            <div style={{
+              textAlign: 'center'
+            }}>
+              <div style={{
+                position: 'relative',
+                marginBottom: '16px'
+              }}>
+                <Image
+                  src="/buzz.png"
+                  alt="Buzz - Your AI Assistant"
+                  width={140}
+                  height={140}
+                  style={{
+                    borderRadius: '50%',
+                    border: '6px solid rgba(255, 255, 255, 0.2)',
+                    boxShadow: '0 12px 32px rgba(0, 0, 0, 0.3)',
+                    background: 'white'
+                  }}
+                />
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  marginTop: '16px',
+                  fontSize: '14px',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}>
+                  <div style={{
+                    width: '8px',
+                    height: '8px',
+                    background: '#4ade80',
+                    borderRadius: '50%',
+                    animation: 'pulse 2s infinite'
+                  }}></div>
+                  <span>Online & Ready to Help</span>
                 </div>
-              </div>
-              <div className="cta-right">
-                <div className="cta-badge">🤖 AI Assistant</div>
-                <h2>Can't find the perfect bee?</h2>
-                <p className="cta-description">
-                  Let Buzz, your AI recruitment specialist, help you find the right AI assistant for your specific needs. 
-                  Get personalized recommendations in seconds!
-                </p>
-                <div className="cta-features">
-                  <div className="feature">
-                    <span className="feature-icon">⚡</span>
-                    <span>Instant Recommendations</span>
-                  </div>
-                  <div className="feature">
-                    <span className="feature-icon">🎯</span>
-                    <span>Personalized Matching</span>
-                  </div>
-                  <div className="feature">
-                    <span className="feature-icon">💬</span>
-                    <span>24/7 Availability</span>
-                  </div>
-                </div>
-                <Link href="/chat" className="chat-with-buzz-btn">
-                  <span className="btn-icon">💬</span>
-                  <span>Chat with Buzz Now</span>
-                  <span className="btn-arrow">→</span>
-                </Link>
               </div>
             </div>
-          </div>
+            <div style={{
+              color: 'white'
+            }}>
+              <div style={{
+                display: 'inline-block',
+                background: 'rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                padding: '8px 16px',
+                borderRadius: '20px',
+                fontSize: '14px',
+                fontWeight: '600',
+                marginBottom: '16px',
+                backdropFilter: 'blur(10px)'
+              }}>
+                🤖 AI Assistant
+              </div>
+              <h2 style={{
+                fontSize: 'clamp(28px, 5vw, 40px)',
+                fontWeight: '800',
+                margin: '0 0 16px 0',
+                lineHeight: '1.2'
+              }}>
+                Can't find the perfect bee?
+              </h2>
+              <p style={{
+                fontSize: 'clamp(16px, 3vw, 18px)',
+                lineHeight: '1.6',
+                marginBottom: '32px',
+                opacity: '0.95'
+              }}>
+                Let Buzz, your AI recruitment specialist, help you find the right AI assistant for your specific needs. 
+                Get personalized recommendations in seconds!
+              </p>
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                marginBottom: '32px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  fontSize: '16px'
+                }}>
+                  <span style={{
+                    fontSize: '20px',
+                    width: '24px',
+                    textAlign: 'center'
+                  }}>⚡</span>
+                  <span>Instant Recommendations</span>
                 </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  fontSize: '16px'
+                }}>
+                  <span style={{
+                    fontSize: '20px',
+                    width: '24px',
+                    textAlign: 'center'
+                  }}>🎯</span>
+                  <span>Personalized Matching</span>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  fontSize: '16px'
+                }}>
+                  <span style={{
+                    fontSize: '20px',
+                    width: '24px',
+                    textAlign: 'center'
+                  }}>💬</span>
+                  <span>24/7 Availability</span>
+                </div>
+              </div>
+              <Link href="/chat" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '12px',
+                background: 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)',
+                color: 'white',
+                textDecoration: 'none',
+                padding: '20px 32px',
+                borderRadius: '50px',
+                fontWeight: '700',
+                fontSize: '18px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 8px 24px rgba(254, 138, 0, 0.4)',
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #e67a00 0%, #d46a00 100%)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(254, 138, 0, 0.5)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(254, 138, 0, 0.4)'
+              }}>
+                <span style={{ fontSize: '20px' }}>💬</span>
+                <span>Chat with Buzz Now</span>
+                <span style={{
+                  fontSize: '20px',
+                  transition: 'transform 0.3s ease'
+                }}>→</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        {/* Footer */}
-        <footer className="footer">
-          <p>&copy; 2024 B2BEE. All rights reserved.</p>
-        </footer>
+      {/* Footer */}
+      <footer style={{
+        padding: 'clamp(20px, 4vw, 32px)',
+        textAlign: 'center',
+        color: 'white',
+        opacity: '0.9',
+        fontSize: '14px',
+        borderTop: '1px solid rgba(255, 255, 255, 0.1)'
+      }}>
+        <p>&copy; 2024 B2BEE. All rights reserved.</p>
+      </footer>
 
-        <style jsx>{`
-        .bees-page {
-          min-height: 100vh;
-          background: linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%);
-        }
-
-        .hero-section {
-          padding: 4rem 2rem;
-          text-align: center;
-          color: white;
-        }
-
-        .hero-content h1 {
-          font-size: 3rem;
-          margin-bottom: 1rem;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .hero-content p {
-          font-size: 1.25rem;
-          max-width: 600px;
-          margin: 0 auto;
-          opacity: 0.9;
-        }
-
-        .filters-section {
-          background: rgba(255, 255, 255, 0.95);
-          padding: 2rem;
-          margin: 0 2rem;
-          border-radius: 12px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-          backdrop-filter: blur(10px);
-          display: flex;
-          gap: 1rem;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-        }
-
-        .search-filter {
-          flex: 1;
-          min-width: 300px;
-        }
-
-        .search-input {
-          width: 100%;
-          padding: 0.75rem 1rem;
-          border: 2px solid #e5e7eb;
-          border-radius: 8px;
-          font-size: 1rem;
-          transition: border-color 0.3s ease;
-        }
-
-        .search-input:focus {
-          outline: none;
-          border-color: #fe8a00;
-        }
-
-        .role-select {
-          padding: 0.75rem 1rem;
-          border: 2px solid #e5e7eb;
-          border-radius: 8px;
-          font-size: 1rem;
-          background: white;
-          cursor: pointer;
-          transition: border-color 0.3s ease;
-        }
-
-        .role-select:focus {
-          outline: none;
-          border-color: #fe8a00;
-        }
-
-        .bees-container {
-          padding: 3rem 2rem;
-        }
-
-        .bees-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-          gap: 2rem;
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .bee-card {
-          background: rgba(255, 255, 255, 0.95);
-          border-radius: 16px;
-          overflow: hidden;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-          backdrop-filter: blur(10px);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .bee-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 16px 32px rgba(0, 0, 0, 0.2);
-        }
-
-        .bee-image-container {
-          height: 250px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-          position: relative;
-          overflow: hidden;
-          border-radius: 16px 16px 0 0;
-        }
-
-        .bee-avatar {
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-          border-radius: 16px 16px 0 0;
-        }
-
-        .price-sticker {
-          position: absolute;
-          bottom: 12px;
-          right: 12px;
-          background: linear-gradient(135deg, #fe8a00 0%, #e67a00 100%);
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-weight: 700;
-          font-size: 0.9rem;
-          box-shadow: 0 4px 12px rgba(254, 138, 0, 0.3);
-          backdrop-filter: blur(10px);
-        }
-
-        .bee-placeholder {
-          font-size: 5rem;
-          opacity: 0.7;
-        }
-
-        .bee-info {
-          padding: 2rem;
-        }
-
-        .bee-info h3 {
-          color: #2d3748;
-          font-size: 1.5rem;
-          margin: 0 0 0.5rem 0;
-          font-weight: 700;
-        }
-
-        .bee-role {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 0.25rem 0.75rem;
-          border-radius: 20px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          display: inline-block;
-          margin-bottom: 1rem;
-          box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-        }
-
-        .bee-description {
-          color: #4a5568;
-          line-height: 1.6;
-          margin-bottom: 1.5rem;
-        }
-
-        .bee-actions {
-          display: flex;
-          gap: 1rem;
-        }
-
-        .hire-button {
-          background: #fe8a00;
-          color: white;
-          border: none;
-          padding: 0.75rem 1.5rem;
-          border-radius: 8px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          flex: 1;
-        }
-
-        .hire-button:hover {
-          background: #e67a00;
-          transform: translateY(-2px);
-        }
-
-
-
-        .no-results {
-          text-align: center;
-          padding: 3rem;
-          color: white;
-          font-size: 1.2rem;
-        }
-
-        .cta-section {
-          margin: 4rem 2rem;
-        }
-
-        .cta-background {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          border-radius: 24px;
-          padding: 3rem;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
-        }
-
-        .cta-background::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-          pointer-events: none;
-        }
-
-        .cta-content {
-          display: grid;
-          grid-template-columns: auto 1fr;
-          gap: 3rem;
-          align-items: center;
-          position: relative;
-          z-index: 1;
-        }
-
-        .cta-left {
-          text-align: center;
-        }
-
-        .buzz-photo {
-          position: relative;
-          margin-bottom: 1rem;
-        }
-
-        .buzz-avatar {
-          border-radius: 50%;
-          border: 6px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-          background: white;
-        }
-
-        .buzz-status {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-top: 1rem;
-          font-size: 0.9rem;
-          color: rgba(255, 255, 255, 0.9);
-        }
-
-        .status-dot {
-          width: 8px;
-          height: 8px;
-          background: #4ade80;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
-
+      <style jsx>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
         }
-
-        .cta-right {
-          color: white;
-        }
-
-        .cta-badge {
-          display: inline-block;
-          background: rgba(255, 255, 255, 0.2);
-          color: white;
-          padding: 0.5rem 1rem;
-          border-radius: 20px;
-          font-size: 0.9rem;
-          font-weight: 600;
-          margin-bottom: 1rem;
-          backdrop-filter: blur(10px);
-        }
-
-        .cta-right h2 {
-          font-size: 2.5rem;
-          font-weight: 800;
-          margin: 0 0 1rem 0;
-          line-height: 1.2;
-        }
-
-        .cta-description {
-          font-size: 1.1rem;
-          line-height: 1.6;
-          margin-bottom: 2rem;
-          opacity: 0.95;
-        }
-
-        .cta-features {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-          margin-bottom: 2rem;
-        }
-
-        .feature {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          font-size: 1rem;
-        }
-
-        .feature-icon {
-          font-size: 1.2rem;
-          width: 24px;
-          text-align: center;
-        }
-
-        .chat-with-buzz-btn {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.75rem;
-          background: linear-gradient(135deg, #fe8a00 0%, #e67a00 100%);
-          color: white;
-          text-decoration: none;
-          padding: 1.25rem 2rem;
-          border-radius: 50px;
-          font-weight: 700;
-          font-size: 1.1rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 8px 24px rgba(254, 138, 0, 0.4);
-          position: relative;
-          overflow: hidden;
-        }
-
-        .chat-with-buzz-btn::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s;
-        }
-
-        .chat-with-buzz-btn:hover::before {
-          left: 100%;
-        }
-
-        .chat-with-buzz-btn:hover {
-          background: linear-gradient(135deg, #e67a00 0%, #d46a00 100%);
-          transform: translateY(-2px);
-          box-shadow: 0 12px 32px rgba(254, 138, 0, 0.5);
-        }
-
-        .btn-icon {
-          font-size: 1.2rem;
-        }
-
-        .btn-arrow {
-          font-size: 1.3rem;
-          transition: transform 0.3s ease;
-        }
-
-        .chat-with-buzz-btn:hover .btn-arrow {
-          transform: translateX(4px);
-        }
-
-        .loading-section {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          min-height: 100vh;
-          text-align: center;
-          color: white;
-        }
-
-        .bee-spinner {
-          display: flex;
-          justify-content: center;
-          gap: 0.5rem;
-          margin-bottom: 2rem;
-        }
-
-        .bee {
-          font-size: 2rem;
-          animation: bounce 1.4s ease-in-out infinite both;
-        }
-
-        .bee:nth-child(1) {
-          animation-delay: -0.32s;
-        }
-
-        .bee:nth-child(2) {
-          animation-delay: -0.16s;
-        }
-
-        .bee:nth-child(3) {
-          animation-delay: 0s;
-        }
-
-        @keyframes bounce {
-          0%, 80%, 100% {
-            transform: scale(0);
-          }
-          40% {
-            transform: scale(1);
-          }
-        }
-
-        .loading-text {
-          font-size: 1.2rem;
-          font-weight: 500;
-          opacity: 0.9;
-          text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
+        
         @media (max-width: 768px) {
-          .hero-content h1 {
-            font-size: 2rem;
-          }
-
-          .hero-content p {
-            font-size: 1rem;
-          }
-
-          .filters-section {
-            margin: 0 1rem;
-            padding: 1.5rem;
-            flex-direction: column;
-          }
-
-          .search-filter {
-            min-width: auto;
-            width: 100%;
-          }
-
-          .bees-container {
-            padding: 2rem 1rem;
-          }
-
-          .bees-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-          }
-
-          .bee-info {
-            padding: 1.5rem;
-          }
-
-          .bee-actions {
-            flex-direction: column;
-          }
-
           .cta-content {
             grid-template-columns: 1fr;
-            gap: 2rem;
+            gap: 32px;
             text-align: center;
           }
-
-          .cta-right h2 {
-            font-size: 2rem;
-          }
-
+          
           .cta-features {
             align-items: center;
           }
-
+          
           .feature {
             justify-content: center;
-          }
-
-          .footer {
-            padding: 2rem;
-            text-align: center;
-            color: white;
-            opacity: 0.9;
-            font-size: 0.875rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
           }
         }
       `}</style>

@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
 export default function EmailSubscription() {
   const [email, setEmail] = useState('')
@@ -67,37 +69,93 @@ export default function EmailSubscription() {
   }
 
   return (
-    <div className="email-subscription">
+    <div style={{ width: '100%', maxWidth: '28rem' }}>
       {status === 'success' ? (
-        <div className="success-message">
-          <p>{message}</p>
+        <div style={{
+          backgroundColor: '#dcfce7',
+          border: '1px solid #22c55e',
+          color: '#166534',
+          padding: '12px 16px',
+          borderRadius: '6px',
+          position: 'relative'
+        }} role="alert">
+          <span style={{ display: 'block' }}>{message}</span>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="subscription-form">
-          <div className="input-group">
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
-              className="email-input"
-              disabled={status === 'loading'}
-              required
-            />
-            <button
-              type="submit"
-              className="notify-button"
-              disabled={status === 'loading'}
-              onClick={handleButtonClick}
-            >
-              {status === 'loading' ? 'Subscribing...' : 'Get Notified'}
-            </button>
+        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                disabled={status === 'loading'}
+                required
+                style={{ 
+                  flex: '1',
+                  padding: '12px 16px',
+                  fontSize: '16px',
+                  borderRadius: '12px',
+                  border: '2px solid #e5e7eb',
+                  backgroundColor: 'white',
+                  color: '#374151',
+                  outline: 'none',
+                  transition: 'all 0.2s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#ea580c'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(234, 88, 12, 0.1)'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e5e7eb'
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+              <Button
+                type="submit"
+                disabled={status === 'loading'}
+                onClick={handleButtonClick}
+                style={{
+                  backgroundColor: '#ea580c',
+                  color: 'white',
+                  border: 'none',
+                  padding: '12px 24px',
+                  fontSize: '16px',
+                  borderRadius: '12px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#dc2626'
+                  e.currentTarget.style.transform = 'translateY(-1px)'
+                  e.currentTarget.style.boxShadow = '0 6px 8px -1px rgba(0, 0, 0, 0.15)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ea580c'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                {status === 'loading' ? 'Subscribing...' : 'Get Notified'}
+              </Button>
+            </div>
+            {status === 'error' && (
+              <p style={{ color: '#ef4444', fontSize: '0.875rem', margin: '0' }}>{message}</p>
+            )}
           </div>
-          {status === 'error' && (
-            <p className="error-message">{message}</p>
-          )}
         </form>
       )}
     </div>
   )
-} 
+}

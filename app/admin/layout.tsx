@@ -1,6 +1,11 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+import Image from 'next/image'
 
 const ADMIN_PASSWORD = 'b2beeadmin2025'
 
@@ -14,7 +19,6 @@ export default function AdminLayout({
   const [error, setError] = useState('')
 
   useEffect(() => {
-    // Check if already authenticated
     const authStatus = sessionStorage.getItem('b2bee-admin-auth')
     if (authStatus === 'true') {
       setIsAuthenticated(true)
@@ -42,191 +46,265 @@ export default function AdminLayout({
 
   if (!isAuthenticated) {
     return (
-      <div className="admin-login">
-        <div className="login-container">
-          <h1>B2Bee Admin</h1>
-          <form onSubmit={handleLogin} className="login-form">
-            <div className="input-group">
-              <label htmlFor="password">Password</label>
-              <input
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px'
+      }}>
+        <div style={{
+          width: '100%',
+          maxWidth: '400px',
+          background: 'rgba(255, 255, 255, 0.95)',
+          borderRadius: '20px',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+          padding: 'clamp(24px, 4vw, 32px)'
+        }}>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: 'clamp(24px, 4vw, 32px)'
+          }}>
+            <h1 style={{
+              fontSize: 'clamp(24px, 5vw, 32px)',
+              fontWeight: 'bold',
+              color: '#2d3748',
+              marginBottom: '8px'
+            }}>
+              B2Bee Admin
+            </h1>
+            <p style={{
+              fontSize: 'clamp(14px, 3vw, 16px)',
+              color: '#666',
+              opacity: '0.8'
+            }}>
+              Secure Admin Access
+            </p>
+          </div>
+          
+          <form onSubmit={handleLogin} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'clamp(16px, 3vw, 24px)'
+          }}>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <label htmlFor="password" style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                color: '#2d3748'
+              }}>
+                Password
+              </label>
+              <Input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter admin password"
                 required
+                style={{
+                  padding: 'clamp(12px, 2vw, 16px)',
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  borderRadius: '12px',
+                  border: '2px solid #e2e8f0',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#fe8a00'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e2e8f0'
+                  e.target.style.boxShadow = 'none'
+                }}
               />
             </div>
-            {error && <p className="error-message">{error}</p>}
-            <button type="submit" className="login-button">
+            
+            {error && (
+              <p style={{
+                color: '#e53e3e',
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                textAlign: 'center',
+                margin: '0'
+              }}>
+                {error}
+              </p>
+            )}
+            
+            <Button 
+              type="submit" 
+              style={{
+                width: '100%',
+                background: '#fe8a00',
+                color: 'white',
+                border: 'none',
+                padding: 'clamp(12px, 2vw, 16px)',
+                borderRadius: '12px',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#e67a00'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#fe8a00'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
+              }}
+            >
               Login
-            </button>
+            </Button>
           </form>
         </div>
-
-        <style jsx>{`
-          .admin-login {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #fcefdb 0%, #f8f4f0 100%);
-            font-family: 'Inter', sans-serif;
-          }
-
-          .login-container {
-            background: white;
-            padding: 3rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 40px rgba(32, 91, 65, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-          }
-
-          h1 {
-            color: #205b41;
-            margin-bottom: 2rem;
-            font-size: 2rem;
-            font-weight: 700;
-          }
-
-          .login-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-          }
-
-          .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            text-align: left;
-          }
-
-          label {
-            color: #205b41;
-            font-weight: 600;
-            font-size: 0.875rem;
-          }
-
-          input {
-            padding: 1rem;
-            border: 2px solid rgba(32, 91, 65, 0.2);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            outline: none;
-          }
-
-          input:focus {
-            border-color: #fe8a00;
-            box-shadow: 0 0 0 3px rgba(254, 138, 0, 0.1);
-          }
-
-          .login-button {
-            background: #fe8a00;
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-          }
-
-          .login-button:hover {
-            background: #e67a00;
-            transform: translateY(-2px);
-          }
-
-          .error-message {
-            color: #dc2626;
-            font-size: 0.875rem;
-            margin: 0;
-          }
-
-          @media (max-width: 480px) {
-            .login-container {
-              padding: 2rem;
-              margin: 1rem;
-            }
-          }
-        `}</style>
       </div>
     )
   }
 
   return (
-    <div className="admin-layout">
-      <header className="admin-header">
-        <h1>B2Bee Admin Dashboard</h1>
-        <button onClick={handleLogout} className="logout-button">
-          Logout
-        </button>
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%)'
+    }}>
+      {/* Header */}
+      <header style={{
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        padding: 'clamp(16px, 3vw, 24px) clamp(20px, 4vw, 40px)'
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'clamp(12px, 2vw, 16px)'
+          }}>
+            <Link href="/" style={{
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'white'
+            }}>
+              <Image
+                src="/logo.png"
+                alt="B2BEE Logo"
+                width={32}
+                height={32}
+                style={{
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.1)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)'
+                }}
+              />
+            </Link>
+            <h1 style={{
+              fontSize: 'clamp(20px, 4vw, 28px)',
+              fontWeight: 'bold',
+              color: 'white',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+            }}>
+              B2Bee Admin Dashboard
+            </h1>
+          </div>
+          
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'clamp(12px, 2vw, 16px)'
+          }}>
+            <Link href="/admin" style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              textDecoration: 'none',
+              padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
+              borderRadius: '20px',
+              fontSize: 'clamp(12px, 2.5vw, 14px)',
+              fontWeight: '600',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+            }}>
+              Dashboard
+            </Link>
+            <Link href="/admin/bees" style={{
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              color: 'white',
+              textDecoration: 'none',
+              padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
+              borderRadius: '20px',
+              fontSize: 'clamp(12px, 2.5vw, 14px)',
+              fontWeight: '600',
+              transition: 'all 0.2s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+            }}>
+              Busy Bees
+            </Link>
+            <Button 
+              onClick={handleLogout} 
+              style={{
+                background: '#e53e3e',
+                color: 'white',
+                border: 'none',
+                padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
+                borderRadius: '20px',
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#c53030'
+                e.currentTarget.style.transform = 'translateY(-1px)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#e53e3e'
+                e.currentTarget.style.transform = 'translateY(0)'
+              }}
+            >
+              Logout
+            </Button>
+          </div>
+        </div>
       </header>
-      <main className="admin-content">
+      
+      {/* Main Content */}
+      <main style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: 'clamp(24px, 4vw, 40px) clamp(20px, 4vw, 40px)'
+      }}>
         {children}
       </main>
-
-      <style jsx>{`
-        .admin-layout {
-          min-height: 100vh;
-          background: #f8f9fa;
-          font-family: 'Inter', sans-serif;
-        }
-
-        .admin-header {
-          background: white;
-          padding: 1rem 2rem;
-          border-bottom: 1px solid #e5e7eb;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .admin-header h1 {
-          color: #205b41;
-          margin: 0;
-          font-size: 1.5rem;
-          font-weight: 700;
-        }
-
-        .logout-button {
-          background: #dc2626;
-          color: white;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 6px;
-          font-size: 0.875rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.3s ease;
-        }
-
-        .logout-button:hover {
-          background: #b91c1c;
-        }
-
-        .admin-content {
-          padding: 2rem;
-        }
-
-        @media (max-width: 768px) {
-          .admin-header {
-            padding: 1rem;
-            flex-direction: column;
-            gap: 1rem;
-            text-align: center;
-          }
-
-          .admin-content {
-            padding: 1rem;
-          }
-        }
-      `}</style>
     </div>
   )
-} 
+}
