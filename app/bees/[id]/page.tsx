@@ -288,11 +288,13 @@ export default function BeeProfilePage() {
                   src={bee.image_url}
                   alt={bee.name}
                   width={400}
-                  height={400}
+                  height={600}
                   style={{
                     borderRadius: '20px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-                    objectFit: 'cover'
+                    objectFit: 'contain',
+                    maxHeight: '500px',
+                    width: 'auto'
                   }}
                 />
               ) : (

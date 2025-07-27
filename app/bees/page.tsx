@@ -289,7 +289,7 @@ export default function BeesPage() {
                 e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15)'
               }}>
                 <div style={{
-                  height: '250px',
+                  height: '350px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -303,12 +303,13 @@ export default function BeesPage() {
                       src={bee.image_url}
                       alt={bee.name}
                       width={300}
-                      height={300}
+                      height={450}
                       style={{
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         width: '100%',
                         height: '100%',
-                        borderRadius: '16px 16px 0 0'
+                        borderRadius: '16px 16px 0 0',
+                        padding: '16px'
                       }}
                     />
                   ) : (
