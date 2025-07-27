@@ -60,7 +60,7 @@ export default function Home() {
         }}>
           <Link href="/" style={{ textDecoration: 'none' }}>
             <Image
-              src="/logo.png"
+              src="/logofooter.png"
               alt="B2BEE Logo"
               width={80}
               height={80}
@@ -515,7 +515,7 @@ export default function Home() {
               gap: '1rem'
             }}>
               <Image
-                src="/logo.png"
+                src="/logofooter.png"
                 alt="B2BEE Logo"
                 width={80}
                 height={80}
