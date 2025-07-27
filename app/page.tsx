@@ -62,8 +62,8 @@ export default function Home() {
             <Image
               src="/logo.png"
               alt="B2BEE Logo"
-              width={40}
-              height={40}
+              width={80}
+              height={80}
               style={{
                 transition: 'transform 0.3s ease'
               }}
@@ -84,22 +84,30 @@ export default function Home() {
             <Link 
               href="/bees" 
               style={{
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
                 textDecoration: 'none',
                 fontWeight: '600',
-                fontSize: '1rem',
-                transition: 'all 0.3s ease',
+                fontSize: '0.9rem',
                 padding: '0.5rem 1rem',
-                borderRadius: '8px'
+                borderRadius: '25px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)'
+                e.currentTarget.style.boxShadow = '0 8px 20px rgba(102, 126, 234, 0.6)'
+                e.currentTarget.style.border = '2px solid rgba(255, 255, 255, 0.4)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent'
+                e.currentTarget.style.transform = 'translateY(0) scale(1)'
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.4)'
+                e.currentTarget.style.border = '2px solid rgba(255, 255, 255, 0.2)'
               }}
             >
-              Our Bees
+              🐝 Check Out Our Busy Bees
             </Link>
             <Link 
               href="/chat" 
@@ -112,7 +120,10 @@ export default function Home() {
                 padding: '0.75rem 1.5rem',
                 borderRadius: '25px',
                 transition: 'all 0.3s ease',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px)'
@@ -123,6 +134,15 @@ export default function Home() {
                 e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)'
               }}
             >
+              <Image
+                src="/buzz.png"
+                alt="Buzz"
+                width={20}
+                height={20}
+                style={{
+                  borderRadius: '50%'
+                }}
+              />
               Chat with Buzz
             </Link>
           </nav>
@@ -497,16 +517,9 @@ export default function Home() {
               <Image
                 src="/logo.png"
                 alt="B2BEE Logo"
-                width={40}
-                height={40}
+                width={80}
+                height={80}
               />
-              <span style={{
-                fontSize: '1.5rem',
-                fontWeight: '800',
-                letterSpacing: '0.05em'
-              }}>
-                B2BEE
-              </span>
             </div>
             <p style={{
               fontSize: '0.9rem',
