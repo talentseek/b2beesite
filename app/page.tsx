@@ -36,211 +36,356 @@ export default function Home() {
       background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '1rem',
       color: 'white',
       position: 'relative'
     }}>
-      {/* Busy Bees Badge */}
-      <Link 
-        href="/bees" 
-        style={{
-          position: 'absolute',
-          top: '20px',
-          right: '20px',
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          padding: 'clamp(8px, 2vw, 12px) clamp(16px, 3vw, 24px)',
-          borderRadius: '25px',
-          textDecoration: 'none',
-          fontSize: 'clamp(14px, 2.5vw, 16px)',
-          fontWeight: '600',
-          boxShadow: '0 8px 25px rgba(102, 126, 234, 0.4)',
-          transition: 'all 0.3s ease',
-          zIndex: 10,
-          border: '2px solid rgba(255, 255, 255, 0.2)',
-          backdropFilter: 'blur(10px)'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = 'translateY(-3px) scale(1.05)'
-          e.currentTarget.style.boxShadow = '0 12px 35px rgba(102, 126, 234, 0.6)'
-          e.currentTarget.style.border = '2px solid rgba(255, 255, 255, 0.4)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = 'translateY(0) scale(1)'
-          e.currentTarget.style.boxShadow = '0 8px 25px rgba(102, 126, 234, 0.4)'
-          e.currentTarget.style.border = '2px solid rgba(255, 255, 255, 0.2)'
-        }}
-      >
-        🐝 Check Out Our Busy Bees
-      </Link>
-      <div style={{ position: 'relative', display: 'inline-block', marginBottom: '2rem' }}>
-        <Image
-          src="/newbuzz.png"
-          alt="B2BEE Logo"
-          width={400}
-          height={400}
-          priority
-          style={{
-            transition: 'transform 0.3s ease-in-out',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = 'scale(1.05)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'scale(1)'
-          }}
-        />
-        <Link 
-          href="/chat" 
-          style={{
-            position: 'absolute',
-            top: '75%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            backgroundColor: 'white',
-            color: '#ea580c',
-            fontWeight: '600',
-            padding: '12px 24px',
-            borderRadius: '9999px',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
-            textDecoration: 'none',
-            transition: 'all 0.3s ease-in-out'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = '#ea580c'
-            e.currentTarget.style.color = 'white'
-            e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.1)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = 'white'
-            e.currentTarget.style.color = '#ea580c'
-            e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)'
-          }}
-        >
-          Talk to Buzz
-        </Link>
-      </div>
-      
-      <div style={{ maxWidth: '64rem', margin: '0 auto', textAlign: 'center' }}>
-        <h1 style={{
-          fontSize: 'clamp(2.25rem, 5vw, 3rem)',
-          fontWeight: 'bold',
-          marginBottom: '1rem',
-          lineHeight: '1.2',
-          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
-        }}>
-          Buzzing Into Business – AI Support Coming Soon!
-        </h1>
-        
-        <h2 style={{
-          fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
-          marginBottom: '2rem',
-          fontWeight: '500',
-          opacity: '0.95',
-          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
-        }}>
-          At B2BEE, we help small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.
-        </h2>
-        
+      {/* Header with Navigation */}
+      <header style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        background: 'rgba(255, 255, 255, 0.1)',
+        backdropFilter: 'blur(10px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
+        padding: '1rem 2rem'
+      }}>
         <div style={{
-          width: '4rem',
-          height: '4px',
-          backgroundColor: 'white',
-          margin: '2rem auto',
-          borderRadius: '9999px'
-        }}></div>
-        
-        <div style={{ marginBottom: '3rem' }}>
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <Image
+              src="/logo.png"
+              alt="B2BEE Logo"
+              width={40}
+              height={40}
+              style={{
+                transition: 'transform 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.1)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1)'
+              }}
+            />
+          </Link>
+          
+          <nav style={{
+            display: 'flex',
+            gap: '2rem',
+            alignItems: 'center'
+          }}>
+            <Link 
+              href="/bees" 
+              style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: '600',
+                fontSize: '1rem',
+                transition: 'all 0.3s ease',
+                padding: '0.5rem 1rem',
+                borderRadius: '8px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'transparent'
+              }}
+            >
+              Our Bees
+            </Link>
+            <Link 
+              href="/chat" 
+              style={{
+                background: 'white',
+                color: '#ea580c',
+                textDecoration: 'none',
+                fontWeight: '600',
+                fontSize: '1rem',
+                padding: '0.75rem 1.5rem',
+                borderRadius: '25px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)'
+              }}
+            >
+              Chat with Buzz
+            </Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Main Hero Section */}
+      <main style={{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '8rem 2rem 4rem 2rem',
+        textAlign: 'center'
+      }}>
+        {/* Main Logo and CTA */}
+        <div style={{ 
+          position: 'relative', 
+          display: 'inline-block', 
+          marginBottom: '3rem' 
+        }}>
+          <Image
+            src="/newbuzz.png"
+            alt="B2BEE Logo"
+            width={300}
+            height={300}
+            priority
+            style={{
+              transition: 'transform 0.3s ease-in-out',
+              filter: 'drop-shadow(0 10px 25px rgba(0, 0, 0, 0.3))'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.05)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+            }}
+          />
+        </div>
+
+        {/* Main Headline */}
+        <div style={{ maxWidth: '800px', marginBottom: '4rem' }}>
+          <h1 style={{
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+            fontWeight: '900',
+            marginBottom: '1.5rem',
+            lineHeight: '1.1',
+            textShadow: '3px 3px 6px rgba(0, 0, 0, 0.4)',
+            letterSpacing: '-0.02em'
+          }}>
+            Buzzing Into Business
+          </h1>
+          
+          <h2 style={{
+            fontSize: 'clamp(1.25rem, 3vw, 1.5rem)',
+            marginBottom: '2rem',
+            fontWeight: '500',
+            opacity: '0.95',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)',
+            lineHeight: '1.4'
+          }}>
+            AI Support Coming Soon! We help small businesses work smarter, faster and at a fraction of the cost – with AI solutions that never stop buzzing.
+          </h2>
+        </div>
+
+        {/* Feature Cards Section */}
+        <div style={{
+          maxWidth: '1200px',
+          width: '100%',
+          marginBottom: '4rem'
+        }}>
           <h3 style={{
-            fontSize: 'clamp(1.5rem, 3vw, 1.875rem)',
-            fontWeight: 'bold',
-            marginBottom: '1rem',
+            fontSize: 'clamp(1.75rem, 4vw, 2.25rem)',
+            fontWeight: '800',
+            marginBottom: '3rem',
+            textAlign: 'center',
             textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
           }}>
             What We Do
           </h3>
-          <p style={{
-            fontSize: '1.125rem',
-            fontWeight: '600',
-            marginBottom: '0.5rem',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
-          }}>
-            Why build a whole hive of staff when AI can do the work?
-          </p>
-          <p style={{
-            fontSize: '1rem',
-            marginBottom: '1.5rem',
-            opacity: '0.9',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
-          }}>
-            Let B2BEE be your busy bee, taking care of:
-          </p>
           
-          <ul style={{
-            listStyle: 'none',
-            padding: '0',
-            margin: '0 0 2rem 0',
-            textAlign: 'left',
-            fontSize: '1rem',
-            lineHeight: '1.6',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            marginBottom: '3rem'
           }}>
-            <li style={{ padding: '12px 0 12px 32px', borderBottom: '1px solid rgba(255, 255, 255, 0.2)' }}>🐝 Inbound replies (email, Instagram, Facebook, phone)</li>
-            <li style={{ padding: '12px 0 12px 32px', borderBottom: '1px solid rgba(255, 255, 255, 0.2)' }}>🐝 Outbound campaigns that keep your brand buzzing</li>
-            <li style={{ padding: '12px 0 12px 32px', borderBottom: '1px solid rgba(255, 255, 255, 0.2)' }}>🐝 Reports and insights that help you stay ahead of the swarm</li>
-            <li style={{ padding: '12px 0 12px 32px', borderBottom: '1px solid rgba(255, 255, 255, 0.2)' }}>🐝 Account management, sales follow-ups and client care</li>
-            <li style={{ padding: '12px 0 12px 32px' }}>🐝 Lead generation and reviving old leads</li>
-          </ul>
-          
-          <p style={{
-            fontSize: '1rem',
-            textAlign: 'center',
-            opacity: '0.9',
-            fontStyle: 'italic',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
-          }}>
-            We create AI helpers that help your business bee more and do more – perfect for estate agents, trades, plumbers, salons, hospitality and other buzzing small businesses.
-          </p>
+            {/* Card 1 */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '20px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+              border: '3px solid rgba(255, 255, 255, 0.3)',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-10px)'
+              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)'
+            }}
+            >
+              <div style={{
+                fontSize: '3rem',
+                marginBottom: '1rem'
+              }}>
+                🐝
+              </div>
+              <h4 style={{
+                fontSize: '1.25rem',
+                fontWeight: '800',
+                color: '#ea580c',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Inbound Support
+              </h4>
+              <p style={{
+                color: '#374151',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
+                Handle email, Instagram, Facebook, and phone inquiries with AI-powered responses that keep your customers buzzing with satisfaction.
+              </p>
+            </div>
+
+            {/* Card 2 */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '20px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+              border: '3px solid rgba(255, 255, 255, 0.3)',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-10px)'
+              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)'
+            }}
+            >
+              <div style={{
+                fontSize: '3rem',
+                marginBottom: '1rem'
+              }}>
+                ⚡
+              </div>
+              <h4 style={{
+                fontSize: '1.25rem',
+                fontWeight: '800',
+                color: '#ea580c',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Outbound Campaigns
+              </h4>
+              <p style={{
+                color: '#374151',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
+                Launch powerful marketing campaigns and lead generation efforts that keep your brand buzzing in the marketplace.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              borderRadius: '20px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 10px 30px rgba(0, 0, 0, 0.2)',
+              border: '3px solid rgba(255, 255, 255, 0.3)',
+              transition: 'all 0.3s ease',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-10px)'
+              e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.2)'
+            }}
+            >
+              <div style={{
+                fontSize: '3rem',
+                marginBottom: '1rem'
+              }}>
+                📊
+              </div>
+              <h4 style={{
+                fontSize: '1.25rem',
+                fontWeight: '800',
+                color: '#ea580c',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Smart Analytics
+              </h4>
+              <p style={{
+                color: '#374151',
+                fontSize: '1rem',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
+                Get detailed reports and insights that help you stay ahead of the competition and make data-driven decisions.
+              </p>
+            </div>
+          </div>
         </div>
-        
+
+        {/* CTA Section */}
         <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '1.5rem'
+          maxWidth: '600px',
+          width: '100%',
+          marginBottom: '4rem'
         }}>
           <EmailSubscription />
-          <p style={{
-            fontSize: '0.875rem',
-            opacity: '0.8',
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
-          }}>
-            Follow us for updates
-          </p>
+          
           <div style={{
             display: 'flex',
-            gap: '1.5rem',
-            marginTop: '1rem'
+            justifyContent: 'center',
+            gap: '2rem',
+            marginTop: '2rem'
           }}>
             <a 
               href="#" 
               style={{
                 color: 'white',
-                padding: '8px',
+                padding: '12px',
                 borderRadius: '50%',
                 transition: 'all 0.3s ease',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '2px solid rgba(255, 255, 255, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#fed7aa'
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.transform = 'scale(1.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'white'
-                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
               onClick={() => handleSocialClick('x')}
             >
@@ -252,18 +397,20 @@ export default function Home() {
               href="#" 
               style={{
                 color: 'white',
-                padding: '8px',
+                padding: '12px',
                 borderRadius: '50%',
                 transition: 'all 0.3s ease',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '2px solid rgba(255, 255, 255, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#fed7aa'
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.transform = 'scale(1.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'white'
-                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
               onClick={() => handleSocialClick('linkedin')}
             >
@@ -275,18 +422,20 @@ export default function Home() {
               href="#" 
               style={{
                 color: 'white',
-                padding: '8px',
+                padding: '12px',
                 borderRadius: '50%',
                 transition: 'all 0.3s ease',
-                textDecoration: 'none'
+                textDecoration: 'none',
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '2px solid rgba(255, 255, 255, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = '#fed7aa'
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                e.currentTarget.style.transform = 'scale(1.1)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'white'
-                e.currentTarget.style.backgroundColor = 'transparent'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'
+                e.currentTarget.style.transform = 'scale(1)'
               }}
               onClick={() => handleSocialClick('instagram')}
             >
@@ -296,16 +445,359 @@ export default function Home() {
             </a>
           </div>
         </div>
-      </div>
-      
+      </main>
+
+      {/* Professional Footer */}
       <footer style={{
-        marginTop: '4rem',
-        padding: '1rem',
-        textAlign: 'center',
-        fontSize: '0.875rem',
-        opacity: '0.9'
+        background: 'rgba(0, 0, 0, 0.8)',
+        color: 'white',
+        padding: '3rem 2rem 2rem 2rem',
+        marginTop: 'auto'
       }}>
-        <p>&copy; 2024 B2BEE. All rights reserved.</p>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '3rem',
+          marginBottom: '2rem'
+        }}>
+          {/* Logo and Brand */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: '1rem'
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem'
+            }}>
+              <Image
+                src="/logo.png"
+                alt="B2BEE Logo"
+                width={40}
+                height={40}
+              />
+              <span style={{
+                fontSize: '1.5rem',
+                fontWeight: '800',
+                letterSpacing: '0.05em'
+              }}>
+                B2BEE
+              </span>
+            </div>
+            <p style={{
+              fontSize: '0.9rem',
+              opacity: '0.8',
+              lineHeight: '1.6',
+              margin: 0
+            }}>
+              AI solutions that never stop buzzing. Helping small businesses work smarter, faster and at a fraction of the cost.
+            </p>
+          </div>
+
+          {/* Quick Links */}
+          <div>
+            <h4 style={{
+              fontSize: '1.1rem',
+              fontWeight: '700',
+              marginBottom: '1rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Quick Links
+            </h4>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}>
+              <li>
+                <Link href="/bees" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  Our Bees
+                </Link>
+              </li>
+              <li>
+                <Link href="/chat" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  Chat with Buzz
+                </Link>
+              </li>
+              <li>
+                <a href="#" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a href="#" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal Links */}
+          <div>
+            <h4 style={{
+              fontSize: '1.1rem',
+              fontWeight: '700',
+              marginBottom: '1rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Legal
+            </h4>
+            <ul style={{
+              listStyle: 'none',
+              padding: 0,
+              margin: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.5rem'
+            }}>
+              <li>
+                <a href="#" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a href="#" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                }}
+                >
+                  Accessibility
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter Signup */}
+          <div>
+            <h4 style={{
+              fontSize: '1.1rem',
+              fontWeight: '700',
+              marginBottom: '1rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
+              Stay Updated
+            </h4>
+            <p style={{
+              fontSize: '0.9rem',
+              opacity: '0.8',
+              marginBottom: '1rem',
+              lineHeight: '1.5'
+            }}>
+              Be the first to know when we launch our AI solutions!
+            </p>
+            <div style={{
+              display: 'flex',
+              gap: '0.5rem'
+            }}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                style={{
+                  flex: 1,
+                  padding: '0.75rem',
+                  borderRadius: '8px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: 'white',
+                  fontSize: '0.9rem'
+                }}
+              />
+              <button style={{
+                padding: '0.75rem 1rem',
+                background: '#ea580c',
+                color: 'white',
+                border: 'none',
+                borderRadius: '8px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#c2410c'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#ea580c'
+              }}
+              >
+                Subscribe
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Bar */}
+        <div style={{
+          borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+          paddingTop: '2rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem'
+        }}>
+          <p style={{
+            fontSize: '0.8rem',
+            opacity: '0.7',
+            margin: 0
+          }}>
+            © 2024 B2BEE. All rights reserved.
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: '1rem'
+          }}>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: '0.8rem',
+              opacity: '0.7',
+              transition: 'opacity 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.7'
+            }}
+            >
+              Privacy
+            </a>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: '0.8rem',
+              opacity: '0.7',
+              transition: 'opacity 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.7'
+            }}
+            >
+              Terms
+            </a>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: '0.8rem',
+              opacity: '0.7',
+              transition: 'opacity 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.7'
+            }}
+            >
+              Accessibility
+            </a>
+          </div>
+        </div>
       </footer>
     </div>
   )
