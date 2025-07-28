@@ -148,6 +148,23 @@ export default function Home() {
   const handleNewsletterSubscribe = async () => {
     if (!newsletterEmail.trim()) return
 
+  // Load Vapi script
+  useEffect(() => {
+    const script = document.createElement('script')
+    script.src = 'https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js'
+    script.async = true
+    script.type = 'text/javascript'
+    document.head.appendChild(script)
+
+    return () => {
+      // Cleanup script on unmount
+      const existingScript = document.querySelector('script[src*="vapi-ai"]')
+      if (existingScript) {
+        existingScript.remove()
+      }
+    }
+  }, [])
+
     setIsSubscribing(true)
     try {
       const response = await fetch('/api/subscribe', {
@@ -279,6 +296,51 @@ export default function Home() {
               }}
             >
               🐝 Check Out Our Busy Bees
+            </button>
+
+            <button 
+              onClick={() => {
+                // Trigger Vapi widget
+                const vapiWidget = document.querySelector('#vapi-widget') as any
+                if (vapiWidget && vapiWidget.open) {
+                  vapiWidget.open()
+                } else {
+                  // Fallback: try to find the widget by class or trigger it differently
+                  const widget = document.querySelector('[data-assistant-id]') as any
+                  if (widget && widget.open) {
+                    widget.open()
+                  }
+                }
+              }}
+              style={{
+                background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                padding: '0.5rem 1rem',
+                borderRadius: '25px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 12px rgba(16, 185, 129, 0.4)',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)'
+                e.currentTarget.style.boxShadow = '0 8px 20px rgba(16, 185, 129, 0.6)'
+                e.currentTarget.style.border = '2px solid rgba(255, 255, 255, 0.4)'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)'
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(16, 185, 129, 0.4)'
+                e.currentTarget.style.border = '2px solid rgba(255, 255, 255, 0.2)'
+              }}
+            >
+              📞 Voice Demo
             </button>
 
           </nav>
@@ -1640,6 +1702,13 @@ export default function Home() {
           </div>
         )}
       </div>
+
+      {/* Vapi Voice Demo Widget */}
+      <div 
+        id="vapi-widget"
+        data-assistant-id="34742276-b3aa-452f-aaea-204f85d884d3" 
+        data-public-key="8855fa42-df57-4574-8cf1-a7888b14166a"
+      />
 
       <style jsx>{`
         @keyframes bounce {
