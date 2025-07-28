@@ -428,6 +428,52 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Scrolling Banner */}
+        <div style={{
+          background: 'black',
+          padding: '1rem 0',
+          marginBottom: '4rem',
+          overflow: 'hidden',
+          position: 'relative'
+        }}>
+          <div style={{
+            display: 'flex',
+            whiteSpace: 'nowrap',
+            animation: 'scroll-left 30s linear infinite'
+          }}>
+            <span style={{
+              color: 'white',
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              fontWeight: '600',
+              marginRight: '3rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em'
+            }}>
+              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey
+            </span>
+            <span style={{
+              color: 'white',
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              fontWeight: '600',
+              marginRight: '3rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em'
+            }}>
+              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey
+            </span>
+            <span style={{
+              color: 'white',
+              fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+              fontWeight: '600',
+              marginRight: '3rem',
+              textTransform: 'uppercase',
+              letterSpacing: '0.1em'
+            }}>
+              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey
+            </span>
+          </div>
+        </div>
+
         {/* Bees Section */}
         <div id="bees-section" style={{
           maxWidth: '1200px',
@@ -1186,6 +1232,15 @@ export default function Home() {
           }
           40% {
             transform: scale(1);
+          }
+        }
+        
+        @keyframes scroll-left {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-50%);
           }
         }
         
