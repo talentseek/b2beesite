@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react'
 import EmailSubscription from '@/components/EmailSubscription'
 import Link from 'next/link'
 
+
+
 interface Bee {
   id: number
   name: string
@@ -148,12 +150,44 @@ export default function Home() {
   const handleNewsletterSubscribe = async () => {
     if (!newsletterEmail.trim()) return
 
-  // Load Vapi script
+  // Load Vapi script and create widget
   useEffect(() => {
     const script = document.createElement('script')
     script.src = 'https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js'
     script.async = true
     script.type = 'text/javascript'
+    
+    script.onload = () => {
+      // Create the vapi-widget element after script loads
+      const container = document.getElementById('vapi-widget-container')
+      if (container) {
+        const widget = document.createElement('vapi-widget')
+        widget.setAttribute('public-key', '8855fa42-df57-4574-8cf1-a7888b14166a')
+        widget.setAttribute('assistant-id', '34742276-b3aa-452f-aaea-204f85d884d3')
+        widget.setAttribute('mode', 'voice')
+        widget.setAttribute('theme', 'dark')
+        widget.setAttribute('base-bg-color', '#000000')
+        widget.setAttribute('accent-color', '#14B8A6')
+        widget.setAttribute('cta-button-color', '#000000')
+        widget.setAttribute('cta-button-text-color', '#ffffff')
+        widget.setAttribute('border-radius', 'large')
+        widget.setAttribute('size', 'full')
+        widget.setAttribute('position', 'bottom-right')
+        widget.setAttribute('title', 'TALK WITH BUZZ')
+        widget.setAttribute('start-button-text', 'Start')
+        widget.setAttribute('end-button-text', 'End Call')
+        widget.setAttribute('chat-first-message', 'Hey, How can I help you today?')
+        widget.setAttribute('chat-placeholder', 'Type your message...')
+        widget.setAttribute('voice-show-transcript', 'false')
+        widget.setAttribute('consent-required', 'true')
+        widget.setAttribute('consent-title', 'Terms and conditions')
+        widget.setAttribute('consent-content', 'By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service.')
+        widget.setAttribute('consent-storage-key', 'vapi_widget_consent')
+        
+        container.appendChild(widget)
+      }
+    }
+    
     document.head.appendChild(script)
 
     return () => {
@@ -301,15 +335,9 @@ export default function Home() {
             <button 
               onClick={() => {
                 // Trigger Vapi widget
-                const vapiWidget = document.querySelector('#vapi-widget') as any
+                const vapiWidget = document.querySelector('vapi-widget') as any
                 if (vapiWidget && vapiWidget.open) {
                   vapiWidget.open()
-                } else {
-                  // Fallback: try to find the widget by class or trigger it differently
-                  const widget = document.querySelector('[data-assistant-id]') as any
-                  if (widget && widget.open) {
-                    widget.open()
-                  }
                 }
               }}
               style={{
@@ -1705,9 +1733,8 @@ export default function Home() {
 
       {/* Vapi Voice Demo Widget */}
       <div 
-        id="vapi-widget"
-        data-assistant-id="34742276-b3aa-452f-aaea-204f85d884d3" 
-        data-public-key="8855fa42-df57-4574-8cf1-a7888b14166a"
+        id="vapi-widget-container"
+        style={{ display: 'none' }}
       />
 
       <style jsx>{`
