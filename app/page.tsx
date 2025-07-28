@@ -20,6 +20,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
   const [selectedRole, setSelectedRole] = useState('all')
   const [searchTerm, setSearchTerm] = useState('')
+  const [isChatOpen, setIsChatOpen] = useState(false)
+  const [messages, setMessages] = useState<Array<{id: string, text: string, sender: 'user' | 'buzz', timestamp: Date}>>([
+    { id: '1', text: "Hi there! I'm Buzz, your AI assistant. How can I help you today?", sender: 'buzz', timestamp: new Date() }
+  ])
+  const [newMessage, setNewMessage] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
 
   useEffect(() => {
     // Track page view
@@ -68,6 +74,65 @@ export default function Home() {
     const beesSection = document.getElementById('bees-section')
     if (beesSection) {
       beesSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  const sendMessage = async () => {
+    if (!newMessage.trim()) return
+
+    const userMessage = {
+      id: Date.now().toString(),
+      text: newMessage,
+      sender: 'user' as const,
+      timestamp: new Date()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setNewMessage('')
+    setIsTyping(true)
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: newMessage })
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        const buzzMessage = {
+          id: (Date.now() + 1).toString(),
+          text: data.response || "Thanks for your message! I'll get back to you soon.",
+          sender: 'buzz' as const,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, buzzMessage])
+      } else {
+        const errorMessage = {
+          id: (Date.now() + 1).toString(),
+          text: "Sorry, I'm having trouble connecting right now. Please try again later!",
+          sender: 'buzz' as const,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
+      }
+    } catch (error) {
+      const errorMessage = {
+        id: (Date.now() + 1).toString(),
+        text: "Sorry, I'm having trouble connecting right now. Please try again later!",
+        sender: 'buzz' as const,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsTyping(false)
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendMessage()
     }
   }
 
@@ -163,42 +228,7 @@ export default function Home() {
             >
               🐝 Check Out Our Busy Bees
             </button>
-            <Link 
-              href="/chat" 
-              style={{
-                background: 'white',
-                color: '#ea580c',
-                textDecoration: 'none',
-                fontWeight: '600',
-                fontSize: '1rem',
-                padding: '0.75rem 1.5rem',
-                borderRadius: '25px',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-2px)'
-                e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.25)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)'
-              }}
-            >
-              <Image
-                src="/buzz.png"
-                alt="Buzz"
-                width={20}
-                height={20}
-                style={{
-                  borderRadius: '50%'
-                }}
-              />
-              Chat with Buzz
-            </Link>
+
           </nav>
         </div>
       </header>
@@ -962,24 +992,7 @@ export default function Home() {
                   Our Bees
                 </button>
               </li>
-              <li>
-                <Link href="/chat" style={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  fontSize: '0.9rem',
-                  opacity: '0.8',
-                  transition: 'opacity 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '1'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '0.8'
-                }}
-                >
-                  Chat with Buzz
-                </Link>
-              </li>
+
               <li>
                 <a href="#" style={{
                   color: 'white',
@@ -1227,6 +1240,273 @@ export default function Home() {
         </div>
       </footer>
 
+      {/* Floating Chat Widget */}
+      <div style={{
+        position: 'fixed',
+        bottom: '2rem',
+        right: '2rem',
+        zIndex: 1000
+      }}>
+        {/* Chat Button */}
+        {!isChatOpen && (
+          <button
+            onClick={() => setIsChatOpen(true)}
+            style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)',
+              border: 'none',
+              boxShadow: '0 8px 24px rgba(254, 138, 0, 0.4)',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              animation: 'pulse 2s infinite'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'scale(1.1)'
+              e.currentTarget.style.boxShadow = '0 12px 32px rgba(254, 138, 0, 0.6)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'scale(1)'
+              e.currentTarget.style.boxShadow = '0 8px 24px rgba(254, 138, 0, 0.4)'
+            }}
+          >
+            <Image
+              src="/buzz.png"
+              alt="Buzz"
+              width={30}
+              height={30}
+              style={{
+                borderRadius: '50%'
+              }}
+            />
+          </button>
+        )}
+
+        {/* Chat Interface */}
+        {isChatOpen && (
+          <div style={{
+            position: 'fixed',
+            bottom: '2rem',
+            right: '2rem',
+            width: '350px',
+            height: '500px',
+            background: 'rgba(255, 255, 255, 0.95)',
+            borderRadius: '20px',
+            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+            backdropFilter: 'blur(10px)',
+            border: '2px solid rgba(255, 255, 255, 0.3)',
+            display: 'flex',
+            flexDirection: 'column',
+            overflow: 'hidden'
+          }}>
+            {/* Chat Header */}
+            <div style={{
+              background: 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)',
+              padding: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              color: 'white'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <Image
+                  src="/buzz.png"
+                  alt="Buzz"
+                  width={24}
+                  height={24}
+                  style={{
+                    borderRadius: '50%'
+                  }}
+                />
+                <span style={{
+                  fontWeight: '600',
+                  fontSize: '1rem'
+                }}>
+                  Chat with Buzz
+                </span>
+              </div>
+              <button
+                onClick={() => setIsChatOpen(false)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '1.5rem',
+                  cursor: 'pointer',
+                  padding: '0',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Messages Container */}
+            <div style={{
+              flex: 1,
+              padding: '1rem',
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.75rem'
+            }}>
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  style={{
+                    display: 'flex',
+                    justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
+                    marginBottom: '0.5rem'
+                  }}
+                >
+                  <div style={{
+                    maxWidth: '80%',
+                    padding: '0.75rem 1rem',
+                    borderRadius: '18px',
+                    background: message.sender === 'user' 
+                      ? 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)'
+                      : '#f3f4f6',
+                    color: message.sender === 'user' ? 'white' : '#374151',
+                    fontSize: '0.9rem',
+                    lineHeight: '1.4',
+                    wordWrap: 'break-word'
+                  }}>
+                    {message.text}
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  marginBottom: '0.5rem'
+                }}>
+                  <div style={{
+                    padding: '0.75rem 1rem',
+                    borderRadius: '18px',
+                    background: '#f3f4f6',
+                    color: '#374151',
+                    fontSize: '0.9rem'
+                  }}>
+                    <div style={{
+                      display: 'flex',
+                      gap: '4px',
+                      alignItems: 'center'
+                    }}>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: '#9ca3af',
+                        animation: 'bounce 1.4s ease-in-out infinite both'
+                      }}></div>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: '#9ca3af',
+                        animation: 'bounce 1.4s ease-in-out infinite both 0.2s'
+                      }}></div>
+                      <div style={{
+                        width: '8px',
+                        height: '8px',
+                        borderRadius: '50%',
+                        background: '#9ca3af',
+                        animation: 'bounce 1.4s ease-in-out infinite both 0.4s'
+                      }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Message Input */}
+            <div style={{
+              padding: '1rem',
+              borderTop: '1px solid #e5e7eb',
+              background: 'white'
+            }}>
+              <div style={{
+                display: 'flex',
+                gap: '0.5rem',
+                alignItems: 'flex-end'
+              }}>
+                <textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="Type your message..."
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem',
+                    border: '2px solid #e5e7eb',
+                    borderRadius: '20px',
+                    fontSize: '0.9rem',
+                    resize: 'none',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                    minHeight: '40px',
+                    maxHeight: '100px'
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = '#e5e7eb'
+                  }}
+                />
+                <button
+                  onClick={sendMessage}
+                  disabled={!newMessage.trim()}
+                  style={{
+                    padding: '0.75rem',
+                    background: newMessage.trim() 
+                      ? 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)'
+                      : '#e5e7eb',
+                    color: newMessage.trim() ? 'white' : '#9ca3af',
+                    border: 'none',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    if (newMessage.trim()) {
+                      e.currentTarget.style.transform = 'scale(1.1)'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (newMessage.trim()) {
+                      e.currentTarget.style.transform = 'scale(1)'
+                    }
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
       <style jsx>{`
         @keyframes bounce {
           0%, 80%, 100% {
@@ -1234,6 +1514,18 @@ export default function Home() {
           }
           40% {
             transform: scale(1);
+          }
+        }
+        
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 8px 24px rgba(254, 138, 0, 0.4);
+          }
+          50% {
+            box-shadow: 0 8px 24px rgba(254, 138, 0, 0.8);
+          }
+          100% {
+            box-shadow: 0 8px 24px rgba(254, 138, 0, 0.4);
           }
         }
         
