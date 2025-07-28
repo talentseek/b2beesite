@@ -45,6 +45,15 @@ export default function Home() {
 
     // Fetch bees data
     fetchBees()
+
+    // Load Vapi script on component mount
+    if (!document.querySelector('script[src*="vapi-ai"]')) {
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js'
+      script.async = true
+      script.type = 'text/javascript'
+      document.head.appendChild(script)
+    }
   }, [])
 
   const fetchBees = async () => {
@@ -192,6 +201,81 @@ export default function Home() {
     }
   }
 
+  // Function to create Vapi widget
+  const createVapiWidget = () => {
+    // Check if script is already loaded
+    if (!document.querySelector('script[src*="vapi-ai"]')) {
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js'
+      script.async = true
+      script.type = 'text/javascript'
+      
+      script.onload = () => {
+        console.log('Vapi script loaded, creating widget...')
+        createWidgetElement()
+      }
+      
+      script.onerror = (error) => {
+        console.error('Failed to load Vapi script:', error)
+      }
+      
+      document.head.appendChild(script)
+    } else {
+      createWidgetElement()
+    }
+  }
+
+  // Function to create the widget element
+  const createWidgetElement = () => {
+    // Remove existing widget if any
+    const existingWidget = document.querySelector('vapi-widget')
+    if (existingWidget) {
+      existingWidget.remove()
+    }
+
+    // Create new widget
+    const widget = document.createElement('vapi-widget')
+    widget.setAttribute('public-key', '8855fa42-df57-4574-8cf1-a7888b14166a')
+    widget.setAttribute('assistant-id', '34742276-b3aa-452f-aaea-204f85d884d3')
+    widget.setAttribute('mode', 'voice')
+    widget.setAttribute('theme', 'dark')
+    widget.setAttribute('base-bg-color', '#000000')
+    widget.setAttribute('accent-color', '#14B8A6')
+    widget.setAttribute('button-base-color', '#000000')
+    widget.setAttribute('button-accent-color', '#FFFFFF')
+    widget.setAttribute('border-radius', 'large')
+    widget.setAttribute('size', 'full')
+    widget.setAttribute('position', 'bottom-right')
+    widget.setAttribute('main-label', 'TALK WITH BUZZ')
+    widget.setAttribute('start-button-text', 'Start')
+    widget.setAttribute('end-button-text', 'End Call')
+    widget.setAttribute('empty-chat-message', 'Hey, How can I help you today?')
+    widget.setAttribute('empty-voice-message', 'Click to start a voice conversation with Buzz!')
+    widget.setAttribute('show-transcript', 'false')
+    widget.setAttribute('require-consent', 'true')
+    widget.setAttribute('terms-content', 'By using this voice widget, you agree to our privacy policy and terms of service. Your conversations may be recorded for quality assurance.')
+    widget.setAttribute('local-storage-key', 'b2bee_widget_consent')
+    
+    // Add widget to body
+    document.body.appendChild(widget)
+    console.log('Vapi widget created and added to DOM')
+    
+    // Try to open the widget
+    setTimeout(() => {
+      if ((widget as any).open) {
+        console.log('Opening Vapi widget...')
+        ;(widget as any).open()
+      } else {
+        console.log('Widget open method not available yet, trying again...')
+        setTimeout(() => {
+          if ((widget as any).open) {
+            ;(widget as any).open()
+          }
+        }, 1000)
+      }
+    }, 500)
+  }
+
   // Get unique roles for filter
   const roles = ['all', ...Array.from(new Set(bees.map(bee => bee.role)))]
 
@@ -287,10 +371,14 @@ export default function Home() {
 
             <button 
               onClick={() => {
-                // Show voice demo modal
-                const modal = document.getElementById('voice-demo-modal')
-                if (modal) {
-                  modal.style.display = 'flex'
+                // Trigger Vapi widget
+                const vapiWidget = document.querySelector('vapi-widget') as any
+                if (vapiWidget && vapiWidget.open) {
+                  vapiWidget.open()
+                } else {
+                  console.log('Vapi widget not found, trying to create it...')
+                  // Create widget if it doesn't exist
+                  createVapiWidget()
                 }
               }}
               style={{
@@ -1686,54 +1774,7 @@ export default function Home() {
 
 
       
-      {/* Fallback Voice Demo Modal */}
-      <div 
-        id="voice-demo-modal"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          display: 'none',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1000
-        }}
-      >
-        <div style={{
-          background: 'white',
-          padding: '2rem',
-          borderRadius: '12px',
-          maxWidth: '400px',
-          textAlign: 'center'
-        }}>
-          <h3 style={{ marginBottom: '1rem', color: '#333' }}>🎤 Voice Demo</h3>
-          <p style={{ marginBottom: '1rem', color: '#666' }}>
-            Experience B2Bee's voice AI assistant! Talk to Buzz and see how our AI can help your business.
-          </p>
-          <p style={{ marginBottom: '1.5rem', color: '#666', fontSize: '0.9rem' }}>
-            Voice demo integration coming soon. In the meantime, try our chat feature below!
-          </p>
-          <button 
-            onClick={() => {
-              const modal = document.getElementById('voice-demo-modal')
-              if (modal) modal.style.display = 'none'
-            }}
-            style={{
-              background: '#10B981',
-              color: 'white',
-              border: 'none',
-              padding: '0.5rem 1rem',
-              borderRadius: '6px',
-              cursor: 'pointer'
-            }}
-          >
-            Close
-          </button>
-        </div>
-      </div>
+
 
       <style jsx>{`
         @keyframes bounce {
