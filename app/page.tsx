@@ -436,11 +436,13 @@ export default function Home() {
           overflow: 'hidden',
           position: 'relative'
         }}>
-          <div style={{
-            display: 'flex',
-            whiteSpace: 'nowrap',
-            animation: 'scroll-left 30s linear infinite'
-          }}>
+          <div 
+            className="scrolling-text"
+            style={{
+              display: 'flex',
+              whiteSpace: 'nowrap'
+            }}
+          >
             <span style={{
               color: 'white',
               fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
@@ -449,7 +451,7 @@ export default function Home() {
               textTransform: 'uppercase',
               letterSpacing: '0.1em'
             }}>
-              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey
+              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey |
             </span>
             <span style={{
               color: 'white',
@@ -459,7 +461,7 @@ export default function Home() {
               textTransform: 'uppercase',
               letterSpacing: '0.1em'
             }}>
-              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey
+              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey |
             </span>
             <span style={{
               color: 'white',
@@ -469,7 +471,7 @@ export default function Home() {
               textTransform: 'uppercase',
               letterSpacing: '0.1em'
             }}>
-              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey
+              No days off | No sick days | No tea breaks | No Vape Breaks | No HR Issues | No Recruitment Fees | Works 24/7 bringing you the honey |
             </span>
           </div>
         </div>
@@ -1242,6 +1244,10 @@ export default function Home() {
           100% {
             transform: translateX(-50%);
           }
+        }
+        
+        .scrolling-text {
+          animation: scroll-left 30s linear infinite;
         }
         
         .bees-grid {
