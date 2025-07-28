@@ -203,33 +203,112 @@ export default function Home() {
   const createVapiWidget = () => {
     console.log('=== createVapiWidget called ===')
     
-    // Remove existing iframe if any
-    const existingIframe = document.querySelector('#vapi-iframe')
-    if (existingIframe) {
-      existingIframe.remove()
+    // Check if script is loaded
+    const script = document.querySelector('script[src*="vapi-ai"]')
+    console.log('Vapi script found:', script)
+    
+    if (!script) {
+      console.log('Vapi script not found, loading it now...')
+      const newScript = document.createElement('script')
+      newScript.src = 'https://unpkg.com/@vapi-ai/web@latest/dist/umd/index.js'
+      newScript.async = true
+      newScript.type = 'text/javascript'
+      
+      newScript.onload = () => {
+        console.log('Vapi script loaded, now creating widget...')
+        createWidgetElement()
+      }
+      
+      newScript.onerror = (error) => {
+        console.error('Failed to load Vapi script:', error)
+      }
+      
+      document.head.appendChild(newScript)
+      return
     }
     
-    // Create iframe for Vapi widget
-    const iframe = document.createElement('iframe')
-    iframe.id = 'vapi-iframe'
-    iframe.src = `https://widget.vapi.ai/?publicKey=8855fa42-df57-4574-8cf1-a7888b14166a&assistantId=34742276-b3aa-452f-aaea-204f85d884d3&mode=voice&theme=dark&baseBgColor=%23000000&accentColor=%2314B8A6&ctaButtonColor=%23000000&ctaButtonTextColor=%23ffffff&borderRadius=large&size=full&position=bottom-right&title=TALK%20WITH%20BUZZ&startButtonText=Start&endButtonText=End%20Call&chatFirstMessage=Hey%2C%20How%20can%20I%20help%20you%20today%3F&chatPlaceholder=Type%20your%20message...&voiceShowTranscript=false&consentRequired=true&consentTitle=Terms%20and%20conditions&consentContent=By%20clicking%20%22Agree%2C%22%20and%20each%20time%20I%20interact%20with%20this%20AI%20agent%2C%20I%20consent%20to%20the%20recording%2C%20storage%2C%20and%20sharing%20of%20my%20communications%20with%20third-party%20service%20providers%2C%20and%20as%20otherwise%20described%20in%20our%20Terms%20of%20Service.&consentStorageKey=vapi_widget_consent`
+    createWidgetElement()
+  }
+
+  // Function to create the widget element
+  const createWidgetElement = () => {
+    console.log('=== createWidgetElement called ===')
     
-    iframe.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 400px;
-      height: 600px;
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
-      background: white;
-    `
+    // Remove existing widget if any
+    const existingWidget = document.querySelector('vapi-widget')
+    if (existingWidget) {
+      console.log('Removing existing widget')
+      existingWidget.remove()
+    }
+
+    console.log('Creating new vapi-widget element...')
+    // Create widget element
+    const widget = document.createElement('vapi-widget')
+    console.log('Widget element created:', widget)
     
-    // Add to body
-    document.body.appendChild(iframe)
-    console.log('Vapi iframe widget added to body')
+    // Set all attributes
+    const attributes = {
+      'public-key': '8855fa42-df57-4574-8cf1-a7888b14166a',
+      'assistant-id': '34742276-b3aa-452f-aaea-204f85d884d3',
+      'mode': 'voice',
+      'theme': 'dark',
+      'base-bg-color': '#000000',
+      'accent-color': '#14B8A6',
+      'cta-button-color': '#000000',
+      'cta-button-text-color': '#ffffff',
+      'border-radius': 'large',
+      'size': 'full',
+      'position': 'bottom-right',
+      'title': 'TALK WITH BUZZ',
+      'start-button-text': 'Start',
+      'end-button-text': 'End Call',
+      'chat-first-message': 'Hey, How can I help you today?',
+      'chat-placeholder': 'Type your message...',
+      'voice-show-transcript': 'false',
+      'consent-required': 'true',
+      'consent-title': 'Terms and conditions',
+      'consent-content': 'By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service.',
+      'consent-storage-key': 'vapi_widget_consent'
+    }
+    
+    // Set all attributes
+    Object.entries(attributes).forEach(([key, value]) => {
+      widget.setAttribute(key, value)
+      console.log(`Set attribute ${key}: ${value}`)
+    })
+    
+    // Add to container
+    const container = document.getElementById('vapi-widget-container')
+    console.log('Container found:', container)
+    
+    if (container) {
+      container.appendChild(widget)
+      console.log('Vapi widget added to container')
+      
+      // Try to open the widget
+      setTimeout(() => {
+        console.log('Checking if widget has open method...')
+        console.log('Widget object:', widget)
+        console.log('Widget open method:', (widget as any).open)
+        
+        if ((widget as any).open) {
+          console.log('Opening Vapi widget...')
+          try {
+            ;(widget as any).open()
+            console.log('Widget open method called successfully')
+          } catch (error) {
+            console.error('Error opening widget:', error)
+          }
+        } else {
+          console.log('Widget open method not available')
+          // Try alternative approach
+          console.log('Trying to dispatch custom event...')
+          widget.dispatchEvent(new CustomEvent('open'))
+        }
+      }, 1000)
+    } else {
+      console.error('Container not found!')
+    }
   }
 
   // Filter bees based on search and role
