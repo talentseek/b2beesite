@@ -46,14 +46,7 @@ export default function Home() {
     // Fetch bees data
     fetchBees()
 
-    // Load Vapi script on component mount
-    if (typeof window !== 'undefined' && !document.querySelector('script[src*="vapi-ai"]')) {
-      const script = document.createElement('script')
-      script.src = 'https://unpkg.com/@vapi-ai/client-sdk-react/dist/embed/widget.umd.js'
-      script.async = true
-      script.type = 'text/javascript'
-      document.head.appendChild(script)
-    }
+
   }, [])
 
   const fetchBees = async () => {
@@ -208,56 +201,35 @@ export default function Home() {
 
   // Function to create Vapi widget
   const createVapiWidget = () => {
-    console.log('Creating Vapi widget...')
+    console.log('=== createVapiWidget called ===')
     
-    // Remove existing widget if any
-    const existingWidget = document.querySelector('vapi-widget')
-    if (existingWidget) {
-      existingWidget.remove()
+    // Remove existing iframe if any
+    const existingIframe = document.querySelector('#vapi-iframe')
+    if (existingIframe) {
+      existingIframe.remove()
     }
-
-    // Create widget element
-    const widget = document.createElement('vapi-widget')
-    widget.setAttribute('public-key', '8855fa42-df57-4574-8cf1-a7888b14166a')
-    widget.setAttribute('assistant-id', '34742276-b3aa-452f-aaea-204f85d884d3')
-    widget.setAttribute('mode', 'voice')
-    widget.setAttribute('theme', 'dark')
-    widget.setAttribute('base-bg-color', '#000000')
-    widget.setAttribute('accent-color', '#14B8A6')
-    widget.setAttribute('cta-button-color', '#000000')
-    widget.setAttribute('cta-button-text-color', '#ffffff')
-    widget.setAttribute('border-radius', 'large')
-    widget.setAttribute('size', 'full')
-    widget.setAttribute('position', 'bottom-right')
-    widget.setAttribute('title', 'TALK WITH BUZZ')
-    widget.setAttribute('start-button-text', 'Start')
-    widget.setAttribute('end-button-text', 'End Call')
-    widget.setAttribute('chat-first-message', 'Hey, How can I help you today?')
-    widget.setAttribute('chat-placeholder', 'Type your message...')
-    widget.setAttribute('voice-show-transcript', 'false')
-    widget.setAttribute('consent-required', 'true')
-    widget.setAttribute('consent-title', 'Terms and conditions')
-    widget.setAttribute('consent-content', 'By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service.')
-    widget.setAttribute('consent-storage-key', 'vapi_widget_consent')
     
-    // Add to container
-    const container = document.getElementById('vapi-widget-container')
-    if (container) {
-      container.appendChild(widget)
-      console.log('Vapi widget added to container')
-      
-      // Try to open the widget
-      setTimeout(() => {
-        if ((widget as any).open) {
-          console.log('Opening Vapi widget...')
-          try {
-            ;(widget as any).open()
-          } catch (error) {
-            console.error('Error opening widget:', error)
-          }
-        }
-      }, 1000)
-    }
+    // Create iframe for Vapi widget
+    const iframe = document.createElement('iframe')
+    iframe.id = 'vapi-iframe'
+    iframe.src = `https://widget.vapi.ai/?publicKey=8855fa42-df57-4574-8cf1-a7888b14166a&assistantId=34742276-b3aa-452f-aaea-204f85d884d3&mode=voice&theme=dark&baseBgColor=%23000000&accentColor=%2314B8A6&ctaButtonColor=%23000000&ctaButtonTextColor=%23ffffff&borderRadius=large&size=full&position=bottom-right&title=TALK%20WITH%20BUZZ&startButtonText=Start&endButtonText=End%20Call&chatFirstMessage=Hey%2C%20How%20can%20I%20help%20you%20today%3F&chatPlaceholder=Type%20your%20message...&voiceShowTranscript=false&consentRequired=true&consentTitle=Terms%20and%20conditions&consentContent=By%20clicking%20%22Agree%2C%22%20and%20each%20time%20I%20interact%20with%20this%20AI%20agent%2C%20I%20consent%20to%20the%20recording%2C%20storage%2C%20and%20sharing%20of%20my%20communications%20with%20third-party%20service%20providers%2C%20and%20as%20otherwise%20described%20in%20our%20Terms%20of%20Service.&consentStorageKey=vapi_widget_consent`
+    
+    iframe.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 400px;
+      height: 600px;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      z-index: 1000;
+      background: white;
+    `
+    
+    // Add to body
+    document.body.appendChild(iframe)
+    console.log('Vapi iframe widget added to body')
   }
 
   // Filter bees based on search and role
