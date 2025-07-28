@@ -46,6 +46,14 @@ export default function Home() {
     // Fetch bees data
     fetchBees()
 
+    // Load Vapi script on component mount
+    if (typeof window !== 'undefined' && !document.querySelector('script[src*="vapi-ai"]')) {
+      const script = document.createElement('script')
+      script.src = 'https://unpkg.com/@vapi-ai/web@latest/dist/umd/index.js'
+      script.async = true
+      script.type = 'text/javascript'
+      document.head.appendChild(script)
+    }
 
   }, [])
 
@@ -203,112 +211,55 @@ export default function Home() {
   const createVapiWidget = () => {
     console.log('=== createVapiWidget called ===')
     
-    // Check if script is loaded
-    const script = document.querySelector('script[src*="vapi-ai"]')
-    console.log('Vapi script found:', script)
-    
-    if (!script) {
-      console.log('Vapi script not found, loading it now...')
-      const newScript = document.createElement('script')
-      newScript.src = 'https://unpkg.com/@vapi-ai/web@latest/dist/umd/index.js'
-      newScript.async = true
-      newScript.type = 'text/javascript'
-      
-      newScript.onload = () => {
-        console.log('Vapi script loaded, now creating widget...')
-        createWidgetElement()
-      }
-      
-      newScript.onerror = (error) => {
-        console.error('Failed to load Vapi script:', error)
-      }
-      
-      document.head.appendChild(newScript)
-      return
-    }
-    
-    createWidgetElement()
-  }
-
-  // Function to create the widget element
-  const createWidgetElement = () => {
-    console.log('=== createWidgetElement called ===')
-    
     // Remove existing widget if any
     const existingWidget = document.querySelector('vapi-widget')
     if (existingWidget) {
-      console.log('Removing existing widget')
       existingWidget.remove()
     }
 
-    console.log('Creating new vapi-widget element...')
-    // Create widget element
+    // Create widget element directly
     const widget = document.createElement('vapi-widget')
-    console.log('Widget element created:', widget)
     
-    // Set all attributes
-    const attributes = {
-      'public-key': '8855fa42-df57-4574-8cf1-a7888b14166a',
-      'assistant-id': '34742276-b3aa-452f-aaea-204f85d884d3',
-      'mode': 'voice',
-      'theme': 'dark',
-      'base-bg-color': '#000000',
-      'accent-color': '#14B8A6',
-      'cta-button-color': '#000000',
-      'cta-button-text-color': '#ffffff',
-      'border-radius': 'large',
-      'size': 'full',
-      'position': 'bottom-right',
-      'title': 'TALK WITH BUZZ',
-      'start-button-text': 'Start',
-      'end-button-text': 'End Call',
-      'chat-first-message': 'Hey, How can I help you today?',
-      'chat-placeholder': 'Type your message...',
-      'voice-show-transcript': 'false',
-      'consent-required': 'true',
-      'consent-title': 'Terms and conditions',
-      'consent-content': 'By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service.',
-      'consent-storage-key': 'vapi_widget_consent'
-    }
+    // Set attributes using the exact format from Vapi docs
+    widget.setAttribute('public-key', '8855fa42-df57-4574-8cf1-a7888b14166a')
+    widget.setAttribute('assistant-id', '34742276-b3aa-452f-aaea-204f85d884d3')
+    widget.setAttribute('mode', 'voice')
+    widget.setAttribute('theme', 'dark')
+    widget.setAttribute('base-bg-color', '#000000')
+    widget.setAttribute('accent-color', '#14B8A6')
+    widget.setAttribute('cta-button-color', '#000000')
+    widget.setAttribute('cta-button-text-color', '#ffffff')
+    widget.setAttribute('border-radius', 'large')
+    widget.setAttribute('size', 'full')
+    widget.setAttribute('position', 'bottom-right')
+    widget.setAttribute('title', 'TALK WITH BUZZ')
+    widget.setAttribute('start-button-text', 'Start')
+    widget.setAttribute('end-button-text', 'End Call')
+    widget.setAttribute('chat-first-message', 'Hey, How can I help you today?')
+    widget.setAttribute('chat-placeholder', 'Type your message...')
+    widget.setAttribute('voice-show-transcript', 'false')
+    widget.setAttribute('consent-required', 'true')
+    widget.setAttribute('consent-title', 'Terms and conditions')
+    widget.setAttribute('consent-content', 'By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service.')
+    widget.setAttribute('consent-storage-key', 'vapi_widget_consent')
     
-    // Set all attributes
-    Object.entries(attributes).forEach(([key, value]) => {
-      widget.setAttribute(key, value)
-      console.log(`Set attribute ${key}: ${value}`)
-    })
+    // Add to body directly
+    document.body.appendChild(widget)
+    console.log('Vapi widget added to body')
     
-    // Add to container
-    const container = document.getElementById('vapi-widget-container')
-    console.log('Container found:', container)
-    
-    if (container) {
-      container.appendChild(widget)
-      console.log('Vapi widget added to container')
-      
-      // Try to open the widget
-      setTimeout(() => {
-        console.log('Checking if widget has open method...')
-        console.log('Widget object:', widget)
-        console.log('Widget open method:', (widget as any).open)
-        
-        if ((widget as any).open) {
-          console.log('Opening Vapi widget...')
-          try {
-            ;(widget as any).open()
-            console.log('Widget open method called successfully')
-          } catch (error) {
-            console.error('Error opening widget:', error)
-          }
-        } else {
-          console.log('Widget open method not available')
-          // Try alternative approach
-          console.log('Trying to dispatch custom event...')
-          widget.dispatchEvent(new CustomEvent('open'))
+    // Try to open the widget
+    setTimeout(() => {
+      if ((widget as any).open) {
+        console.log('Opening Vapi widget...')
+        try {
+          ;(widget as any).open()
+        } catch (error) {
+          console.error('Error opening widget:', error)
         }
-      }, 1000)
-    } else {
-      console.error('Container not found!')
-    }
+      } else {
+        console.log('Widget open method not available')
+      }
+    }, 500)
   }
 
   // Filter bees based on search and role
