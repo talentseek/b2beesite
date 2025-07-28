@@ -4,6 +4,13 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import EmailSubscription from '@/components/EmailSubscription'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
+
+// Dynamically import VapiWidget to avoid SSR issues
+const VapiWidget = dynamic(() => import('@vapi-ai/client-sdk-react').then(mod => ({ default: mod.VapiWidget })), {
+  ssr: false,
+  loading: () => <div>Loading voice widget...</div>
+})
 
 
 
@@ -31,6 +38,7 @@ export default function Home() {
   const [showNewsletterForm, setShowNewsletterForm] = useState(false)
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)
+  const [showVapiWidget, setShowVapiWidget] = useState(false)
 
   useEffect(() => {
     // Track page view
@@ -46,14 +54,7 @@ export default function Home() {
     // Fetch bees data
     fetchBees()
 
-    // Load Vapi script on component mount
-    if (typeof window !== 'undefined' && !document.querySelector('script[src*="vapi-ai"]')) {
-      const script = document.createElement('script')
-      script.src = 'https://unpkg.com/@vapi-ai/web@latest/dist/umd/index.js'
-      script.async = true
-      script.type = 'text/javascript'
-      document.head.appendChild(script)
-    }
+
 
   }, [])
 
@@ -207,60 +208,7 @@ export default function Home() {
   // Get unique roles for filter
   const roles = ['all', ...Array.from(new Set(bees.map(bee => bee.role)))]
 
-  // Function to create Vapi widget
-  const createVapiWidget = () => {
-    console.log('=== createVapiWidget called ===')
-    
-    // Remove existing widget if any
-    const existingWidget = document.querySelector('vapi-widget')
-    if (existingWidget) {
-      existingWidget.remove()
-    }
 
-    // Create widget element directly
-    const widget = document.createElement('vapi-widget')
-    
-    // Set attributes using the exact format from Vapi docs
-    widget.setAttribute('public-key', '8855fa42-df57-4574-8cf1-a7888b14166a')
-    widget.setAttribute('assistant-id', '34742276-b3aa-452f-aaea-204f85d884d3')
-    widget.setAttribute('mode', 'voice')
-    widget.setAttribute('theme', 'dark')
-    widget.setAttribute('base-bg-color', '#000000')
-    widget.setAttribute('accent-color', '#14B8A6')
-    widget.setAttribute('cta-button-color', '#000000')
-    widget.setAttribute('cta-button-text-color', '#ffffff')
-    widget.setAttribute('border-radius', 'large')
-    widget.setAttribute('size', 'full')
-    widget.setAttribute('position', 'bottom-right')
-    widget.setAttribute('title', 'TALK WITH BUZZ')
-    widget.setAttribute('start-button-text', 'Start')
-    widget.setAttribute('end-button-text', 'End Call')
-    widget.setAttribute('chat-first-message', 'Hey, How can I help you today?')
-    widget.setAttribute('chat-placeholder', 'Type your message...')
-    widget.setAttribute('voice-show-transcript', 'false')
-    widget.setAttribute('consent-required', 'true')
-    widget.setAttribute('consent-title', 'Terms and conditions')
-    widget.setAttribute('consent-content', 'By clicking "Agree," and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service.')
-    widget.setAttribute('consent-storage-key', 'vapi_widget_consent')
-    
-    // Add to body directly
-    document.body.appendChild(widget)
-    console.log('Vapi widget added to body')
-    
-    // Try to open the widget
-    setTimeout(() => {
-      if ((widget as any).open) {
-        console.log('Opening Vapi widget...')
-        try {
-          ;(widget as any).open()
-        } catch (error) {
-          console.error('Error opening widget:', error)
-        }
-      } else {
-        console.log('Widget open method not available')
-      }
-    }, 500)
-  }
 
   // Filter bees based on search and role
   const filteredBees = bees.filter(bee => {
@@ -355,7 +303,7 @@ export default function Home() {
             <button 
               onClick={() => {
                 console.log('Voice Demo button clicked!')
-                createVapiWidget()
+                setShowVapiWidget(true)
               }}
               style={{
                 background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
@@ -1748,8 +1696,35 @@ export default function Home() {
         )}
       </div>
 
-      {/* Vapi Widget Container */}
-      <div id="vapi-widget-container"></div>
+      {/* Vapi Widget */}
+      {showVapiWidget && (
+        <VapiWidget
+          publicKey="8855fa42-df57-4574-8cf1-a7888b14166a"
+          assistantId="34742276-b3aa-452f-aaea-204f85d884d3"
+          mode="voice"
+          theme="dark"
+          baseColor="#000000"
+          accentColor="#14B8A6"
+          buttonBaseColor="#000000"
+          buttonAccentColor="#FFFFFF"
+          borderRadius="large"
+          size="full"
+          position="bottom-right"
+          mainLabel="TALK WITH BUZZ"
+          startButtonText="Start"
+          endButtonText="End Call"
+          emptyChatMessage="Hey, How can I help you today?"
+          emptyVoiceMessage="Click to start a voice conversation with Buzz!"
+          showTranscript={false}
+          requireConsent={true}
+          termsContent="By clicking 'Agree,' and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service."
+          localStorageKey="vapi_widget_consent"
+          onCallStart={() => console.log('Voice call started')}
+          onCallEnd={() => console.log('Voice call ended')}
+          onMessage={(message) => console.log('Message received:', message)}
+          onError={(error) => console.error('Widget error:', error)}
+        />
+      )}
 
       <style jsx>{`
         @keyframes bounce {
