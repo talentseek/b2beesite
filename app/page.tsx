@@ -22,10 +22,13 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [messages, setMessages] = useState<Array<{id: string, text: string, sender: 'user' | 'buzz', timestamp: Date}>>([
-    { id: '1', text: "Hi there! I'm Buzz, your AI assistant. How can I help you today?", sender: 'buzz', timestamp: new Date() }
+    { id: '1', text: "Hey there! I'm Buzz, your AI business assistant! I'm here to help your business *buzz* with efficiency and make sure you never get *stung* by missed opportunities. How can I help *pollinate* your business growth today? ✨", sender: 'buzz', timestamp: new Date() }
   ])
   const [newMessage, setNewMessage] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [showNewsletterForm, setShowNewsletterForm] = useState(false)
+  const [newsletterEmail, setNewsletterEmail] = useState('')
+  const [isSubscribing, setIsSubscribing] = useState(false)
 
   useEffect(() => {
     // Track page view
@@ -102,19 +105,21 @@ export default function Home() {
         const data = await response.json()
         const buzzMessage = {
           id: (Date.now() + 1).toString(),
-          text: data.response || "Thanks for your message! I'll get back to you soon.",
+          text: "Thanks for your message! I'm still learning and will be fully operational soon. In the meantime, why not subscribe to our newsletter to be the first to know when I'm ready to help your business? 🐝✨",
           sender: 'buzz' as const,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, buzzMessage])
+        setShowNewsletterForm(true)
       } else {
         const errorMessage = {
           id: (Date.now() + 1).toString(),
-          text: "Sorry, I'm having trouble connecting right now. Please try again later!",
+          text: "Thanks for your message! I'm still learning and will be fully operational soon. In the meantime, why not subscribe to our newsletter to be the first to know when I'm ready to help your business? 🐝✨",
           sender: 'buzz' as const,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, errorMessage])
+        setShowNewsletterForm(true)
       }
     } catch (error) {
       const errorMessage = {
@@ -133,6 +138,49 @@ export default function Home() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
       sendMessage()
+    }
+  }
+
+  const handleNewsletterSubscribe = async () => {
+    if (!newsletterEmail.trim()) return
+
+    setIsSubscribing(true)
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: newsletterEmail })
+      })
+
+      if (response.ok) {
+        const successMessage = {
+          id: (Date.now() + 1).toString(),
+          text: "Great! You've been subscribed to our newsletter. We'll keep you updated on when I'm fully operational! 🎉",
+          sender: 'buzz' as const,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, successMessage])
+        setNewsletterEmail('')
+        setShowNewsletterForm(false)
+      } else {
+        const errorMessage = {
+          id: (Date.now() + 1).toString(),
+          text: "Oops! Something went wrong with the subscription. Please try again later!",
+          sender: 'buzz' as const,
+          timestamp: new Date()
+        }
+        setMessages(prev => [...prev, errorMessage])
+      }
+    } catch (error) {
+      const errorMessage = {
+        id: (Date.now() + 1).toString(),
+        text: "Oops! Something went wrong with the subscription. Please try again later!",
+        sender: 'buzz' as const,
+        timestamp: new Date()
+      }
+      setMessages(prev => [...prev, errorMessage])
+    } finally {
+      setIsSubscribing(false)
     }
   }
 
@@ -1432,76 +1480,158 @@ export default function Home() {
               )}
             </div>
 
-            {/* Message Input */}
+            {/* Message Input or Newsletter Form */}
             <div style={{
               padding: '1rem',
               borderTop: '1px solid #e5e7eb',
               background: 'white'
             }}>
-              <div style={{
-                display: 'flex',
-                gap: '0.5rem',
-                alignItems: 'flex-end'
-              }}>
-                <textarea
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Type your message..."
-                  style={{
-                    flex: 1,
+              {showNewsletterForm ? (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem'
+                }}>
+                  <div style={{
+                    background: '#f3f4f6',
                     padding: '0.75rem',
-                    border: '2px solid #e5e7eb',
-                    borderRadius: '20px',
+                    borderRadius: '12px',
                     fontSize: '0.9rem',
-                    resize: 'none',
-                    outline: 'none',
-                    fontFamily: 'inherit',
-                    minHeight: '40px',
-                    maxHeight: '100px'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#fe8a00'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e5e7eb'
-                  }}
-                />
-                <button
-                  onClick={sendMessage}
-                  disabled={!newMessage.trim()}
-                  style={{
-                    padding: '0.75rem',
-                    background: newMessage.trim() 
-                      ? 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)'
-                      : '#e5e7eb',
-                    color: newMessage.trim() ? 'white' : '#9ca3af',
-                    border: 'none',
-                    borderRadius: '50%',
-                    width: '40px',
-                    height: '40px',
-                    cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
+                    color: '#374151',
+                    textAlign: 'center'
+                  }}>
+                    Enter your email address
+                  </div>
+                  <div style={{
                     display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (newMessage.trim()) {
-                      e.currentTarget.style.transform = 'scale(1.1)'
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (newMessage.trim()) {
-                      e.currentTarget.style.transform = 'scale(1)'
-                    }
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                  </svg>
-                </button>
-              </div>
+                    gap: '0.5rem',
+                    alignItems: 'center'
+                  }}>
+                    <input
+                      type="email"
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      placeholder="your@email.com"
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '20px',
+                        fontSize: '0.9rem',
+                        outline: 'none',
+                        fontFamily: 'inherit'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#fe8a00'
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e5e7eb'
+                      }}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          handleNewsletterSubscribe()
+                        }
+                      }}
+                    />
+                    <button
+                      onClick={handleNewsletterSubscribe}
+                      disabled={!newsletterEmail.trim() || isSubscribing}
+                      style={{
+                        padding: '0.75rem 1rem',
+                        background: newsletterEmail.trim() && !isSubscribing
+                          ? 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)'
+                          : '#e5e7eb',
+                        color: newsletterEmail.trim() && !isSubscribing ? 'white' : '#9ca3af',
+                        border: 'none',
+                        borderRadius: '20px',
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        cursor: newsletterEmail.trim() && !isSubscribing ? 'pointer' : 'not-allowed',
+                        transition: 'all 0.3s ease',
+                        whiteSpace: 'nowrap'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (newsletterEmail.trim() && !isSubscribing) {
+                          e.currentTarget.style.transform = 'scale(1.05)'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (newsletterEmail.trim() && !isSubscribing) {
+                          e.currentTarget.style.transform = 'scale(1)'
+                        }
+                      }}
+                    >
+                      {isSubscribing ? 'Subscribing...' : 'Subscribe to our newsletter'}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{
+                  display: 'flex',
+                  gap: '0.5rem',
+                  alignItems: 'flex-end'
+                }}>
+                  <textarea
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Type your message..."
+                    style={{
+                      flex: 1,
+                      padding: '0.75rem',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '20px',
+                      fontSize: '0.9rem',
+                      resize: 'none',
+                      outline: 'none',
+                      fontFamily: 'inherit',
+                      minHeight: '40px',
+                      maxHeight: '100px'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#fe8a00'
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#e5e7eb'
+                    }}
+                  />
+                  <button
+                    onClick={sendMessage}
+                    disabled={!newMessage.trim()}
+                    style={{
+                      padding: '0.75rem',
+                      background: newMessage.trim() 
+                        ? 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)'
+                        : '#e5e7eb',
+                      color: newMessage.trim() ? 'white' : '#9ca3af',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '40px',
+                      height: '40px',
+                      cursor: newMessage.trim() ? 'pointer' : 'not-allowed',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (newMessage.trim()) {
+                        e.currentTarget.style.transform = 'scale(1.1)'
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (newMessage.trim()) {
+                        e.currentTarget.style.transform = 'scale(1)'
+                      }
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
