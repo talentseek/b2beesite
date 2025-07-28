@@ -554,13 +554,7 @@ export default function Home() {
               </p>
             </div>
           ) : filteredBees.length > 0 ? (
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: 'clamp(20px, 4vw, 32px)',
-              maxWidth: '1200px',
-              margin: '0 auto'
-            }}>
+            <div className="bees-grid">
               {filteredBees.map((bee) => (
                 <div key={bee.id} style={{
                   background: 'rgba(255, 255, 255, 0.95)',
@@ -1192,6 +1186,32 @@ export default function Home() {
           }
           40% {
             transform: scale(1);
+          }
+        }
+        
+        .bees-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: clamp(20px, 4vw, 32px);
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+        
+        @media (max-width: 1200px) {
+          .bees-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+        
+        @media (max-width: 900px) {
+          .bees-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        
+        @media (max-width: 600px) {
+          .bees-grid {
+            grid-template-columns: 1fr;
           }
         }
       `}</style>
