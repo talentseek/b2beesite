@@ -105,12 +105,16 @@ export default function Home() {
         const data = await response.json()
         const buzzMessage = {
           id: (Date.now() + 1).toString(),
-          text: "Thanks for your message! I'm still learning and will be fully operational soon. In the meantime, why not subscribe to our newsletter to be the first to know when I'm ready to help your business? 🐝✨",
+          text: data.response || "Thanks for your message! I'm still learning and will be fully operational soon. In the meantime, why not subscribe to our newsletter to be the first to know when I'm ready to help your business? 🐝✨",
           sender: 'buzz' as const,
           timestamp: new Date()
         }
         setMessages(prev => [...prev, buzzMessage])
-        setShowNewsletterForm(true)
+        
+        // Only show newsletter form if the response suggests it or if there's an error
+        if (data.response && data.response.toLowerCase().includes('newsletter')) {
+          setShowNewsletterForm(true)
+        }
       } else {
         const errorMessage = {
           id: (Date.now() + 1).toString(),
