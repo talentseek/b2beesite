@@ -1,11 +1,26 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import EmailSubscription from '@/components/EmailSubscription'
 import Link from 'next/link'
 
+interface Bee {
+  id: number
+  name: string
+  role: string
+  description: string
+  price: number | null
+  image_url: string | null
+  created_at: string
+}
+
 export default function Home() {
+  const [bees, setBees] = useState<Bee[]>([])
+  const [loading, setLoading] = useState(true)
+  const [selectedRole, setSelectedRole] = useState('all')
+  const [searchTerm, setSearchTerm] = useState('')
+
   useEffect(() => {
     // Track page view
     fetch('/api/analytics', {
@@ -16,7 +31,26 @@ export default function Home() {
         eventData: { page: 'coming-soon' }
       })
     })
+
+    // Fetch bees data
+    fetchBees()
   }, [])
+
+  const fetchBees = async () => {
+    try {
+      const response = await fetch('/api/bees')
+      if (response.ok) {
+        const data = await response.json()
+        setBees(data.bees || [])
+      } else {
+        console.error('Failed to fetch bees:', response.status)
+      }
+    } catch (error) {
+      console.error('Error fetching bees:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleSocialClick = (platform: string) => {
     // Track social media clicks
@@ -29,6 +63,25 @@ export default function Home() {
       })
     })
   }
+
+  const scrollToBees = () => {
+    const beesSection = document.getElementById('bees-section')
+    if (beesSection) {
+      beesSection.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
+  // Get unique roles for filter
+  const roles = ['all', ...Array.from(new Set(bees.map(bee => bee.role)))]
+
+  // Filter bees based on search and role
+  const filteredBees = bees.filter(bee => {
+    const matchesSearch = bee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         bee.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         bee.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesRole = selectedRole === 'all' || bee.role === selectedRole
+    return matchesSearch && matchesRole
+  })
 
   return (
     <div style={{
@@ -81,8 +134,8 @@ export default function Home() {
             gap: '2rem',
             alignItems: 'center'
           }}>
-            <Link 
-              href="/bees" 
+            <button 
+              onClick={scrollToBees}
               style={{
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 color: 'white',
@@ -94,7 +147,8 @@ export default function Home() {
                 transition: 'all 0.3s ease',
                 boxShadow: '0 4px 12px rgba(102, 126, 234, 0.4)',
                 border: '2px solid rgba(255, 255, 255, 0.2)',
-                backdropFilter: 'blur(10px)'
+                backdropFilter: 'blur(10px)',
+                cursor: 'pointer'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)'
@@ -108,7 +162,7 @@ export default function Home() {
               }}
             >
               🐝 Check Out Our Busy Bees
-            </Link>
+            </button>
             <Link 
               href="/chat" 
               style={{
@@ -374,6 +428,298 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Bees Section */}
+        <div id="bees-section" style={{
+          maxWidth: '1200px',
+          width: '100%',
+          marginBottom: '4rem'
+        }}>
+          <h3 style={{
+            fontSize: 'clamp(1.75rem, 4vw, 2.25rem)',
+            fontWeight: '800',
+            marginBottom: '3rem',
+            textAlign: 'center',
+            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+          }}>
+            Our Busy Bees
+          </h3>
+
+          {/* Search and Filter Controls */}
+          <div style={{
+            marginBottom: '3rem',
+            display: 'flex',
+            gap: '16px',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <div style={{
+              flex: '1',
+              minWidth: '300px'
+            }}>
+              <input
+                type="text"
+                placeholder="Search bees by name, role, or description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '12px 16px',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: 'white',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#fe8a00'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+                }}
+              />
+            </div>
+            <div>
+              <select
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                style={{
+                  padding: '12px 16px',
+                  border: '2px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: '8px',
+                  fontSize: '16px',
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  color: 'white',
+                  cursor: 'pointer',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none',
+                  backdropFilter: 'blur(10px)'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#fe8a00'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+                }}
+              >
+                {roles.map(role => (
+                  <option key={role} value={role} style={{ background: '#ea580c', color: 'white' }}>
+                    {role === 'all' ? 'All Roles' : role}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Bees Grid */}
+          {loading ? (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '4rem 2rem',
+              color: 'white',
+              textAlign: 'center'
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '8px',
+                marginBottom: '32px'
+              }}>
+                <div style={{
+                  fontSize: '32px',
+                  animation: 'bounce 1.4s ease-in-out infinite both'
+                }}>🐝</div>
+                <div style={{
+                  fontSize: '32px',
+                  animation: 'bounce 1.4s ease-in-out infinite both 0.2s'
+                }}>🐝</div>
+                <div style={{
+                  fontSize: '32px',
+                  animation: 'bounce 1.4s ease-in-out infinite both 0.4s'
+                }}>🐝</div>
+              </div>
+              <p style={{
+                fontSize: '20px',
+                fontWeight: '500',
+                opacity: '0.9',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>
+                Loading our busy bees...
+              </p>
+            </div>
+          ) : filteredBees.length > 0 ? (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: 'clamp(20px, 4vw, 32px)',
+              maxWidth: '1200px',
+              margin: '0 auto'
+            }}>
+              {filteredBees.map((bee) => (
+                <div key={bee.id} style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+                  backdropFilter: 'blur(10px)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-8px)'
+                  e.currentTarget.style.boxShadow = '0 16px 32px rgba(0, 0, 0, 0.2)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15)'
+                }}>
+                  <div style={{
+                    height: '350px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%)',
+                    position: 'relative',
+                    overflow: 'hidden',
+                    borderRadius: '16px 16px 0 0'
+                  }}>
+                    {bee.image_url ? (
+                      <Image
+                        src={bee.image_url}
+                        alt={bee.name}
+                        width={300}
+                        height={450}
+                        style={{
+                          objectFit: 'contain',
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '16px 16px 0 0',
+                          padding: '16px'
+                        }}
+                      />
+                    ) : (
+                      <div style={{
+                        fontSize: '80px',
+                        opacity: '0.7'
+                      }}>🐝</div>
+                    )}
+                    {bee.price && (
+                      <div style={{
+                        position: 'absolute',
+                        bottom: '12px',
+                        right: '12px',
+                        background: 'linear-gradient(135deg, #fe8a00 0%, #e67a00 100%)',
+                        color: 'white',
+                        padding: '8px 16px',
+                        borderRadius: '20px',
+                        fontWeight: '700',
+                        fontSize: '14px',
+                        boxShadow: '0 4px 12px rgba(254, 138, 0, 0.3)',
+                        backdropFilter: 'blur(10px)'
+                      }}>
+                        ${bee.price}/month
+                      </div>
+                    )}
+                  </div>
+                  <div style={{
+                    padding: 'clamp(20px, 4vw, 32px)'
+                  }}>
+                    <h4 style={{
+                      color: '#2d3748',
+                      fontSize: 'clamp(20px, 4vw, 24px)',
+                      margin: '0 0 8px 0',
+                      fontWeight: '700'
+                    }}>
+                      {bee.name}
+                    </h4>
+                    <div style={{
+                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                      color: 'white',
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      fontSize: '14px',
+                      fontWeight: '600',
+                      display: 'inline-block',
+                      marginBottom: '16px',
+                      boxShadow: '0 2px 8px rgba(102, 126, 234, 0.3)'
+                    }}>
+                      {bee.role}
+                    </div>
+                    <p style={{
+                      color: '#4a5568',
+                      lineHeight: '1.6',
+                      marginBottom: '24px'
+                    }}>
+                      {bee.description}
+                    </p>
+                    <div style={{
+                      display: 'flex',
+                      gap: '16px'
+                    }}>
+                      <button 
+                        style={{
+                          background: '#fe8a00',
+                          color: 'white',
+                          border: 'none',
+                          padding: '12px 24px',
+                          borderRadius: '8px',
+                          fontWeight: '600',
+                          cursor: 'pointer',
+                          transition: 'all 0.3s ease',
+                          flex: '1'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = '#e67a00'
+                          e.currentTarget.style.transform = 'translateY(-2px)'
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = '#fe8a00'
+                          e.currentTarget.style.transform = 'translateY(0)'
+                        }}
+                        onClick={() => window.location.href = `/bees/${bee.id}`}
+                      >
+                        Hire {bee.name}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div style={{
+              textAlign: 'center',
+              padding: '4rem 2rem',
+              color: 'white'
+            }}>
+              <div style={{
+                fontSize: '64px',
+                marginBottom: '1rem',
+                opacity: '0.7'
+              }}>🐝</div>
+              <h4 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                marginBottom: '1rem',
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>
+                No bees found
+              </h4>
+              <p style={{
+                fontSize: '1rem',
+                opacity: '0.8',
+                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)'
+              }}>
+                Try adjusting your search or filter criteria
+              </p>
+            </div>
+          )}
+        </div>
+
         {/* CTA Section */}
         <div style={{
           maxWidth: '600px',
@@ -551,22 +897,28 @@ export default function Home() {
               gap: '0.5rem'
             }}>
               <li>
-                <Link href="/bees" style={{
-                  color: 'white',
-                  textDecoration: 'none',
-                  fontSize: '0.9rem',
-                  opacity: '0.8',
-                  transition: 'opacity 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.opacity = '1'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.opacity = '0.8'
-                }}
+                <button 
+                  onClick={scrollToBees}
+                  style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease',
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
                 >
                   Our Bees
-                </Link>
+                </button>
               </li>
               <li>
                 <Link href="/chat" style={{
@@ -832,6 +1184,17 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes bounce {
+          0%, 80%, 100% {
+            transform: scale(0);
+          }
+          40% {
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   )
 }
