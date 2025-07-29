@@ -4,13 +4,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import EmailSubscription from '@/components/EmailSubscription'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
-
-// Dynamically import VapiWidget to avoid SSR issues
-const VapiWidget = dynamic(() => import('@vapi-ai/client-sdk-react').then(mod => ({ default: mod.VapiWidget })), {
-  ssr: false,
-  loading: () => <div>Loading voice widget...</div>
-})
+import VapiWidget from '@/components/vapi-widget'
 
 
 
@@ -1698,32 +1692,34 @@ export default function Home() {
 
       {/* Vapi Widget */}
       {showVapiWidget && (
-        <VapiWidget
-          publicKey="8855fa42-df57-4574-8cf1-a7888b14166a"
-          assistantId="34742276-b3aa-452f-aaea-204f85d884d3"
-          mode="voice"
-          theme="dark"
-          baseColor="#000000"
-          accentColor="#14B8A6"
-          buttonBaseColor="#000000"
-          buttonAccentColor="#FFFFFF"
-          borderRadius="large"
-          size="full"
-          position="bottom-right"
-          mainLabel="TALK WITH BUZZ"
-          startButtonText="Start"
-          endButtonText="End Call"
-          emptyChatMessage="Hey, How can I help you today?"
-          emptyVoiceMessage="Click to start a voice conversation with Buzz!"
-          showTranscript={false}
-          requireConsent={true}
-          termsContent="By clicking 'Agree,' and each time I interact with this AI agent, I consent to the recording, storage, and sharing of my communications with third-party service providers, and as otherwise described in our Terms of Service."
-          localStorageKey="vapi_widget_consent"
-          onCallStart={() => console.log('Voice call started')}
-          onCallEnd={() => console.log('Voice call ended')}
-          onMessage={(message) => console.log('Message received:', message)}
-          onError={(error) => console.error('Widget error:', error)}
-        />
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1000,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          padding: '20px',
+          borderRadius: '12px'
+        }}>
+          <VapiWidget />
+          <button 
+            onClick={() => setShowVapiWidget(false)}
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              background: 'none',
+              border: 'none',
+              color: 'white',
+              fontSize: '24px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            ×
+          </button>
+        </div>
       )}
 
       <style jsx>{`
