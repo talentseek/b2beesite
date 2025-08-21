@@ -252,14 +252,15 @@ export default function BeesManagement() {
               }}>
                 {bee.description}
               </p>
-              {bee.price && (
+              {(bee as any).display_price && (
                 <p style={{
                   fontSize: 'clamp(18px, 4vw, 20px)',
                   fontWeight: 'bold',
                   color: '#fe8a00',
                   margin: '0'
                 }}>
-                  ${bee.price}/month
+                  {(bee as any).display_currency === 'GBP' ? '£' : (bee as any).display_currency === 'EUR' ? '€' : '$'}
+                  {(bee as any).display_price}/month
                 </p>
               )}
               

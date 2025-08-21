@@ -64,3 +64,26 @@ CREATE TRIGGER update_bees_updated_at
   BEFORE UPDATE ON bees 
   FOR EACH ROW 
   EXECUTE FUNCTION update_updated_at_column(); 
+
+-- Regional pricing table for bees
+CREATE TABLE IF NOT EXISTS bee_prices (
+  id SERIAL PRIMARY KEY,
+  bee_id INTEGER NOT NULL REFERENCES bees(id) ON DELETE CASCADE,
+  currency_code VARCHAR(3) NOT NULL,
+  amount INTEGER NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT bee_prices_currency_check CHECK (currency_code IN ('USD','GBP','EUR')),
+  CONSTRAINT bee_prices_unique UNIQUE (bee_id, currency_code)
+);
+
+-- Indexes for bee_prices
+CREATE INDEX IF NOT EXISTS idx_bee_prices_bee_id ON bee_prices(bee_id);
+CREATE INDEX IF NOT EXISTS idx_bee_prices_currency ON bee_prices(currency_code);
+
+-- Trigger to auto-update updated_at on bee_prices
+DROP TRIGGER IF EXISTS update_bee_prices_updated_at ON bee_prices;
+CREATE TRIGGER update_bee_prices_updated_at
+  BEFORE UPDATE ON bee_prices
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();

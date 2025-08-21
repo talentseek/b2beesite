@@ -10,7 +10,8 @@ interface Bee {
   name: string
   role: string
   description: string
-  price: number | null
+  display_price?: number | null
+  display_currency?: 'USD' | 'GBP' | 'EUR'
   image_url: string | null
   created_at: string
 }
@@ -187,7 +188,9 @@ export default function BeeProfilePage() {
     )
   }
 
-  const savings = bee.price ? calculateSavings(bee.price) : null
+  const currencySymbol = bee.display_currency === 'GBP' ? '£' : bee.display_currency === 'EUR' ? '€' : '$'
+  const priceValue = typeof bee.display_price === 'number' ? bee.display_price : null
+  const savings = priceValue ? calculateSavings(priceValue) : null
 
   return (
     <div style={{
@@ -337,14 +340,14 @@ export default function BeeProfilePage() {
               }}>
                 {bee.description}
               </p>
-              {bee.price && (
+              {priceValue && (
                 <div style={{
                   marginBottom: 'clamp(24px, 4vw, 32px)'
                 }}>
                   <span style={{
                     fontSize: 'clamp(32px, 5vw, 40px)',
                     fontWeight: 'bold'
-                  }}>${bee.price}</span>
+                  }}>{currencySymbol}{priceValue}</span>
                   <span style={{
                     fontSize: 'clamp(18px, 3vw, 24px)',
                     opacity: '0.8'

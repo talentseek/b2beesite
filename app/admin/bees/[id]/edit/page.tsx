@@ -14,17 +14,19 @@ interface Bee {
   name: string
   role: string
   description: string
-  price: number | null
   image_url: string | null
   is_active: boolean
   created_at: string
+  prices?: Record<string, number>
 }
 
 interface FormData {
   name: string
   role: string
   description: string
-  price: string
+  price_usd: string
+  price_gbp: string
+  price_eur: string
   image_url: string
 }
 
@@ -45,7 +47,9 @@ export default function EditBee() {
     name: '',
     role: '',
     description: '',
-    price: '',
+    price_usd: '',
+    price_gbp: '',
+    price_eur: '',
     image_url: ''
   })
   const [errors, setErrors] = useState<FormErrors>({})
@@ -66,7 +70,9 @@ export default function EditBee() {
             name: beeData.name,
             role: beeData.role,
             description: beeData.description,
-            price: beeData.price?.toString() || '',
+            price_usd: beeData.prices?.USD?.toString() || '',
+            price_gbp: beeData.prices?.GBP?.toString() || '',
+            price_eur: beeData.prices?.EUR?.toString() || '',
             image_url: beeData.image_url || ''
           })
         } else {
@@ -94,7 +100,9 @@ export default function EditBee() {
         formData.name !== bee.name ||
         formData.role !== bee.role ||
         formData.description !== bee.description ||
-        formData.price !== (bee.price?.toString() || '') ||
+        formData.price_usd !== (bee.prices?.USD?.toString() || '') ||
+        formData.price_gbp !== (bee.prices?.GBP?.toString() || '') ||
+        formData.price_eur !== (bee.prices?.EUR?.toString() || '') ||
         formData.image_url !== (bee.image_url || '')
       
       setHasUnsavedChanges(hasChanges)
@@ -116,8 +124,9 @@ export default function EditBee() {
       newErrors.description = 'Description is required'
     }
 
-    if (formData.price && isNaN(parseFloat(formData.price))) {
-      newErrors.price = 'Price must be a valid number'
+    const priceFields = [formData.price_usd, formData.price_gbp, formData.price_eur]
+    if (priceFields.some(p => p && isNaN(parseFloat(p)))) {
+      newErrors.price = 'Prices must be valid numbers'
     }
 
     setErrors(newErrors)
@@ -134,9 +143,18 @@ export default function EditBee() {
     setIsSubmitting(true)
 
     try {
-      const beeData = {
-        ...formData,
-        price: formData.price ? parseFloat(formData.price) : null
+      const prices: Record<string, number | undefined> = {
+        USD: formData.price_usd ? Math.round(Number(formData.price_usd)) : undefined,
+        GBP: formData.price_gbp ? Math.round(Number(formData.price_gbp)) : undefined,
+        EUR: formData.price_eur ? Math.round(Number(formData.price_eur)) : undefined,
+      }
+
+      const beeData: any = {
+        name: formData.name,
+        role: formData.role,
+        description: formData.description,
+        image_url: formData.image_url || null,
+        prices,
       }
 
       const response = await fetch(`/api/bees/${beeId}`, {
@@ -544,43 +562,72 @@ export default function EditBee() {
             )}
           </div>
 
-          {/* Price Field */}
+          {/* Prices (USD/GBP/EUR) */}
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            gap: '8px'
+            gap: '12px'
           }}>
-            <label htmlFor="price" style={{
+            <label style={{
               fontSize: 'clamp(16px, 3vw, 18px)',
               fontWeight: '600',
               color: '#2d3748'
             }}>
-              Price (optional)
+              Prices (optional)
             </label>
-            <Input
-              type="number"
-              id="price"
-              value={formData.price}
-              onChange={(e) => setFormData({...formData, price: e.target.value})}
-              step="0.01"
-              min="0"
-              placeholder="0.00"
-              style={{
-                padding: 'clamp(12px, 2vw, 16px)',
-                fontSize: 'clamp(14px, 3vw, 16px)',
-                borderRadius: '12px',
-                border: errors.price ? '2px solid #e53e3e' : '2px solid #e2e8f0',
-                transition: 'all 0.3s ease'
-              }}
-              onFocus={(e) => {
-                e.target.style.borderColor = '#fe8a00'
-                e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = errors.price ? '#e53e3e' : '#e2e8f0'
-                e.target.style.boxShadow = 'none'
-              }}
-            />
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+              <div>
+                <label style={{ fontSize: '12px', color: '#666' }}>USD ($)</label>
+                <Input
+                  type="number"
+                  value={formData.price_usd}
+                  onChange={(e) => setFormData({...formData, price_usd: e.target.value})}
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: errors.price ? '2px solid #e53e3e' : '2px solid #e2e8f0'
+                  }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: '12px', color: '#666' }}>GBP (£)</label>
+                <Input
+                  type="number"
+                  value={formData.price_gbp}
+                  onChange={(e) => setFormData({...formData, price_gbp: e.target.value})}
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: errors.price ? '2px solid #e53e3e' : '2px solid #e2e8f0'
+                  }}
+                />
+              </div>
+              <div>
+                <label style={{ fontSize: '12px', color: '#666' }}>EUR (€)</label>
+                <Input
+                  type="number"
+                  value={formData.price_eur}
+                  onChange={(e) => setFormData({...formData, price_eur: e.target.value})}
+                  min="0"
+                  step="1"
+                  placeholder="0"
+                  style={{
+                    padding: 'clamp(12px, 2vw, 16px)',
+                    fontSize: 'clamp(14px, 3vw, 16px)',
+                    borderRadius: '12px',
+                    border: errors.price ? '2px solid #e53e3e' : '2px solid #e2e8f0'
+                  }}
+                />
+              </div>
+            </div>
             {errors.price && (
               <p style={{
                 fontSize: 'clamp(12px, 2.5vw, 14px)',
