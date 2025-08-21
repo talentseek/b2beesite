@@ -385,11 +385,23 @@ export default function BeeProfilePage() {
                     alignItems: 'center',
                     marginBottom: '16px'
                   }}>
-                    <div style={{
-                      fontSize: 'clamp(32px, 5vw, 40px)',
-                      fontWeight: 'bold'
-                    }}>
-                      {currencySymbol}{priceValue}/month
+                    <div>
+                      <div style={{
+                        fontSize: 'clamp(32px, 5vw, 40px)',
+                        fontWeight: 'bold'
+                      }}>
+                        {currencySymbol}{priceValue}/month
+                      </div>
+                      {/* Usage Pricing Display */}
+                      {bee.usage_pricing && bee.usage_pricing[selectedCurrency] && (
+                        <div style={{
+                          fontSize: 'clamp(14px, 2.5vw, 16px)',
+                          opacity: '0.8',
+                          marginTop: '4px'
+                        }}>
+                          + {currencySymbol}{bee.usage_pricing[selectedCurrency].rate_per_unit} {bee.usage_pricing[selectedCurrency].unit_description}
+                        </div>
+                      )}
                     </div>
                     
                     {/* Currency Toggle */}
@@ -598,6 +610,53 @@ export default function BeeProfilePage() {
                     marginBottom: '8px'
                   }}>
                     {feature}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Integrations Section */}
+      {bee.integrations && bee.integrations.length > 0 && (
+        <div style={{
+          padding: 'clamp(40px, 8vw, 80px) clamp(20px, 4vw, 40px)',
+          color: 'white'
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto'
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(28px, 5vw, 40px)',
+              color: 'white',
+              textAlign: 'center',
+              marginBottom: 'clamp(32px, 6vw, 48px)',
+              fontWeight: 'bold'
+            }}>
+              Integrations
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '24px'
+            }}>
+              {bee.integrations.map((integration, index) => (
+                <div key={index} style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  padding: '20px',
+                  borderRadius: '12px',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  textAlign: 'center'
+                }}>
+                  <div style={{
+                    fontSize: '16px',
+                    fontWeight: '600',
+                    color: 'white'
+                  }}>
+                    {integration}
                   </div>
                 </div>
               ))}
