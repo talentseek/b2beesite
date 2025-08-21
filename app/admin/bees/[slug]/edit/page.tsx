@@ -42,7 +42,7 @@ interface FormErrors {
 export default function EditBee() {
   const router = useRouter()
   const params = useParams()
-  const beeId = params.id as string
+  const beeSlug = params.slug as string
 
   const [bee, setBee] = useState<Bee | null>(null)
   const [formData, setFormData] = useState<FormData>({
@@ -73,18 +73,12 @@ export default function EditBee() {
   useEffect(() => {
     const fetchBee = async () => {
       try {
-        // First get the bee by ID to get the slug
-        const response = await fetch(`/api/bees/${beeId}`)
+        // Get the bee by slug
+        const response = await fetch(`/api/bees/slug/${beeSlug}`)
         if (response.ok) {
           const data = await response.json()
-          const beeData = data.bee
-          setBee(beeData)
-          
-          // Now fetch the full bee data using the slug
-          const slugResponse = await fetch(`/api/bees/slug/${beeData.slug}`)
-          if (slugResponse.ok) {
-            const slugData = await slugResponse.json()
-            const fullBeeData = slugData.bee
+          const fullBeeData = data.bee
+          setBee(fullBeeData)
             
             setFormData({
               slug: fullBeeData.slug || '',
@@ -119,10 +113,10 @@ export default function EditBee() {
       }
     }
 
-    if (beeId) {
+    if (beeSlug) {
       fetchBee()
     }
-  }, [beeId, router])
+  }, [beeSlug, router])
 
   // Track unsaved changes
   useEffect(() => {
@@ -187,7 +181,7 @@ export default function EditBee() {
       }
 
       const beeData: any = {
-        id: beeId,
+        id: bee?.id,
         slug: formData.slug,
         name: formData.name,
         tagline: formData.tagline,
@@ -234,7 +228,7 @@ export default function EditBee() {
     setIsSubmitting(true)
 
     try {
-      const response = await fetch(`/api/bees/${beeId}`, {
+      const response = await fetch(`/api/bees/slug/${beeSlug}`, {
         method: 'DELETE'
       })
 

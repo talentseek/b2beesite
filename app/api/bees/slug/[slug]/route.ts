@@ -98,3 +98,48 @@ export async function GET(
     )
   }
 }
+
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { slug: string } }
+) {
+  try {
+    const { slug } = params
+    
+    const client = await pool.connect()
+    
+    try {
+      // First get the bee ID from the slug
+      const beeQuery = 'SELECT id FROM bees WHERE slug = $1'
+      const beeResult = await client.query(beeQuery, [slug])
+      
+      if (beeResult.rows.length === 0) {
+        return NextResponse.json(
+          { error: 'Bee not found' },
+          { status: 404 }
+        )
+      }
+
+      const beeId = beeResult.rows[0].id
+
+      // Delete related records first (foreign key constraints)
+      await client.query('DELETE FROM bee_usage_pricing WHERE bee_id = $1', [beeId])
+      await client.query('DELETE FROM bee_prices WHERE bee_id = $1', [beeId])
+      
+      // Delete the bee
+      await client.query('DELETE FROM bees WHERE id = $1', [beeId])
+
+      return NextResponse.json({ success: true })
+      
+    } finally {
+      client.release()
+    }
+    
+  } catch (error) {
+    console.error('Error deleting bee:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
+  }
+}

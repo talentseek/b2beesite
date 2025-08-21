@@ -288,7 +288,7 @@ export default function BeesManagement() {
                 gap: 'clamp(8px, 2vw, 12px)',
                 marginTop: 'clamp(12px, 2vw, 16px)'
               }}>
-                <Link href={`/admin/bees/${bee.id}/edit`}>
+                <Link href={`/admin/bees/${bee.slug}/edit`}>
                   <Button 
                     variant="outline" 
                     size="sm" 
