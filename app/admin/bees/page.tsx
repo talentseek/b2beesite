@@ -2,11 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import ImageUpload from '@/components/ImageUpload'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
 
 interface Bee {
   id: number
@@ -22,15 +19,6 @@ interface Bee {
 export default function BeesManagement() {
   const [bees, setBees] = useState<Bee[]>([])
   const [loading, setLoading] = useState(true)
-  const [showAddForm, setShowAddForm] = useState(false)
-  const [editingBee, setEditingBee] = useState<Bee | null>(null)
-  const [formData, setFormData] = useState({
-    name: '',
-    role: '',
-    description: '',
-    price: '',
-    image_url: ''
-  })
 
   useEffect(() => {
     fetchBees()
@@ -47,39 +35,6 @@ export default function BeesManagement() {
       console.error('Error fetching bees:', error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    const beeData = {
-      ...formData,
-      price: formData.price ? parseFloat(formData.price) : null
-    }
-
-    try {
-      const url = editingBee ? `/api/bees/${editingBee.id}` : '/api/bees'
-      const method = editingBee ? 'PUT' : 'POST'
-      
-      const response = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(beeData)
-      })
-
-      if (response.ok) {
-        setShowAddForm(false)
-        setEditingBee(null)
-        resetForm()
-        fetchBees()
-      } else {
-        const error = await response.json()
-        alert(error.error || 'Failed to save bee')
-      }
-    } catch (error) {
-      console.error('Error saving bee:', error)
-      alert('Failed to save bee')
     }
   }
 
@@ -100,34 +55,6 @@ export default function BeesManagement() {
       console.error('Error deleting bee:', error)
       alert('Failed to delete bee')
     }
-  }
-
-  const handleEdit = (bee: Bee) => {
-    setEditingBee(bee)
-    setFormData({
-      name: bee.name,
-      role: bee.role,
-      description: bee.description,
-      price: bee.price?.toString() || '',
-      image_url: bee.image_url || ''
-    })
-    setShowAddForm(true)
-  }
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      role: '',
-      description: '',
-      price: '',
-      image_url: ''
-    })
-  }
-
-  const cancelForm = () => {
-    setShowAddForm(false)
-    setEditingBee(null)
-    resetForm()
   }
 
   if (loading) {
@@ -210,363 +137,37 @@ export default function BeesManagement() {
           Busy Bees Management
         </h1>
         
-        <Button 
-          onClick={() => {
-            console.log('Add New Bee button clicked')
-            setShowAddForm(true)
-          }}
-          style={{
-            background: '#fe8a00',
-            color: 'white',
-            border: 'none',
-            padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
-            borderRadius: '12px',
-            fontSize: 'clamp(14px, 3vw, 16px)',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = '#e67a00'
-            e.currentTarget.style.transform = 'translateY(-2px)'
-            e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = '#fe8a00'
-            e.currentTarget.style.transform = 'translateY(0)'
-            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
-          }}
-        >
-          Add New Bee
-        </Button>
+        <Link href="/admin/bees/new">
+          <Button 
+            style={{
+              background: '#fe8a00',
+              color: 'white',
+              border: 'none',
+              padding: 'clamp(12px, 2vw, 16px) clamp(24px, 4vw, 32px)',
+              borderRadius: '12px',
+              fontSize: 'clamp(14px, 3vw, 16px)',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#e67a00'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#fe8a00'
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
+            }}
+          >
+            Add New Bee
+          </Button>
+        </Link>
       </div>
 
-      {/* Custom Modal */}
-      {showAddForm && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }}>
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.95)',
-            borderRadius: '20px',
-            backdropFilter: 'blur(10px)',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
-            border: 'none',
-            padding: 'clamp(24px, 4vw, 32px)',
-            maxWidth: '500px',
-            width: '90vw',
-            maxHeight: '90vh',
-            overflowY: 'auto'
-          }}>
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: 'clamp(16px, 3vw, 24px)'
-            }}>
-              <h2 style={{
-                fontSize: 'clamp(20px, 4vw, 24px)',
-                fontWeight: 'bold',
-                color: '#2d3748',
-                margin: 0
-              }}>
-                {editingBee ? 'Edit Bee' : 'Add New Bee'}
-              </h2>
-              <Button 
-                onClick={() => setShowAddForm(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontSize: '24px',
-                  cursor: 'pointer',
-                  color: '#666',
-                  padding: '4px',
-                  borderRadius: '4px'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#f0f0f0'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'none'
-                }}
-              >
-                ×
-              </Button>
-            </div>
-            <form onSubmit={handleSubmit} style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'clamp(16px, 3vw, 24px)'
-            }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <label htmlFor="name" style={{
-                  fontSize: 'clamp(14px, 3vw, 16px)',
-                  fontWeight: '600',
-                  color: '#2d3748'
-                }}>
-                  Name *
-                </label>
-                <Input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  required
-                  style={{
-                    padding: 'clamp(12px, 2vw, 16px)',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#fe8a00'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e2e8f0'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                />
-              </div>
 
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <label htmlFor="role" style={{
-                  fontSize: 'clamp(14px, 3vw, 16px)',
-                  fontWeight: '600',
-                  color: '#2d3748'
-                }}>
-                  Role *
-                </label>
-                <Input
-                  type="text"
-                  id="role"
-                  value={formData.role}
-                  onChange={(e) => setFormData({...formData, role: e.target.value})}
-                  required
-                  style={{
-                    padding: 'clamp(12px, 2vw, 16px)',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#fe8a00'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e2e8f0'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <label htmlFor="description" style={{
-                  fontSize: 'clamp(14px, 3vw, 16px)',
-                  fontWeight: '600',
-                  color: '#2d3748'
-                }}>
-                  Description *
-                </label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  required
-                  rows={4}
-                  style={{
-                    padding: 'clamp(12px, 2vw, 16px)',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0',
-                    transition: 'all 0.3s ease',
-                    resize: 'vertical'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#fe8a00'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e2e8f0'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <label htmlFor="price" style={{
-                  fontSize: 'clamp(14px, 3vw, 16px)',
-                  fontWeight: '600',
-                  color: '#2d3748'
-                }}>
-                  Price (optional)
-                </label>
-                <Input
-                  type="number"
-                  id="price"
-                  value={formData.price}
-                  onChange={(e) => setFormData({...formData, price: e.target.value})}
-                  step="0.01"
-                  min="0"
-                  style={{
-                    padding: 'clamp(12px, 2vw, 16px)',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#fe8a00'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e2e8f0'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
-                <label style={{
-                  fontSize: 'clamp(14px, 3vw, 16px)',
-                  fontWeight: '600',
-                  color: '#2d3748'
-                }}>
-                  Bee Profile Image (optional)
-                </label>
-                <ImageUpload
-                  currentImageUrl={formData.image_url}
-                  onImageUpload={(url) => setFormData({...formData, image_url: url})}
-                  onImageRemove={() => setFormData({...formData, image_url: ''})}
-                />
-                <p style={{
-                  fontSize: 'clamp(12px, 2.5vw, 14px)',
-                  color: '#666',
-                  margin: '0'
-                }}>
-                  Upload an image above, or provide a URL below
-                </p>
-                <Input
-                  type="text"
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                  placeholder="Or enter image URL directly..."
-                  style={{
-                    padding: 'clamp(12px, 2vw, 16px)',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    borderRadius: '12px',
-                    border: '2px solid #e2e8f0',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#fe8a00'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e2e8f0'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                />
-              </div>
-
-              <div style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: 'clamp(12px, 2vw, 16px)',
-                marginTop: 'clamp(16px, 3vw, 24px)'
-              }}>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={cancelForm}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    color: '#2d3748',
-                    border: '2px solid #e2e8f0',
-                    padding: 'clamp(10px, 2vw, 14px) clamp(20px, 3vw, 28px)',
-                    borderRadius: '12px',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
-                    e.currentTarget.style.borderColor = '#fe8a00'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-                    e.currentTarget.style.borderColor = '#e2e8f0'
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit"
-                  style={{
-                    background: '#fe8a00',
-                    color: 'white',
-                    border: 'none',
-                    padding: 'clamp(10px, 2vw, 14px) clamp(20px, 3vw, 28px)',
-                    borderRadius: '12px',
-                    fontSize: 'clamp(14px, 3vw, 16px)',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#e67a00'
-                    e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.3)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#fe8a00'
-                    e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)'
-                  }}
-                >
-                  {editingBee ? 'Update Bee' : 'Add Bee'}
-                </Button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Bees Grid */}
       <div style={{
@@ -668,32 +269,33 @@ export default function BeesManagement() {
                 gap: 'clamp(8px, 2vw, 12px)',
                 marginTop: 'clamp(12px, 2vw, 16px)'
               }}>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => handleEdit(bee)}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    color: '#2d3748',
-                    border: '2px solid #e2e8f0',
-                    padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
-                    borderRadius: '12px',
-                    fontSize: 'clamp(12px, 2.5vw, 14px)',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
-                    e.currentTarget.style.borderColor = '#fe8a00'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
-                    e.currentTarget.style.borderColor = '#e2e8f0'
-                  }}
-                >
-                  Edit
-                </Button>
+                <Link href={`/admin/bees/${bee.id}/edit`}>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.2)',
+                      color: '#2d3748',
+                      border: '2px solid #e2e8f0',
+                      padding: 'clamp(8px, 1.5vw, 12px) clamp(16px, 3vw, 24px)',
+                      borderRadius: '12px',
+                      fontSize: 'clamp(12px, 2.5vw, 14px)',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)'
+                      e.currentTarget.style.borderColor = '#fe8a00'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'
+                      e.currentTarget.style.borderColor = '#e2e8f0'
+                    }}
+                  >
+                    Edit
+                  </Button>
+                </Link>
                 <Button 
                   variant="destructive" 
                   size="sm" 
