@@ -13,7 +13,8 @@ interface Bee {
   name: string
   role: string
   description: string
-  price: number | null
+  display_price?: number | null
+  display_currency?: 'USD' | 'GBP' | 'EUR'
   image_url: string | null
   created_at: string
 }
@@ -781,7 +782,7 @@ export default function Home() {
                         opacity: '0.7'
                       }}>🐝</div>
                     )}
-                    {bee.price && (
+                    {(bee as any).display_price && (
                       <div style={{
                         position: 'absolute',
                         bottom: '12px',
@@ -795,7 +796,7 @@ export default function Home() {
                         boxShadow: '0 4px 12px rgba(254, 138, 0, 0.3)',
                         backdropFilter: 'blur(10px)'
                       }}>
-                        ${bee.price}/month
+                        {((bee as any).display_currency === 'GBP' ? '£' : (bee as any).display_currency === 'EUR' ? '€' : '$')}{(bee as any).display_price}/month
                       </div>
                     )}
                   </div>
