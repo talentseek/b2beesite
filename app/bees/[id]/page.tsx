@@ -166,7 +166,7 @@ export default function BeeProfilePage() {
         }}>
           {error || 'The bee you\'re looking for doesn\'t exist.'}
         </p>
-        <Link href="/bees" style={{
+        <Link href="/" style={{
           background: 'rgba(255, 255, 255, 0.2)',
           color: 'white',
           textDecoration: 'none',
@@ -259,7 +259,7 @@ export default function BeeProfilePage() {
           maxWidth: '1200px',
           margin: '0 auto'
         }}>
-          <Link href="/bees" style={{
+          <Link href="/" style={{
             color: 'white',
             textDecoration: 'none',
             fontSize: 'clamp(16px, 3vw, 18px)',
