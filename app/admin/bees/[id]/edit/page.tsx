@@ -9,16 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
-interface Bee {
-  id: number
-  name: string
-  role: string
-  description: string
-  image_url: string | null
-  is_active: boolean
-  created_at: string
-  prices?: Record<string, number>
-}
+import { Bee } from '@/lib/types'
 
 interface FormData {
   name: string

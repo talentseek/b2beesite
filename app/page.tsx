@@ -8,16 +8,7 @@ import VapiWidget from '@/components/vapi-widget'
 
 
 
-interface Bee {
-  id: number
-  name: string
-  role: string
-  description: string
-  display_price?: number | null
-  display_currency?: 'USD' | 'GBP' | 'EUR'
-  image_url: string | null
-  created_at: string
-}
+import { Bee } from '@/lib/types'
 
 export default function Home() {
   const [bees, setBees] = useState<Bee[]>([])
@@ -855,7 +846,7 @@ export default function Home() {
                           e.currentTarget.style.background = '#fe8a00'
                           e.currentTarget.style.transform = 'translateY(0)'
                         }}
-                        onClick={() => window.location.href = `/bees/${bee.id}`}
+                        onClick={() => window.location.href = `/bees/${bee.slug}`}
                       >
                         Hire {bee.name}
                       </button>

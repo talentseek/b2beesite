@@ -5,16 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 
-interface Bee {
-  id: number
-  name: string
-  role: string
-  description: string
-  display_price?: number | null
-  display_currency?: 'USD' | 'GBP' | 'EUR'
-  image_url: string | null
-  created_at: string
-}
+import { Bee } from '@/lib/types'
 
 export default function BeeProfilePage() {
   const [bee, setBee] = useState<Bee | null>(null)

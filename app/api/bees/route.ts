@@ -16,17 +16,31 @@ export async function GET(request: NextRequest) {
       `
       SELECT 
         b.id,
+        b.slug,
         b.name,
+        b.tagline,
         b.role,
+        b.status,
+        b.short_description,
         b.description,
+        b.long_description,
         b.image_url,
+        b.features,
+        b.integrations,
+        b.roi_model,
+        b.faqs,
+        b.demo_assets,
+        b.seo_title,
+        b.seo_description,
+        b.seo_og_image,
         b.created_at,
+        b.updated_at,
         COALESCE(p_curr.amount, p_usd.amount) AS display_price,
         CASE WHEN p_curr.amount IS NOT NULL THEN $1 ELSE 'USD' END AS display_currency
       FROM bees b
       LEFT JOIN bee_prices p_curr ON p_curr.bee_id = b.id AND p_curr.currency_code = $1
       LEFT JOIN bee_prices p_usd  ON p_usd.bee_id  = b.id AND p_usd.currency_code  = 'USD'
-      WHERE b.is_active = true
+      WHERE b.status = 'active'
       ORDER BY b.created_at DESC
       `,
       [currency]
@@ -45,24 +59,56 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { name, role, description, image_url } = body
+    const { 
+      slug, 
+      name, 
+      tagline,
+      role, 
+      status = 'draft',
+      short_description,
+      description, 
+      long_description,
+      image_url,
+      features,
+      integrations,
+      roi_model,
+      faqs,
+      demo_assets,
+      seo_title,
+      seo_description,
+      seo_og_image
+    } = body
     const prices: Record<string, number | undefined> = body.prices || {
       USD: body.price_usd,
       GBP: body.price_gbp,
       EUR: body.price_eur,
     }
+    const usage_pricing = body.usage_pricing || {}
     
     // Validate required fields
-    if (!name || !role || !description) {
+    if (!slug || !name || !role || !description) {
       return NextResponse.json(
-        { error: 'Name, role, and description are required' },
+        { error: 'Slug, name, role, and description are required' },
         { status: 400 }
       )
     }
 
     const result = await pool.query(
-      'INSERT INTO bees (name, role, description, price, image_url) VALUES ($1, $2, $3, NULL, $4) RETURNING id',
-      [name, role, description, image_url || null]
+      `INSERT INTO bees (
+        slug, name, tagline, role, status, short_description, description, long_description, 
+        image_url, features, integrations, roi_model, faqs, demo_assets, 
+        seo_title, seo_description, seo_og_image
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17) RETURNING id`,
+      [
+        slug, name, tagline, role, status, short_description, description, long_description,
+        image_url || null, 
+        features ? JSON.stringify(features) : null,
+        integrations ? JSON.stringify(integrations) : null,
+        roi_model ? JSON.stringify(roi_model) : null,
+        faqs ? JSON.stringify(faqs) : null,
+        demo_assets ? JSON.stringify(demo_assets) : null,
+        seo_title, seo_description, seo_og_image
+      ]
     )
 
     const beeId = result.rows[0].id
@@ -86,6 +132,30 @@ export async function POST(request: NextRequest) {
          VALUES ${valuesSql}
          ON CONFLICT (bee_id, currency_code) DO UPDATE SET amount = EXCLUDED.amount`,
         params
+      )
+    }
+
+    // Insert usage pricing if provided
+    const usageEntries: Array<[string, any]> = []
+    for (const [currency, usage] of Object.entries(usage_pricing)) {
+      if (usage && usage.usage_type && usage.rate_per_unit && usage.unit_description) {
+        usageEntries.push([currency, usage])
+      }
+    }
+
+    if (usageEntries.length > 0) {
+      const usageValuesSql = usageEntries
+        .map((_, i) => `($1, $${i * 4 + 2}, $${i * 4 + 3}, $${i * 4 + 4}, $${i * 4 + 5})`)
+        .join(',')
+      const usageParams = [beeId, ...usageEntries.flatMap(([currency, usage]) => [
+        currency, usage.usage_type, usage.rate_per_unit, usage.unit_description
+      ])]
+      await pool.query(
+        `INSERT INTO bee_usage_pricing (bee_id, currency_code, usage_type, rate_per_unit, unit_description)
+         VALUES ${usageValuesSql}
+         ON CONFLICT (bee_id, currency_code, usage_type) DO UPDATE SET 
+         rate_per_unit = EXCLUDED.rate_per_unit, unit_description = EXCLUDED.unit_description`,
+        usageParams
       )
     }
 

@@ -5,16 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-interface Bee {
-  id: number
-  name: string
-  role: string
-  description: string
-  price: number | null
-  image_url: string | null
-  is_active: boolean
-  created_at: string
-}
+import { Bee } from '@/lib/types'
 
 export default function BeesManagement() {
   const [bees, setBees] = useState<Bee[]>([])
