@@ -12,16 +12,27 @@ import { Textarea } from '@/components/ui/textarea'
 import { Bee } from '@/lib/types'
 
 interface FormData {
+  slug: string
   name: string
+  tagline: string
   role: string
+  status: 'active' | 'inactive' | 'draft'
+  short_description: string
   description: string
+  long_description: string
   price_usd: string
   price_gbp: string
   price_eur: string
   image_url: string
+  features: string[]
+  integrations: string[]
+  seo_title: string
+  seo_description: string
+  seo_og_image: string
 }
 
 interface FormErrors {
+  slug?: string
   name?: string
   role?: string
   description?: string
@@ -35,13 +46,23 @@ export default function EditBee() {
 
   const [bee, setBee] = useState<Bee | null>(null)
   const [formData, setFormData] = useState<FormData>({
+    slug: '',
     name: '',
+    tagline: '',
     role: '',
+    status: 'draft',
+    short_description: '',
     description: '',
+    long_description: '',
     price_usd: '',
     price_gbp: '',
     price_eur: '',
-    image_url: ''
+    image_url: '',
+    features: [],
+    integrations: [],
+    seo_title: '',
+    seo_description: '',
+    seo_og_image: ''
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isLoading, setIsLoading] = useState(true)
@@ -52,20 +73,39 @@ export default function EditBee() {
   useEffect(() => {
     const fetchBee = async () => {
       try {
+        // First get the bee by ID to get the slug
         const response = await fetch(`/api/bees/${beeId}`)
         if (response.ok) {
           const data = await response.json()
           const beeData = data.bee
           setBee(beeData)
-          setFormData({
-            name: beeData.name,
-            role: beeData.role,
-            description: beeData.description,
-            price_usd: beeData.prices?.USD?.toString() || '',
-            price_gbp: beeData.prices?.GBP?.toString() || '',
-            price_eur: beeData.prices?.EUR?.toString() || '',
-            image_url: beeData.image_url || ''
-          })
+          
+          // Now fetch the full bee data using the slug
+          const slugResponse = await fetch(`/api/bees/slug/${beeData.slug}`)
+          if (slugResponse.ok) {
+            const slugData = await slugResponse.json()
+            const fullBeeData = slugData.bee
+            
+            setFormData({
+              slug: fullBeeData.slug || '',
+              name: fullBeeData.name || '',
+              tagline: fullBeeData.tagline || '',
+              role: fullBeeData.role || '',
+              status: fullBeeData.status || 'draft',
+              short_description: fullBeeData.short_description || '',
+              description: fullBeeData.description || '',
+              long_description: fullBeeData.long_description || '',
+              price_usd: fullBeeData.display_price?.USD?.toString() || '',
+              price_gbp: fullBeeData.display_price?.GBP?.toString() || '',
+              price_eur: fullBeeData.display_price?.EUR?.toString() || '',
+              image_url: fullBeeData.image_url || '',
+              features: fullBeeData.features || [],
+              integrations: fullBeeData.integrations || [],
+              seo_title: fullBeeData.seo_title || '',
+              seo_description: fullBeeData.seo_description || '',
+              seo_og_image: fullBeeData.seo_og_image || ''
+            })
+          }
         } else {
           alert('Bee not found')
           router.push('/admin/bees')
@@ -102,6 +142,12 @@ export default function EditBee() {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
+
+    if (!formData.slug.trim()) {
+      newErrors.slug = 'Slug is required'
+    } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
+      newErrors.slug = 'Slug must contain only lowercase letters, numbers, and hyphens'
+    }
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required'
@@ -141,14 +187,25 @@ export default function EditBee() {
       }
 
       const beeData: any = {
+        id: beeId,
+        slug: formData.slug,
         name: formData.name,
+        tagline: formData.tagline,
         role: formData.role,
+        status: formData.status,
+        short_description: formData.short_description,
         description: formData.description,
+        long_description: formData.long_description,
         image_url: formData.image_url || null,
+        features: formData.features,
+        integrations: formData.integrations,
+        seo_title: formData.seo_title,
+        seo_description: formData.seo_description,
+        seo_og_image: formData.seo_og_image,
         prices,
       }
 
-      const response = await fetch(`/api/bees/${beeId}`, {
+      const response = await fetch('/api/bees', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(beeData)

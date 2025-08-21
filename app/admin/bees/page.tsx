@@ -235,13 +235,40 @@ export default function BeesManagement() {
               }}>
                 {bee.role}
               </p>
+              
+              {/* Status Badge */}
+              <div style={{
+                display: 'inline-block',
+                padding: '4px 12px',
+                borderRadius: '12px',
+                fontSize: '12px',
+                fontWeight: '600',
+                textTransform: 'uppercase',
+                marginBottom: '8px',
+                backgroundColor: bee.status === 'active' ? '#10B981' : bee.status === 'inactive' ? '#F59E0B' : '#6B7280',
+                color: 'white'
+              }}>
+                {bee.status}
+              </div>
+              
+              {bee.tagline && (
+                <p style={{
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  color: '#4A5568',
+                  fontStyle: 'italic',
+                  margin: '0 0 8px 0'
+                }}>
+                  {bee.tagline}
+                </p>
+              )}
+              
               <p style={{
                 fontSize: 'clamp(14px, 3vw, 16px)',
                 color: '#666',
                 lineHeight: '1.5',
                 margin: '0'
               }}>
-                {bee.description}
+                {bee.short_description || bee.description}
               </p>
               {(bee as any).display_price && (
                 <p style={{

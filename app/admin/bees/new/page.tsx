@@ -10,16 +10,27 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 
 interface FormData {
+  slug: string
   name: string
+  tagline: string
   role: string
+  status: 'active' | 'inactive' | 'draft'
+  short_description: string
   description: string
+  long_description: string
   price_usd: string
   price_gbp: string
   price_eur: string
   image_url: string
+  features: string[]
+  integrations: string[]
+  seo_title: string
+  seo_description: string
+  seo_og_image: string
 }
 
 interface FormErrors {
+  slug?: string
   name?: string
   role?: string
   description?: string
@@ -29,13 +40,23 @@ interface FormErrors {
 export default function AddNewBee() {
   const router = useRouter()
   const [formData, setFormData] = useState<FormData>({
+    slug: '',
     name: '',
+    tagline: '',
     role: '',
+    status: 'draft',
+    short_description: '',
     description: '',
+    long_description: '',
     price_usd: '',
     price_gbp: '',
     price_eur: '',
-    image_url: ''
+    image_url: '',
+    features: [],
+    integrations: [],
+    seo_title: '',
+    seo_description: '',
+    seo_og_image: ''
   })
   const [errors, setErrors] = useState<FormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -55,6 +76,19 @@ export default function AddNewBee() {
     }
   }, [])
 
+  // Auto-generate slug from name
+  useEffect(() => {
+    if (formData.name && !formData.slug) {
+      const generatedSlug = formData.name
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .trim()
+      setFormData(prev => ({ ...prev, slug: generatedSlug }))
+    }
+  }, [formData.name])
+
   // Save draft when form data changes
   useEffect(() => {
     if (formData.name || formData.role || formData.description) {
@@ -65,6 +99,12 @@ export default function AddNewBee() {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {}
+
+    if (!formData.slug.trim()) {
+      newErrors.slug = 'Slug is required'
+    } else if (!/^[a-z0-9-]+$/.test(formData.slug)) {
+      newErrors.slug = 'Slug must contain only lowercase letters, numbers, and hyphens'
+    }
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required'
@@ -104,10 +144,20 @@ export default function AddNewBee() {
       }
 
       const beeData: any = {
+        slug: formData.slug,
         name: formData.name,
+        tagline: formData.tagline,
         role: formData.role,
+        status: formData.status,
+        short_description: formData.short_description,
         description: formData.description,
+        long_description: formData.long_description,
         image_url: formData.image_url || null,
+        features: formData.features,
+        integrations: formData.integrations,
+        seo_title: formData.seo_title,
+        seo_description: formData.seo_description,
+        seo_og_image: formData.seo_og_image,
         prices,
       }
 
@@ -152,13 +202,23 @@ export default function AddNewBee() {
     if (confirm('Clear the current draft?')) {
       localStorage.removeItem('bee-form-draft')
       setFormData({
+        slug: '',
         name: '',
+        tagline: '',
         role: '',
+        status: 'draft',
+        short_description: '',
         description: '',
+        long_description: '',
         price_usd: '',
         price_gbp: '',
         price_eur: '',
-        image_url: ''
+        image_url: '',
+        features: [],
+        integrations: [],
+        seo_title: '',
+        seo_description: '',
+        seo_og_image: ''
       })
       setHasUnsavedChanges(false)
     }
@@ -294,6 +354,53 @@ export default function AddNewBee() {
           flexDirection: 'column',
           gap: 'clamp(24px, 4vw, 32px)'
         }}>
+          {/* Slug Field */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <label htmlFor="slug" style={{
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              color: '#2d3748'
+            }}>
+              Slug *
+            </label>
+            <Input
+              type="text"
+              id="slug"
+              value={formData.slug}
+              onChange={(e) => setFormData({...formData, slug: e.target.value})}
+              required
+              placeholder="e.g., appointment-bee"
+              style={{
+                padding: 'clamp(12px, 2vw, 16px)',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                borderRadius: '12px',
+                border: errors.slug ? '2px solid #e53e3e' : '2px solid #e2e8f0',
+                transition: 'all 0.3s ease'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#fe8a00'
+                e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = errors.slug ? '#e53e3e' : '#e2e8f0'
+                e.target.style.boxShadow = 'none'
+              }}
+            />
+            {errors.slug && (
+              <p style={{
+                fontSize: 'clamp(12px, 2.5vw, 14px)',
+                color: '#e53e3e',
+                margin: '0'
+              }}>
+                {errors.slug}
+              </p>
+            )}
+          </div>
+
           {/* Name Field */}
           <div style={{
             display: 'flex',
@@ -338,6 +445,83 @@ export default function AddNewBee() {
                 {errors.name}
               </p>
             )}
+          </div>
+
+          {/* Tagline Field */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <label htmlFor="tagline" style={{
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              color: '#2d3748'
+            }}>
+              Tagline
+            </label>
+            <Input
+              type="text"
+              id="tagline"
+              value={formData.tagline}
+              onChange={(e) => setFormData({...formData, tagline: e.target.value})}
+              placeholder="e.g., Your 24/7 virtual receptionist"
+              style={{
+                padding: 'clamp(12px, 2vw, 16px)',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                borderRadius: '12px',
+                border: '2px solid #e2e8f0',
+                transition: 'all 0.3s ease'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#fe8a00'
+                e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e2e8f0'
+                e.target.style.boxShadow = 'none'
+              }}
+            />
+          </div>
+
+          {/* Status Field */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <label htmlFor="status" style={{
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              color: '#2d3748'
+            }}>
+              Status
+            </label>
+            <select
+              id="status"
+              value={formData.status}
+              onChange={(e) => setFormData({...formData, status: e.target.value as 'active' | 'inactive' | 'draft'})}
+              style={{
+                padding: 'clamp(12px, 2vw, 16px)',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                borderRadius: '12px',
+                border: '2px solid #e2e8f0',
+                transition: 'all 0.3s ease',
+                backgroundColor: 'white'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#fe8a00'
+                e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e2e8f0'
+                e.target.style.boxShadow = 'none'
+              }}
+            >
+              <option value="draft">Draft</option>
+              <option value="inactive">Inactive (Coming Soon)</option>
+              <option value="active">Active</option>
+            </select>
           </div>
 
           {/* Role Field */}
@@ -386,6 +570,82 @@ export default function AddNewBee() {
             )}
           </div>
 
+          {/* Short Description Field */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <label htmlFor="short_description" style={{
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              color: '#2d3748'
+            }}>
+              Short Description
+            </label>
+            <Textarea
+              id="short_description"
+              value={formData.short_description}
+              onChange={(e) => setFormData({...formData, short_description: e.target.value})}
+              rows={3}
+              placeholder="Brief description for cards and previews"
+              style={{
+                padding: 'clamp(12px, 2vw, 16px)',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                borderRadius: '12px',
+                border: '2px solid #e2e8f0',
+                transition: 'all 0.3s ease',
+                resize: 'vertical'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#fe8a00'
+                e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e2e8f0'
+                e.target.style.boxShadow = 'none'
+              }}
+            />
+          </div>
+
+          {/* Long Description Field */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px'
+          }}>
+            <label htmlFor="long_description" style={{
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              color: '#2d3748'
+            }}>
+              Long Description
+            </label>
+            <Textarea
+              id="long_description"
+              value={formData.long_description}
+              onChange={(e) => setFormData({...formData, long_description: e.target.value})}
+              rows={4}
+              placeholder="Detailed description for the bee profile page"
+              style={{
+                padding: 'clamp(12px, 2vw, 16px)',
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                borderRadius: '12px',
+                border: '2px solid #e2e8f0',
+                transition: 'all 0.3s ease',
+                resize: 'vertical'
+              }}
+              onFocus={(e) => {
+                e.target.style.borderColor = '#fe8a00'
+                e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+              }}
+              onBlur={(e) => {
+                e.target.style.borderColor = '#e2e8f0'
+                e.target.style.boxShadow = 'none'
+              }}
+            />
+          </div>
+
           {/* Description Field */}
           <div style={{
             display: 'flex',
@@ -397,7 +657,7 @@ export default function AddNewBee() {
               fontWeight: '600',
               color: '#2d3748'
             }}>
-              Description *
+              Main Description *
             </label>
             <Textarea
               id="description"
@@ -587,6 +847,138 @@ export default function AddNewBee() {
                 value={formData.image_url}
                 onChange={(e) => setFormData({...formData, image_url: e.target.value})}
                 placeholder="Or enter image URL directly..."
+                style={{
+                  padding: 'clamp(12px, 2vw, 16px)',
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  borderRadius: '12px',
+                  border: '2px solid #e2e8f0',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#fe8a00'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e2e8f0'
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+          </div>
+
+          {/* SEO Section */}
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'clamp(16px, 3vw, 24px)',
+            padding: 'clamp(20px, 4vw, 24px)',
+            background: 'rgba(254, 138, 0, 0.05)',
+            borderRadius: '12px',
+            border: '1px solid rgba(254, 138, 0, 0.2)'
+          }}>
+            <h3 style={{
+              fontSize: 'clamp(18px, 4vw, 20px)',
+              fontWeight: '600',
+              color: '#2d3748',
+              margin: '0'
+            }}>
+              SEO Settings
+            </h3>
+            
+            {/* SEO Title */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <label htmlFor="seo_title" style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                color: '#2d3748'
+              }}>
+                SEO Title
+              </label>
+              <Input
+                type="text"
+                id="seo_title"
+                value={formData.seo_title}
+                onChange={(e) => setFormData({...formData, seo_title: e.target.value})}
+                placeholder="e.g., Appointment Bee - 24/7 Virtual Receptionist"
+                style={{
+                  padding: 'clamp(12px, 2vw, 16px)',
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  borderRadius: '12px',
+                  border: '2px solid #e2e8f0',
+                  transition: 'all 0.3s ease'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#fe8a00'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e2e8f0'
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+
+            {/* SEO Description */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <label htmlFor="seo_description" style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                color: '#2d3748'
+              }}>
+                SEO Description
+              </label>
+              <Textarea
+                id="seo_description"
+                value={formData.seo_description}
+                onChange={(e) => setFormData({...formData, seo_description: e.target.value})}
+                rows={3}
+                placeholder="Brief description for search engines (150-160 characters)"
+                style={{
+                  padding: 'clamp(12px, 2vw, 16px)',
+                  fontSize: 'clamp(14px, 3vw, 16px)',
+                  borderRadius: '12px',
+                  border: '2px solid #e2e8f0',
+                  transition: 'all 0.3s ease',
+                  resize: 'vertical'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#fe8a00'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(254, 138, 0, 0.1)'
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e2e8f0'
+                  e.target.style.boxShadow = 'none'
+                }}
+              />
+            </div>
+
+            {/* SEO OG Image */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px'
+            }}>
+              <label htmlFor="seo_og_image" style={{
+                fontSize: 'clamp(14px, 3vw, 16px)',
+                fontWeight: '600',
+                color: '#2d3748'
+              }}>
+                Social Media Image URL
+              </label>
+              <Input
+                type="text"
+                id="seo_og_image"
+                value={formData.seo_og_image}
+                onChange={(e) => setFormData({...formData, seo_og_image: e.target.value})}
+                placeholder="https://example.com/social-image.jpg"
                 style={{
                   padding: 'clamp(12px, 2vw, 16px)',
                   fontSize: 'clamp(14px, 3vw, 16px)',
