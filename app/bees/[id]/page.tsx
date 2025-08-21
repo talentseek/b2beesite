@@ -724,7 +724,7 @@ export default function BeeProfilePage() {
                     marginBottom: '16px',
                     color: 'white'
                   }}>
-                    ${bee.price}/month
+                    {currencySymbol}{priceValue}/month
                   </div>
                   <div style={{
                     textAlign: 'left',
