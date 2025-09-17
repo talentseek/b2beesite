@@ -1124,6 +1124,27 @@ export default function Home() {
                   Contact
                 </a>
               </li>
+              <li>
+                <a href="/gpt5-prompt-creator" style={{
+                  color: 'white',
+                  textDecoration: 'none',
+                  fontSize: '0.9rem',
+                  opacity: '0.8',
+                  transition: 'opacity 0.3s ease',
+                  fontWeight: '600'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.opacity = '1'
+                  e.currentTarget.style.color = '#fe8a00'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.opacity = '0.8'
+                  e.currentTarget.style.color = 'white'
+                }}
+                >
+                  🚀 GPT-5 Prompt Creator
+                </a>
+              </li>
             </ul>
           </div>
 
