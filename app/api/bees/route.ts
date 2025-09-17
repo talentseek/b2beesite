@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db'
 import { auth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 
+export const runtime = 'nodejs'
+
 // Validation schemas
 const CreateBeeSchema = z.object({
   slug: z.string().min(1),

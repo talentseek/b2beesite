@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db'
 import { z } from 'zod'
 
+export const runtime = 'nodejs'
+
 const SubscribeSchema = z.object({
   email: z.string().email(),
   source: z.string().optional().default('coming-soon-page'),
