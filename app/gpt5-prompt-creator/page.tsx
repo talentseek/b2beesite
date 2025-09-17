@@ -93,20 +93,33 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
   }
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: 'clamp(20px, 5vw, 40px)',
-      fontFamily: 'system-ui, -apple-system, sans-serif'
-    }}>
+    <>
+      <style jsx>{`
+        input::placeholder,
+        textarea::placeholder {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
+        select option {
+          background-color: #333;
+          color: white;
+        }
+      `}</style>
+      <div style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #fb923c 0%, #ea580c 100%)',
+        padding: 'clamp(20px, 5vw, 40px)',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        color: 'white'
+      }}>
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+        backgroundColor: 'rgba(255, 255, 255, 0.1)',
         borderRadius: '20px',
         padding: 'clamp(30px, 6vw, 60px)',
-        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-        backdropFilter: 'blur(10px)'
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)',
+        backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255, 255, 255, 0.2)'
       }}>
         {/* Header */}
         <div style={{
@@ -116,16 +129,15 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
           <h1 style={{
             fontSize: 'clamp(32px, 6vw, 48px)',
             fontWeight: 'bold',
-            background: 'linear-gradient(135deg, #667eea, #764ba2)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            marginBottom: '16px'
+            color: 'white',
+            marginBottom: '16px',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
           }}>
             🚀 GPT-5 Prompt Creator
           </h1>
           <p style={{
             fontSize: 'clamp(16px, 3vw, 20px)',
-            color: '#666',
+            color: 'rgba(255, 255, 255, 0.9)',
             maxWidth: '600px',
             margin: '0 auto',
             lineHeight: '1.6'
@@ -145,10 +157,11 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
             <h2 style={{
               fontSize: 'clamp(24px, 4vw, 28px)',
               fontWeight: '600',
-              color: '#333',
+              color: 'white',
               marginBottom: 'clamp(20px, 4vw, 30px)',
-              borderBottom: '2px solid #667eea',
-              paddingBottom: '10px'
+              borderBottom: '2px solid #fe8a00',
+              paddingBottom: '10px',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
             }}>
               Configure Your Prompt
             </h2>
@@ -164,8 +177,9 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                   display: 'block',
                   fontSize: 'clamp(14px, 2.5vw, 16px)',
                   fontWeight: '600',
-                  color: '#333',
-                  marginBottom: '8px'
+                  color: 'white',
+                  marginBottom: '8px',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                 }}>
                   🎭 Role *
                 </label>
@@ -177,29 +191,40 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                   style={{
                     width: '100%',
                     padding: 'clamp(12px, 2.5vw, 16px)',
-                    border: '2px solid #e1e5e9',
+                    border: '2px solid rgba(255, 255, 255, 0.2)',
                     borderRadius: '12px',
                     fontSize: 'clamp(14px, 2.5vw, 16px)',
-                    transition: 'border-color 0.3s ease',
-                    outline: 'none'
+                    transition: 'all 0.3s ease',
+                    outline: 'none',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    color: 'white',
+                    backdropFilter: 'blur(10px)'
                   }}
-                  onFocus={(e) => e.target.style.borderColor = '#667eea'}
-                  onBlur={(e) => e.target.style.borderColor = '#e1e5e9'}
+                  onFocus={(e) => {
+                    e.target.style.borderColor = '#fe8a00'
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderColor = 'rgba(255, 255, 255, 0.2)'
+                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+                  }}
                 />
               </div>
 
               {/* Control Panel */}
               <div style={{
-                backgroundColor: '#f8f9fa',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 padding: 'clamp(16px, 3vw, 24px)',
                 borderRadius: '12px',
-                border: '1px solid #e9ecef'
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)'
               }}>
                 <h3 style={{
                   fontSize: 'clamp(16px, 3vw, 18px)',
                   fontWeight: '600',
-                  color: '#333',
-                  marginBottom: 'clamp(12px, 2.5vw, 16px)'
+                  color: 'white',
+                  marginBottom: 'clamp(12px, 2.5vw, 16px)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                 }}>
                   ⚙️ Control Panel
                 </h3>
@@ -214,8 +239,9 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                       display: 'block',
                       fontSize: 'clamp(14px, 2.5vw, 16px)',
                       fontWeight: '500',
-                      color: '#333',
-                      marginBottom: '6px'
+                      color: 'white',
+                      marginBottom: '6px',
+                      textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                     }}>
                       🧠 Reasoning
                     </label>
@@ -225,11 +251,13 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                       style={{
                         width: '100%',
                         padding: 'clamp(10px, 2vw, 12px)',
-                        border: '2px solid #e1e5e9',
+                        border: '2px solid rgba(255, 255, 255, 0.2)',
                         borderRadius: '8px',
                         fontSize: 'clamp(14px, 2.5vw, 16px)',
-                        backgroundColor: 'white',
-                        outline: 'none'
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        color: 'white',
+                        outline: 'none',
+                        backdropFilter: 'blur(10px)'
                       }}
                     >
                       <option value="think">Think</option>
@@ -462,7 +490,7 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                 disabled={!formData.role || !formData.task || !formData.deliverables}
                 style={{
                   padding: 'clamp(16px, 3vw, 20px)',
-                  backgroundColor: formData.role && formData.task && formData.deliverables ? '#667eea' : '#ccc',
+                  backgroundColor: formData.role && formData.task && formData.deliverables ? '#fe8a00' : 'rgba(255, 255, 255, 0.3)',
                   color: 'white',
                   border: 'none',
                   borderRadius: '12px',
@@ -470,18 +498,21 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                   fontWeight: '600',
                   cursor: formData.role && formData.task && formData.deliverables ? 'pointer' : 'not-allowed',
                   transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+                  boxShadow: '0 4px 12px rgba(254, 138, 0, 0.3)',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                 }}
                 onMouseEnter={(e) => {
                   if (formData.role && formData.task && formData.deliverables) {
                     e.currentTarget.style.transform = 'translateY(-2px)'
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(102, 126, 234, 0.4)'
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(254, 138, 0, 0.4)'
+                    e.currentTarget.style.backgroundColor = '#e67a00'
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (formData.role && formData.task && formData.deliverables) {
                     e.currentTarget.style.transform = 'translateY(0)'
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)'
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(254, 138, 0, 0.3)'
+                    e.currentTarget.style.backgroundColor = '#fe8a00'
                   }
                 }}
               >
@@ -495,30 +526,33 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
             <h2 style={{
               fontSize: 'clamp(24px, 4vw, 28px)',
               fontWeight: '600',
-              color: '#333',
+              color: 'white',
               marginBottom: 'clamp(20px, 4vw, 30px)',
-              borderBottom: '2px solid #667eea',
-              paddingBottom: '10px'
+              borderBottom: '2px solid #fe8a00',
+              paddingBottom: '10px',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
             }}>
               Generated Prompt
             </h2>
 
             {generatedPrompt ? (
               <div style={{
-                backgroundColor: '#f8f9fa',
-                border: '2px solid #e9ecef',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                border: '2px solid rgba(255, 255, 255, 0.2)',
                 borderRadius: '12px',
                 padding: 'clamp(20px, 4vw, 30px)',
-                position: 'relative'
+                position: 'relative',
+                backdropFilter: 'blur(10px)'
               }}>
                 <pre style={{
                   fontSize: 'clamp(13px, 2.5vw, 15px)',
                   lineHeight: '1.6',
-                  color: '#333',
+                  color: 'white',
                   whiteSpace: 'pre-wrap',
                   wordWrap: 'break-word',
                   fontFamily: 'Monaco, Consolas, "Courier New", monospace',
-                  margin: 0
+                  margin: 0,
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                 }}>
                   {generatedPrompt}
                 </pre>
@@ -530,7 +564,7 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                     top: 'clamp(12px, 2.5vw, 16px)',
                     right: 'clamp(12px, 2.5vw, 16px)',
                     padding: 'clamp(8px, 2vw, 12px) clamp(12px, 2.5vw, 16px)',
-                    backgroundColor: copied ? '#28a745' : '#667eea',
+                    backgroundColor: copied ? '#28a745' : '#fe8a00',
                     color: 'white',
                     border: 'none',
                     borderRadius: '8px',
@@ -538,7 +572,8 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                     fontWeight: '500',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                    textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                   }}
                 >
                   {copied ? '✅ Copied!' : '📋 Copy'}
@@ -546,12 +581,13 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
               </div>
             ) : (
               <div style={{
-                backgroundColor: '#f8f9fa',
-                border: '2px dashed #e9ecef',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                border: '2px dashed rgba(255, 255, 255, 0.3)',
                 borderRadius: '12px',
                 padding: 'clamp(40px, 8vw, 60px)',
                 textAlign: 'center',
-                color: '#666'
+                color: 'rgba(255, 255, 255, 0.8)',
+                backdropFilter: 'blur(10px)'
               }}>
                 <div style={{
                   fontSize: 'clamp(48px, 8vw, 64px)',
@@ -561,7 +597,8 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
                 </div>
                 <p style={{
                   fontSize: 'clamp(16px, 3vw, 18px)',
-                  margin: 0
+                  margin: 0,
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                 }}>
                   Fill out the form and click "Generate Perfect Prompt" to see your custom prompt here!
                 </p>
@@ -574,23 +611,26 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
         <div style={{
           marginTop: 'clamp(40px, 8vw, 60px)',
           padding: 'clamp(20px, 4vw, 30px)',
-          backgroundColor: '#f8f9fa',
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
           borderRadius: '12px',
-          border: '1px solid #e9ecef'
+          border: '1px solid rgba(255, 255, 255, 0.2)',
+          backdropFilter: 'blur(10px)'
         }}>
           <h3 style={{
             fontSize: 'clamp(18px, 3.5vw, 22px)',
             fontWeight: '600',
-            color: '#333',
-            marginBottom: 'clamp(12px, 2.5vw, 16px)'
+            color: 'white',
+            marginBottom: 'clamp(12px, 2.5vw, 16px)',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
           }}>
             💡 About the Master Prompt Framework
           </h3>
           <p style={{
             fontSize: 'clamp(14px, 2.5vw, 16px)',
-            color: '#666',
+            color: 'rgba(255, 255, 255, 0.9)',
             lineHeight: '1.6',
-            margin: 0
+            margin: 0,
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
           }}>
             This tool uses the proven Master Prompt framework that structures AI interactions for optimal results. 
             The framework includes role definition, control parameters, clear task specification, optional inputs, 
@@ -598,6 +638,7 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 }
