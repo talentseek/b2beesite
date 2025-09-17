@@ -1,0 +1,181 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+}
+
+model Bee {
+  id                Int      @id @default(autoincrement())
+  slug              String   @unique
+  name              String
+  tagline           String?
+  role              String
+  status            BeeStatus @default(DRAFT)
+  shortDescription  String?  @map("short_description")
+  description       String
+  longDescription   String?  @map("long_description")
+  imageUrl          String?  @map("image_url")
+  features          Json?
+  integrations      Json?
+  roiModel          Json?    @map("roi_model")
+  faqs              Json?
+  demoAssets        Json?    @map("demo_assets")
+  seoTitle          String?  @map("seo_title")
+  seoDescription    String?  @map("seo_description")
+  seoOgImage        String?  @map("seo_og_image")
+  isActive          Boolean  @default(true) @map("is_active")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  prices            BeePrice[]
+  usagePricing      BeeUsagePricing[]
+  subscribers       Subscriber[]
+  useCases          UseCase[]
+
+  @@map("bees")
+}
+
+enum BeeStatus {
+  ACTIVE
+  INACTIVE
+  DRAFT
+}
+
+model BeePrice {
+  id           Int      @id @default(autoincrement())
+  beeId        Int      @map("bee_id")
+  currencyCode String   @map("currency_code")
+  amount       Int
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  bee          Bee      @relation(fields: [beeId], references: [id], onDelete: Cascade)
+
+  @@unique([beeId, currencyCode])
+  @@map("bee_prices")
+}
+
+model BeeUsagePricing {
+  id              Int      @id @default(autoincrement())
+  beeId           Int      @map("bee_id")
+  currencyCode    String   @map("currency_code")
+  usageType       String   @map("usage_type")
+  ratePerUnit     Decimal  @map("rate_per_unit")
+  unitDescription String   @map("unit_description")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  bee             Bee      @relation(fields: [beeId], references: [id], onDelete: Cascade)
+
+  @@unique([beeId, currencyCode, usageType])
+  @@map("bee_usage_pricing")
+}
+
+model UseCase {
+  id              Int      @id @default(autoincrement())
+  beeId           Int      @map("bee_id")
+  industry        String
+  slug            String
+  headline        String
+  subheadline     String
+  problem         Json?
+  solution        Json?
+  exampleScenarios Json?   @map("example_scenarios")
+  playbooks       Json?
+  roi             Json?
+  integrations    Json?
+  socialProof     Json?    @map("social_proof")
+  faqs            Json?
+  primaryCtas     Json?    @map("primary_ctas")
+  secondaryCtas   Json?    @map("secondary_ctas")
+  seoTitle        String?  @map("seo_title")
+  seoDescription  String?  @map("seo_description")
+  seoOgImage      String?  @map("seo_og_image")
+  isActive        Boolean  @default(true) @map("is_active")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  bee             Bee      @relation(fields: [beeId], references: [id], onDelete: Cascade)
+
+  @@unique([beeId, slug])
+  @@map("use_cases")
+}
+
+model CTAPack {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  primary     Json?
+  secondary   Json?
+  microcopy   String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("cta_packs")
+}
+
+model BeeCTAAssignment {
+  id        Int      @id @default(autoincrement())
+  beeId     Int      @map("bee_id")
+  ctaPackId Int      @map("cta_pack_id")
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([beeId, ctaPackId])
+  @@map("bee_cta_assignments")
+}
+
+model Subscriber {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  source       String   @default("coming-soon-page")
+  beeId        Int?     @map("bee_id")
+  useCaseSlug  String?  @map("use_case_slug")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  bee          Bee?     @relation(fields: [beeId], references: [id], onDelete: SetNull)
+
+  @@map("subscribers")
+}
+
+model PageAnalytics {
+  id        Int      @id @default(autoincrement())
+  eventType String   @map("event_type")
+  eventData Json?    @map("event_data")
+  userAgent String?  @map("user_agent")
+  ipAddress String?  @map("ip_address")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("page_analytics")
+}

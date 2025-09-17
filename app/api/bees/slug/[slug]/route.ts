@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Pool } from 'pg'
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-})
+import { prisma } from '@/lib/db'
+import { auth } from '@clerk/nextjs/server'
 
 export async function GET(
   request: NextRequest,
@@ -17,78 +14,40 @@ export async function GET(
     const currencyMatch = cookieHeader.match(/currencyPreference=([^;]+)/)
     const currencyPreference = currencyMatch ? currencyMatch[1] : 'GBP'
 
-    const client = await pool.connect()
+    // Fetch bee with pricing information using Prisma
+    const bee = await prisma.bee.findUnique({
+      where: { slug },
+      include: {
+        prices: true,
+        usagePricing: true
+      }
+    })
     
-    try {
-      // Fetch bee with pricing information
-      const beeQuery = `
-        SELECT 
-          b.*,
-          bp.amount as display_price,
-          bp.currency_code as display_currency,
-          json_agg(
-            DISTINCT jsonb_build_object(
-              'currency_code', bp2.currency_code,
-              'amount', bp2.amount
-            )
-          ) FILTER (WHERE bp2.currency_code IS NOT NULL) as prices,
-          json_agg(
-            DISTINCT jsonb_build_object(
-              'currency_code', bup.currency_code,
-              'usage_type', bup.usage_type,
-              'rate_per_unit', bup.rate_per_unit,
-              'unit_description', bup.unit_description
-            )
-          ) FILTER (WHERE bup.currency_code IS NOT NULL) as usage_pricing
-        FROM bees b
-        LEFT JOIN bee_prices bp ON b.id = bp.bee_id AND bp.currency_code = $1
-        LEFT JOIN bee_prices bp2 ON b.id = bp2.bee_id
-        LEFT JOIN bee_usage_pricing bup ON b.id = bup.bee_id
-        WHERE b.slug = $2
-        GROUP BY b.id, bp.amount, bp.currency_code
-      `
-      
-      const beeResult = await client.query(beeQuery, [currencyPreference, slug])
-      
-      if (beeResult.rows.length === 0) {
-        return NextResponse.json(
-          { error: 'Bee not found' },
-          { status: 404 }
-        )
-      }
-
-      const bee = beeResult.rows[0]
-      
-      // Parse JSON fields
-      if (bee.prices) {
-        bee.prices = bee.prices.filter((price: any) => price.currency_code !== null)
-      }
-      if (bee.usage_pricing) {
-        bee.usage_pricing = bee.usage_pricing.filter((usage: any) => usage.currency_code !== null)
-      }
-      
-      // Parse other JSON fields
-      if (bee.features) {
-        bee.features = JSON.parse(bee.features)
-      }
-      if (bee.integrations) {
-        bee.integrations = JSON.parse(bee.integrations)
-      }
-      if (bee.roi_model) {
-        bee.roi_model = JSON.parse(bee.roi_model)
-      }
-      if (bee.faqs) {
-        bee.faqs = JSON.parse(bee.faqs)
-      }
-      if (bee.demo_assets) {
-        bee.demo_assets = JSON.parse(bee.demo_assets)
-      }
-
-      return NextResponse.json({ bee })
-      
-    } finally {
-      client.release()
+    if (!bee) {
+      return NextResponse.json(
+        { error: 'Bee not found' },
+        { status: 404 }
+      )
     }
+
+    // Transform data to match expected format
+    const transformedBee = {
+      ...bee,
+      prices: bee.prices.reduce((acc, price) => {
+        acc[price.currencyCode] = price.amount
+        return acc
+      }, {} as Record<string, number>),
+      usage_pricing: bee.usagePricing.reduce((acc, usage) => {
+        acc[usage.currencyCode] = {
+          usage_type: usage.usageType,
+          rate_per_unit: usage.ratePerUnit,
+          unit_description: usage.unitDescription
+        }
+        return acc
+      }, {} as Record<string, any>)
+    }
+
+    return NextResponse.json(transformedBee)
     
   } catch (error) {
     console.error('Error fetching bee by slug:', error)
@@ -104,36 +63,24 @@ export async function DELETE(
   { params }: { params: { slug: string } }
 ) {
   try {
+    // Check if user is authenticated
+    const { userId } = await auth()
+    
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
     const { slug } = params
     
-    const client = await pool.connect()
-    
-    try {
-      // First get the bee ID from the slug
-      const beeQuery = 'SELECT id FROM bees WHERE slug = $1'
-      const beeResult = await client.query(beeQuery, [slug])
-      
-      if (beeResult.rows.length === 0) {
-        return NextResponse.json(
-          { error: 'Bee not found' },
-          { status: 404 }
-        )
-      }
+    // Delete the bee and all related records using Prisma
+    await prisma.bee.delete({
+      where: { slug }
+    })
 
-      const beeId = beeResult.rows[0].id
-
-      // Delete related records first (foreign key constraints)
-      await client.query('DELETE FROM bee_usage_pricing WHERE bee_id = $1', [beeId])
-      await client.query('DELETE FROM bee_prices WHERE bee_id = $1', [beeId])
-      
-      // Delete the bee
-      await client.query('DELETE FROM bees WHERE id = $1', [beeId])
-
-      return NextResponse.json({ success: true })
-      
-    } finally {
-      client.release()
-    }
+    return NextResponse.json({ success: true })
     
   } catch (error) {
     console.error('Error deleting bee:', error)

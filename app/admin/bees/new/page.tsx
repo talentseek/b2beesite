@@ -226,9 +226,12 @@ export default function AddNewBee() {
         price_usd: '',
         price_gbp: '',
         price_eur: '',
+        usage_pricing: {},
         image_url: '',
         features: [],
         integrations: [],
+        roi_model: {},
+        faqs: [],
         seo_title: '',
         seo_description: '',
         seo_og_image: ''

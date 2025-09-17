@@ -109,6 +109,9 @@ export default function AdminDashboard() {
 
   return (
     <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #ea3e93 0%, #fe8a00 100%)',
+      padding: 'clamp(24px, 4vw, 32px)',
       display: 'flex',
       flexDirection: 'column',
       gap: 'clamp(32px, 6vw, 48px)'

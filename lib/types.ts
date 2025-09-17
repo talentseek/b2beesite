@@ -6,23 +6,25 @@ export interface Bee {
   name: string
   tagline?: string
   role: string
-  status: 'active' | 'inactive' | 'draft'
-  short_description?: string
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT'
+  shortDescription?: string
   description: string
-  long_description?: string
-  display_price?: number | null
-  display_currency?: 'USD' | 'GBP' | 'EUR'
-  image_url: string | null
-  features?: string[]
-  integrations?: string[]
-  roi_model?: ROIModel
-  faqs?: FAQ[]
-  demo_assets?: DemoAssets
-  seo_title?: string
-  seo_description?: string
-  seo_og_image?: string
-  created_at: string
-  updated_at: string
+  longDescription?: string
+  imageUrl?: string
+  features?: any
+  integrations?: any
+  roiModel?: any
+  faqs?: any[]
+  demoAssets?: any
+  seoTitle?: string
+  seoDescription?: string
+  seoOgImage?: string
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+  prices?: Record<string, number>
+  usagePricing?: any[]
+  usage_pricing?: Record<string, any>
 }
 
 export interface BeePrice {
@@ -102,13 +104,18 @@ export interface Subscriber {
 
 // Supporting interfaces
 export interface ROIModel {
-  traditional_cost_per_month: number
-  traditional_cost_description: string
-  bee_base_cost: number
-  bee_usage_rate?: number
-  bee_usage_description?: string
-  savings_percentage: number
-  additional_benefits: string[]
+  assumptions?: {
+    traditional_admin_cost?: number
+    traditional_security_cost?: number
+    bee_cost_per_month?: number
+    bee_coverage_hours?: number
+  }
+  benefits?: {
+    time_savings_percent?: number
+    accuracy_improvement_percent?: number
+    customer_satisfaction_boost?: number
+  }
+  traditional_cost_description?: string
 }
 
 export interface FAQ {

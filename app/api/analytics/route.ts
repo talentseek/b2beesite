@@ -1,35 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
-import pool from '@/lib/db'
+import { prisma } from '@/lib/db'
 
 export async function POST(request: NextRequest) {
   try {
-    const { eventType, eventData } = await request.json()
+    const body = await request.json()
+    const { eventType, eventData } = body
+
+    // Get user agent and IP address
     const userAgent = request.headers.get('user-agent') || ''
     const ipAddress = request.headers.get('x-forwarded-for') || 
                      request.headers.get('x-real-ip') || 
                      'unknown'
 
-    // Validate event type
-    const validEventTypes = ['page_view', 'button_click', 'social_click', 'email_subscription']
-    if (!validEventTypes.includes(eventType)) {
-      return NextResponse.json(
-        { error: 'Invalid event type' },
-        { status: 400 }
-      )
-    }
-
-    // Insert analytics event
-    await pool.query(
-      'INSERT INTO page_analytics (event_type, event_data, user_agent, ip_address) VALUES ($1, $2, $3, $4)',
-      [eventType, JSON.stringify(eventData), userAgent, ipAddress]
-    )
+    // Insert analytics event using Prisma
+    await prisma.pageAnalytics.create({
+      data: {
+        eventType,
+        eventData,
+        userAgent,
+        ipAddress
+      }
+    })
 
     return NextResponse.json({ success: true })
-
   } catch (error) {
-    console.error('Analytics error:', error)
+    console.error('Error tracking analytics:', error)
     return NextResponse.json(
-      { error: 'Failed to log analytics event' },
+      { error: 'Failed to track analytics' },
       { status: 500 }
     )
   }
@@ -38,27 +35,35 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     // Get analytics summary
-    const pageViews = await pool.query(
-      "SELECT COUNT(*) as count FROM page_analytics WHERE event_type = 'page_view'"
-    )
+    const pageViews = await prisma.pageAnalytics.count({
+      where: {
+        eventType: 'page_view'
+      }
+    })
     
-    const buttonClicks = await pool.query(
-      "SELECT COUNT(*) as count FROM page_analytics WHERE event_type = 'button_click'"
-    )
+    const buttonClicks = await prisma.pageAnalytics.count({
+      where: {
+        eventType: 'button_click'
+      }
+    })
     
-    const socialClicks = await pool.query(
-      "SELECT COUNT(*) as count FROM page_analytics WHERE event_type = 'social_click'"
-    )
+    const socialClicks = await prisma.pageAnalytics.count({
+      where: {
+        eventType: 'social_click'
+      }
+    })
     
-    const totalSubscribers = await pool.query(
-      'SELECT COUNT(*) as count FROM subscribers WHERE is_active = true'
-    )
+    const totalSubscribers = await prisma.subscriber.count({
+      where: {
+        isActive: true
+      }
+    })
 
     return NextResponse.json({
-      page_views: parseInt(pageViews.rows[0].count),
-      button_clicks: parseInt(buttonClicks.rows[0].count),
-      social_clicks: parseInt(socialClicks.rows[0].count),
-      total_subscribers: parseInt(totalSubscribers.rows[0].count)
+      page_views: parseInt(pageViews.toString()),
+      button_clicks: parseInt(buttonClicks.toString()),
+      social_clicks: parseInt(socialClicks.toString()),
+      total_subscribers: parseInt(totalSubscribers.toString())
     })
 
   } catch (error) {

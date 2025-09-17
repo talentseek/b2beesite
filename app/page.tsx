@@ -25,6 +25,7 @@ export default function Home() {
   const [newsletterEmail, setNewsletterEmail] = useState('')
   const [isSubscribing, setIsSubscribing] = useState(false)
   const [showVapiWidget, setShowVapiWidget] = useState(false)
+  const [imageErrors, setImageErrors] = useState<{[key: string]: boolean}>({})
 
   useEffect(() => {
     // Track page view
@@ -49,7 +50,7 @@ export default function Home() {
       const response = await fetch('/api/bees')
       if (response.ok) {
         const data = await response.json()
-        setBees(data.bees || [])
+        setBees(data || [])
       } else {
         console.error('Failed to fetch bees:', response.status)
       }
@@ -194,8 +195,6 @@ export default function Home() {
   // Get unique roles for filter
   const roles = ['all', ...Array.from(new Set(bees.map(bee => bee.role)))]
 
-
-
   // Filter bees based on search and role
   const filteredBees = bees.filter(bee => {
     const matchesSearch = bee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -204,6 +203,8 @@ export default function Home() {
     const matchesRole = selectedRole === 'all' || bee.role === selectedRole
     return matchesSearch && matchesRole
   })
+  
+
 
   return (
     <div style={{
@@ -753,9 +754,9 @@ export default function Home() {
                     overflow: 'hidden',
                     borderRadius: '16px 16px 0 0'
                   }}>
-                    {bee.image_url ? (
+                    {bee.imageUrl && !imageErrors[bee.slug] ? (
                       <Image
-                        src={bee.image_url}
+                        src={bee.imageUrl}
                         alt={bee.name}
                         width={300}
                         height={450}
@@ -766,6 +767,7 @@ export default function Home() {
                           borderRadius: '16px 16px 0 0',
                           padding: '16px'
                         }}
+                        onError={() => setImageErrors(prev => ({ ...prev, [bee.slug]: true }))}
                       />
                     ) : (
                       <div style={{

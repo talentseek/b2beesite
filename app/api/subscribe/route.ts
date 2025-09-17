@@ -1,56 +1,74 @@
 import { NextRequest, NextResponse } from 'next/server'
-import pool from '@/lib/db'
+import { prisma } from '@/lib/db'
+import { z } from 'zod'
+
+const SubscribeSchema = z.object({
+  email: z.string().email(),
+  source: z.string().optional().default('coming-soon-page'),
+  beeId: z.number().optional(),
+  useCaseSlug: z.string().optional()
+})
 
 export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json()
+    const body = await request.json()
+    const validatedData = SubscribeSchema.parse(body)
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!email || !emailRegex.test(email)) {
+    // Check if subscriber already exists
+    const existingSubscriber = await prisma.subscriber.findUnique({
+      where: { email: validatedData.email }
+    })
+
+    if (existingSubscriber) {
+      if (existingSubscriber.isActive) {
+        return NextResponse.json(
+          { error: 'Email already subscribed' },
+          { status: 400 }
+        )
+      } else {
+        // Reactivate existing subscriber
+        await prisma.subscriber.update({
+          where: { email: validatedData.email },
+          data: { 
+            isActive: true,
+            source: validatedData.source,
+            beeId: validatedData.beeId,
+            useCaseSlug: validatedData.useCaseSlug
+          }
+        })
+        
+        return NextResponse.json({ 
+          message: 'Subscription reactivated successfully' 
+        })
+      }
+    }
+
+    // Create new subscriber
+    await prisma.subscriber.create({
+      data: {
+        email: validatedData.email,
+        source: validatedData.source,
+        beeId: validatedData.beeId,
+        useCaseSlug: validatedData.useCaseSlug
+      }
+    })
+
+    return NextResponse.json({ 
+      message: 'Subscription successful' 
+    }, { status: 201 })
+
+  } catch (error) {
+    console.error('Subscription error:', error)
+    
+    if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Please provide a valid email address' },
+        { error: 'Invalid email address' },
         { status: 400 }
       )
     }
 
-    // Check if email already exists
-    const existingSubscriber = await pool.query(
-      'SELECT id FROM subscribers WHERE email = $1',
-      [email]
-    )
-
-    if (existingSubscriber.rows.length > 0) {
-      return NextResponse.json(
-        { message: 'You are already subscribed! We\'ll notify you when we launch.' },
-        { status: 200 }
-      )
-    }
-
-    // Insert new subscriber
-    const result = await pool.query(
-      'INSERT INTO subscribers (email) VALUES ($1) RETURNING id, email, created_at',
-      [email]
-    )
-
-    // Log analytics event
-    await pool.query(
-      'INSERT INTO page_analytics (event_type, event_data) VALUES ($1, $2)',
-      ['email_subscription', JSON.stringify({ email, subscriber_id: result.rows[0].id })]
-    )
-
     return NextResponse.json(
-      { 
-        message: 'Thank you for subscribing! We\'ll notify you when B2Bee launches.',
-        subscriber: result.rows[0]
-      },
-      { status: 201 }
-    )
-
-  } catch (error) {
-    console.error('Subscription error:', error)
-    return NextResponse.json(
-      { error: 'Something went wrong. Please try again.' },
+      { error: 'Failed to subscribe' },
       { status: 500 }
     )
   }
@@ -58,12 +76,12 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const result = await pool.query(
-      'SELECT COUNT(*) as total_subscribers FROM subscribers WHERE is_active = true'
-    )
+    const result = await prisma.subscriber.count({
+      where: { isActive: true }
+    })
     
     return NextResponse.json({
-      total_subscribers: parseInt(result.rows[0].total_subscribers)
+      total_subscribers: result
     })
   } catch (error) {
     console.error('Error fetching subscriber count:', error)

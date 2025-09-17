@@ -4,7 +4,12 @@ import { useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 
-export default function EmailSubscription() {
+interface EmailSubscriptionProps {
+  beeId?: number
+  source?: string
+}
+
+export default function EmailSubscription({ beeId, source }: EmailSubscriptionProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
@@ -27,7 +32,11 @@ export default function EmailSubscription() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ 
+          email: email.trim(),
+          bee_id: beeId,
+          source: source || 'bee-profile'
+        }),
       })
 
       const data = await response.json()

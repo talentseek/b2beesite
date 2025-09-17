@@ -10,6 +10,7 @@ import { Bee } from '@/lib/types'
 export default function BeesManagement() {
   const [bees, setBees] = useState<Bee[]>([])
   const [loading, setLoading] = useState(true)
+  const [imageErrors, setImageErrors] = useState<{[key: string]: boolean}>({})
 
   useEffect(() => {
     fetchBees()
@@ -20,7 +21,7 @@ export default function BeesManagement() {
       const response = await fetch('/api/bees')
       if (response.ok) {
         const data = await response.json()
-        setBees(data.bees || [])
+        setBees(data || [])
       }
     } catch (error) {
       console.error('Error fetching bees:', error)
@@ -29,11 +30,11 @@ export default function BeesManagement() {
     }
   }
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (slug: string) => {
     if (!confirm('Are you sure you want to delete this bee?')) return
 
     try {
-      const response = await fetch(`/api/bees/${id}`, {
+      const response = await fetch(`/api/bees/slug/${slug}`, {
         method: 'DELETE'
       })
 
@@ -189,14 +190,15 @@ export default function BeesManagement() {
               height: '200px',
               overflow: 'hidden'
             }}>
-              {bee.image_url ? (
+              {bee.imageUrl && !imageErrors[bee.slug] ? (
                 <Image
-                  src={bee.image_url}
+                  src={bee.imageUrl}
                   alt={bee.name}
                   fill
                   style={{
                     objectFit: 'cover'
                   }}
+                  onError={() => setImageErrors(prev => ({ ...prev, [bee.slug]: true }))}
                 />
               ) : (
                 <div style={{
@@ -245,7 +247,7 @@ export default function BeesManagement() {
                 fontWeight: '600',
                 textTransform: 'uppercase',
                 marginBottom: '8px',
-                backgroundColor: bee.status === 'active' ? '#10B981' : bee.status === 'inactive' ? '#F59E0B' : '#6B7280',
+                backgroundColor: bee.status === 'ACTIVE' ? '#10B981' : bee.status === 'INACTIVE' ? '#F59E0B' : '#6B7280',
                 color: 'white'
               }}>
                 {bee.status}
@@ -268,7 +270,7 @@ export default function BeesManagement() {
                 lineHeight: '1.5',
                 margin: '0'
               }}>
-                {bee.short_description || bee.description}
+                {bee.shortDescription || bee.description}
               </p>
               {(bee as any).display_price && (
                 <p style={{
@@ -318,7 +320,7 @@ export default function BeesManagement() {
                 <Button 
                   variant="destructive" 
                   size="sm" 
-                  onClick={() => handleDelete(bee.id)}
+                  onClick={() => handleDelete(bee.slug)}
                   style={{
                     background: '#e53e3e',
                     color: 'white',

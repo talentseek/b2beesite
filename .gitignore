@@ -103,3 +103,4 @@ jspm_packages/
 # Uploaded files (keep directory but ignore contents)
 public/uploads/*
 !public/uploads/.gitkeep 
+/generated/prisma

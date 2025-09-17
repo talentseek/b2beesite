@@ -1,18 +1,12 @@
-import { Pool } from 'pg'
+import { PrismaClient } from '@prisma/client'
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false, // Always disable SSL for Fly.io compatibility
-})
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
+}
 
-// Test the connection
-pool.on('connect', () => {
-  console.log('Connected to PostgreSQL database')
-})
+export const prisma = globalForPrisma.prisma ?? new PrismaClient()
 
-pool.on('error', (err) => {
-  console.error('Unexpected error on idle client', err)
-  process.exit(-1)
-})
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
 
-export default pool 
+// Export for backward compatibility
+export default prisma 
