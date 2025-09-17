@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface PromptFormData {
   role: string
@@ -148,7 +150,7 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: 'clamp(30px, 6vw, 50px)',
           alignItems: 'start'
         }}>
@@ -637,6 +639,455 @@ If Meta-Fix=on and any deliverable is missing/wrong or the draft fails a rubric 
             and explicit deliverables. The private operations ensure quality through self-reflection and meta-fixing capabilities.
           </p>
         </div>
+
+        {/* B2BEE Call-to-Action */}
+        <div style={{
+          marginTop: 'clamp(40px, 8vw, 60px)',
+          padding: 'clamp(30px, 6vw, 50px)',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderRadius: '20px',
+          border: '2px solid rgba(255, 255, 255, 0.1)',
+          textAlign: 'center',
+          backdropFilter: 'blur(10px)'
+        }}>
+          <h2 style={{
+            fontSize: 'clamp(28px, 5vw, 36px)',
+            fontWeight: 'bold',
+            color: 'white',
+            marginBottom: 'clamp(16px, 3vw, 24px)',
+            textShadow: '0 2px 4px rgba(0, 0, 0, 0.3)'
+          }}>
+            🐝 Ready to Transform Your Business?
+          </h2>
+          <p style={{
+            fontSize: 'clamp(16px, 3vw, 20px)',
+            color: 'rgba(255, 255, 255, 0.9)',
+            marginBottom: 'clamp(24px, 4vw, 32px)',
+            lineHeight: '1.6',
+            maxWidth: '600px',
+            margin: '0 auto clamp(24px, 4vw, 32px) auto',
+            textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
+          }}>
+            This prompt creator is just the beginning. Discover our full suite of AI-powered business solutions that can automate your workflows, boost productivity, and save you time and money.
+          </p>
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(16px, 3vw, 24px)',
+            justifyContent: 'center',
+            flexWrap: 'wrap'
+          }}>
+            <Link href="/" style={{
+              padding: 'clamp(16px, 3vw, 20px) clamp(24px, 4vw, 32px)',
+              backgroundColor: '#fe8a00',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '12px',
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 12px rgba(254, 138, 0, 0.3)',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)'
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(254, 138, 0, 0.4)'
+              e.currentTarget.style.backgroundColor = '#e67a00'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(254, 138, 0, 0.3)'
+              e.currentTarget.style.backgroundColor = '#fe8a00'
+            }}
+            >
+              🚀 Explore Our Bees
+            </Link>
+            <a href="#footer" style={{
+              padding: 'clamp(16px, 3vw, 20px) clamp(24px, 4vw, 32px)',
+              backgroundColor: 'transparent',
+              color: 'white',
+              textDecoration: 'none',
+              borderRadius: '12px',
+              fontSize: 'clamp(16px, 3vw, 18px)',
+              fontWeight: '600',
+              transition: 'all 0.3s ease',
+              border: '2px solid rgba(255, 255, 255, 0.3)',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent'
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)'
+            }}
+            >
+              📧 Stay Updated
+            </a>
+          </div>
+        </div>
+
+        {/* B2BEE Footer */}
+        <footer style={{
+          background: 'black',
+          color: 'white',
+          padding: '3rem 2rem 2rem 2rem',
+          marginTop: 'clamp(40px, 8vw, 60px)',
+          borderRadius: '20px 20px 0 0'
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+            gap: '3rem',
+            marginBottom: '2rem'
+          }}>
+            {/* Logo and Brand */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+              gap: '1rem'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem'
+              }}>
+                <Link href="/" style={{ textDecoration: 'none' }}>
+                  <Image
+                    src="/logofooter.png"
+                    alt="B2BEE Logo"
+                    width={80}
+                    height={80}
+                    style={{
+                      transition: 'transform 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.1)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)'
+                    }}
+                  />
+                </Link>
+              </div>
+              <p style={{
+                fontSize: '0.9rem',
+                opacity: '0.8',
+                lineHeight: '1.6',
+                margin: 0
+              }}>
+                AI solutions that never stop buzzing. Helping small businesses work smarter, faster and at a fraction of the cost.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 style={{
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Quick Links
+              </h4>
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem'
+              }}>
+                <li>
+                  <Link href="/" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
+                  >
+                    Our Bees
+                  </Link>
+                </li>
+
+                <li>
+                  <a href="#" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
+                  >
+                    About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="#" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
+                  >
+                    Contact
+                  </a>
+                </li>
+                <li>
+                  <Link href="/gpt5-prompt-creator" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease',
+                    fontWeight: '600'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                    e.currentTarget.style.color = '#fe8a00'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                    e.currentTarget.style.color = 'white'
+                  }}
+                  >
+                    🚀 GPT-5 Prompt Creator
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <h4 style={{
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Legal
+              </h4>
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem'
+              }}>
+                <li>
+                  <a href="#" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
+                  >
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="#" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
+                  >
+                    Terms of Service
+                  </a>
+                </li>
+                <li>
+                  <a href="#" style={{
+                    color: 'white',
+                    textDecoration: 'none',
+                    fontSize: '0.9rem',
+                    opacity: '0.8',
+                    transition: 'opacity 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = '1'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = '0.8'
+                  }}
+                  >
+                    Accessibility
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Newsletter Signup */}
+            <div>
+              <h4 style={{
+                fontSize: '1.1rem',
+                fontWeight: '700',
+                marginBottom: '1rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
+              }}>
+                Stay Updated
+              </h4>
+              <p style={{
+                fontSize: '0.9rem',
+                opacity: '0.8',
+                marginBottom: '1rem',
+                lineHeight: '1.5'
+              }}>
+                Be the first to know when we launch our AI solutions!
+              </p>
+              <div style={{
+                display: 'flex',
+                gap: '0.5rem'
+              }}>
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem',
+                    borderRadius: '8px',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    color: 'white',
+                    fontSize: '0.9rem'
+                  }}
+                />
+                <button style={{
+                  padding: '0.75rem 1rem',
+                  background: '#ea580c',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#c2410c'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#ea580c'
+                }}
+                >
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+            paddingTop: '2rem',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}>
+            <p style={{
+              fontSize: '0.8rem',
+              opacity: '0.7',
+              margin: 0
+            }}>
+              © 2024 B2BEE. All rights reserved.
+            </p>
+            <div style={{
+              display: 'flex',
+              gap: '1rem'
+            }}>
+              <a href="#" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '0.8rem',
+                opacity: '0.7',
+                transition: 'opacity 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.7'
+              }}
+              >
+                Privacy
+              </a>
+              <a href="#" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '0.8rem',
+                opacity: '0.7',
+                transition: 'opacity 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.7'
+              }}
+              >
+                Terms
+              </a>
+              <a href="#" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: '0.8rem',
+                opacity: '0.7',
+                transition: 'opacity 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = '1'
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = '0.7'
+              }}
+              >
+                Accessibility
+              </a>
+            </div>
+          </div>
+        </footer>
       </div>
       </div>
     </>
